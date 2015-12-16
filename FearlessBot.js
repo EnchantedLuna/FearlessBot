@@ -202,7 +202,7 @@ mybot.on("message", function (message)
             });
             break;
         case "!getunapproved":
-            if (channel == "bottlesting")
+            if (channel == config.modChannel)
             {
                 db.query("SELECT * FROM data_store WHERE approved = 0", function (err, rows)
                 {
