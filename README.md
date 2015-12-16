@@ -6,5 +6,5 @@ and as such contains code that is specific to the particular server.
 ##Prerequisites
 
 * node.js
-* discord.js
+* discord.js https://github.com/hydrabolt/discord.js/
 * mysql.js https://github.com/felixge/node-mysql
