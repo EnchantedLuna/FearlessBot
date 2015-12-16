@@ -1,8 +1,9 @@
 {
   "email": "",
   "password": "",
-  "mysqlhost" : "",
-  "mysqluser" : "",
-  "mysqlpass" : "",
-  "mysqldb" : ""
+  "mysqlHost" : "",
+  "mysqlUser" : "",
+  "mysqlPass" : "",
+  "mysqlDB" : "",
+  "modChannel" : ""
 }
