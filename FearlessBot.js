@@ -180,8 +180,16 @@ mybot.on("message", function (message)
         case "!delete":
             if (isMod(message.channel.server, user))
             {
-                db.query("DELETE FROM data_store WHERE keyword = ?", [command[1]]);
-                mybot.reply(message, "deleted.");
+                db.query("DELETE FROM data_store WHERE keyword = ?", [command[1]], function (err, result) {
+                    if (result.affectedRows > 0)
+                    {
+                        mybot.reply(message, "deleted.");
+                    }
+                    else
+                    {
+                        mybot.reply(message, "keyword not found.");
+                    }
+                });
             }
             else
             {
