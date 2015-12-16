@@ -150,6 +150,7 @@ mybot.on("message", function (message)
                 }
             });
             break;
+        case "!g":
         case "!get":
             if (command[1] == null)
                 return;
