@@ -40,6 +40,10 @@ mybot.on("message", function (message)
         [message.channel.id]
     );
 
+    // Check user info
+    db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
+        "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",[author.id,author.username,author.username]);
+
 
     // Check for commands
     switch (command[0])
