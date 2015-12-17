@@ -219,7 +219,7 @@ mybot.on("message", function (message)
                     if (rows.length == 0)
                     {
                         mybot.reply(message, "no unapproved items.");
-                        break;
+                        return;
                     }
 
 
