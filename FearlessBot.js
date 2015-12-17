@@ -42,7 +42,7 @@ mybot.on("message", function (message)
 
     // Check user info
     db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
-        "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",[author.id,user.username,user.username]);
+        "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",[user.id,user.username,user.username]);
 
 
     // Check for commands
