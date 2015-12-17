@@ -216,6 +216,13 @@ mybot.on("message", function (message)
             {
                 db.query("SELECT * FROM data_store WHERE approved = 0", function (err, rows)
                 {
+                    if (rows.length == 0)
+                    {
+                        mybot.reply(message, "no unapproved items.");
+                        break;
+                    }
+
+
                     var list = "";
                     for (var i = 0; i < rows.length; i++)
                     {
