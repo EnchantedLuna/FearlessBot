@@ -16,14 +16,15 @@ $db->set_charset("utf8");
         <h1>FearlessBot Data Storage</h1>
         <table>
             <tr>
-            <th>Keyword</th>
-            <th>Value</th>
+                <th>Keyword</th>
+                <th>Value</th>
+                <th>Added By</th>
             </tr>
             <?php
-            $query = $db->query("SELECT * FROM data_store WHERE approved=1 ORDER BY keyword");
+            $query = $db->query("SELECT keyword, value, username FROM data_store LEFT JOIN members ON data_store.owner=members.id WHERE approved=1 ORDER BY keyword");
             while ($row = $query->fetch_array())
             {
-                echo "<tr><td>".autolink($row['keyword'],50)."</td><td>".autolink($row['value'],50)."</td></tr>";
+                echo "<tr><td>".autolink($row['keyword'],50)."</td><td>".autolink($row['value'],50)."</td><td>".$row['username']."</td></tr>";
             }
             ?>
         </table>
