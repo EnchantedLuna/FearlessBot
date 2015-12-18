@@ -55,7 +55,8 @@ mybot.on("message", function (message)
                 "!stats Returns the total number of messages sent in this channel\n" +
                 "!song returns a random Taylor song\n" +
                 "!save (keyword) (contents) Saves data that can be easily retrieved later (links, text, etc)\n" +
-                "!get (keyword) Retrieves data previously stored using !save");
+                "!get (keyword) Retrieves data previously stored using !save\n" +
+                "!seen (username) Gets the time a person has last sent a message.");
             break;
         case "!fhelpmod":
             if (isMod(message.channel.server, user) && channel == config.modChannel)
@@ -121,11 +122,11 @@ mybot.on("message", function (message)
             });
             break;
         case "!seen":
-            db.query("SELECT lastseen FROM members WHERE username = ?", [command[1]], function (err, rows)
+            db.query("SELECT lastseen FROM members WHERE username = ?", [params], function (err, rows)
             {
                 if (rows[0] != null)
                 {
-                    mybot.reply(message, command[1]+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
+                    mybot.reply(message, params+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
                 }
             });
             break;
