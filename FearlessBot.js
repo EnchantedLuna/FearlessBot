@@ -426,7 +426,7 @@ function secondsToTime(seconds)
     {
         result += minutes + " minutes ";
     }
-    result += seconds + " seconds";
+    result += sec + " seconds";
     return result;
 }
 
