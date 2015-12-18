@@ -120,6 +120,15 @@ mybot.on("message", function (message)
                 mybot.reply(message, "there have been " + total + " messages sent since December 5, 2015 in this channel.");
             });
             break;
+        case "!seen":
+            db.query("SELECT lastseen FROM members WHERE username = ?", [command[1]], function (err, rows)
+            {
+                if (rows[0] != null)
+                {
+                    mybot.reply(message, command[1]+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen));
+                }
+            });
+            break;
         case "!save":
             if (command[1] == null)
                 return;
@@ -394,6 +403,30 @@ function inRole(server, user, needle)
 function isMod(server, user)
 {
     return inRole(server, user, "admins") || inRole(server, user, "chat mods");
+}
+
+function secondsToTime(seconds)
+{
+    var sec = seconds % 60;
+    var minutes = Math.floor(seconds / 60);
+    var hours = Math.floor(minutes / 60);
+    var days = Math.floor(hours / 24);
+
+    var result = "";
+    if (days > 0)
+    {
+        result += days + " days ";
+    }
+    if (hours > 0)
+    {
+        result += hours + " hours ";
+    }
+    if (minutes > 0)
+    {
+        result += minutes + " minutes ";
+    }
+    result += seconds + " seconds";
+    return result;
 }
 
 mybot.login(config.email, config.password);
