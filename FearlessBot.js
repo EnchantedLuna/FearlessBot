@@ -122,11 +122,17 @@ mybot.on("message", function (message)
             });
             break;
         case "!seen":
-            db.query("SELECT lastseen FROM members WHERE username = ?", [params], function (err, rows)
+            var search;
+            if (message.mentions.length > 0) {
+                search = message.mentions[0].username;
+            } else {
+                search = params;
+            }
+            db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
-                    mybot.reply(message, params+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
+                    mybot.reply(message, search+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
                 }
             });
             break;
