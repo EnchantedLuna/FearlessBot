@@ -125,7 +125,7 @@ mybot.on("message", function (message)
             {
                 if (rows[0] != null)
                 {
-                    mybot.reply(message, command[1]+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen));
+                    mybot.reply(message, command[1]+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
                 }
             });
             break;
