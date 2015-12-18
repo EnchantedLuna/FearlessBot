@@ -409,9 +409,9 @@ function isMod(server, user)
 function secondsToTime(seconds)
 {
     var sec = seconds % 60;
-    var minutes = Math.floor(seconds / 60 % 60);
-    var hours = Math.floor(minutes / 60 % 24);
-    var days = Math.floor(hours / 24);
+    var minutes = Math.floor(seconds / 60) % 60;
+    var hours = Math.floor(seconds / 3600) % 24;
+    var days = Math.floor(seconds / 86400);
 
     var result = "";
     if (days > 0)
