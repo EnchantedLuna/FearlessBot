@@ -55,7 +55,8 @@ mybot.on("message", function (message)
                 "!stats Returns the total number of messages sent in this channel\n" +
                 "!song returns a random Taylor song\n" +
                 "!save (keyword) (contents) Saves data that can be easily retrieved later (links, text, etc)\n" +
-                "!get (keyword) Retrieves data previously stored using !save");
+                "!get (keyword) Retrieves data previously stored using !save\n" +
+                "!seen (username) Gets the time a person has last sent a message.");
             break;
         case "!fhelpmod":
             if (isMod(message.channel.server, user) && channel == config.modChannel)
@@ -118,6 +119,21 @@ mybot.on("message", function (message)
             {
                 var total = rows[0].total_messages;
                 mybot.reply(message, "there have been " + total + " messages sent since December 5, 2015 in this channel.");
+            });
+            break;
+        case "!seen":
+            var search;
+            if (message.mentions.length > 0) {
+                search = message.mentions[0].username;
+            } else {
+                search = params;
+            }
+            db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
+            {
+                if (rows[0] != null)
+                {
+                    mybot.reply(message, search+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
+                }
             });
             break;
         case "!save":
@@ -394,6 +410,30 @@ function inRole(server, user, needle)
 function isMod(server, user)
 {
     return inRole(server, user, "admins") || inRole(server, user, "chat mods");
+}
+
+function secondsToTime(seconds)
+{
+    var sec = seconds % 60;
+    var minutes = Math.floor(seconds / 60) % 60;
+    var hours = Math.floor(seconds / 3600) % 24;
+    var days = Math.floor(seconds / 86400);
+
+    var result = "";
+    if (days > 0)
+    {
+        result += days + " days ";
+    }
+    if (hours > 0)
+    {
+        result += hours + " hours ";
+    }
+    if (minutes > 0)
+    {
+        result += minutes + " minutes ";
+    }
+    result += sec + " seconds";
+    return result;
 }
 
 mybot.login(config.email, config.password);
