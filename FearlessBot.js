@@ -128,6 +128,11 @@ mybot.on("message", function (message)
             } else {
                 search = params;
             }
+            if (search.toLowerCase()=="fearlessbot")
+            {
+                mybot.reply(message, "I'm right here!");
+                return;
+            }
             db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
             {
                 if (rows[0] != null)
