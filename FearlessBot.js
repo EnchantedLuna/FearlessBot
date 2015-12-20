@@ -179,12 +179,17 @@ mybot.on("message", function (message)
         case "!get":
             if (command[1] == null)
                 return;
-            db.query("SELECT * FROM data_store WHERE keyword = ? AND approved=1", [command[1]], function (err, rows)
+            db.query("SELECT * FROM data_store WHERE keyword = ?", [command[1]], function (err, rows)
             {
                 if (rows[0] == null)
                 {
                     mybot.reply(message, "nothing is stored for keyword " + command[1]);
-                } else
+                }
+                else if (!rows[0].approved)
+                {
+                    mybot.reply(message, "this item has not been approved yet.");
+                }
+                else
                 {
                     mybot.reply(message, rows[0]['value']);
                 }
