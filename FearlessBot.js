@@ -277,7 +277,6 @@ mybot.on("message", function (message)
                     {
                         if (!isMod(message.channel.server, person))
                         {
-                            mybot.kickMember(person, message.channel.server);
                             mybot.banMember(person, message.channel.server, 1);
                             mybot.reply(message, person.username + " has been banned.");
                         }
