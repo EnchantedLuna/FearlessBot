@@ -378,24 +378,24 @@ function updateRegion(message)
         return;
     }
     command[1] = command[1].toLowerCase();
-    clearRegions(message.channel.server, user);
+    clearRegions(message.channel.server, message.author);
     switch (command[1])
     {
         case "america":
-            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "america"));
+            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "america"));
             mybot.reply(message, "your region has been set to America.");
             break;
         case "europe":
-            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "europe"));
+            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "europe"));
             mybot.reply(message, "your region has been set to Europe.");
             break;
         case "asia":
-            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "asia"));
+            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "asia"));
             mybot.reply(message, "your region has been to Asia.");
             break;
         case "oceania":
         case "australia":
-            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "oceania"));
+            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "oceania"));
             mybot.reply(message, "your region has been set to Oceania.");
             break;
         default:
