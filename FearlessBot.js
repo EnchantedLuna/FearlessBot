@@ -29,7 +29,7 @@ var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar
 
 mybot.on("message", function (message)
 {
-    if (message.channel.isPrivate) {
+    if (!message.channel.isPrivate) {
         handlePM(message);
         return;
     }
