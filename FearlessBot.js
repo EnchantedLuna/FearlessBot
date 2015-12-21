@@ -81,30 +81,7 @@ mybot.on("message", function (message)
             break;
         case "!region":
         case "!setregion":
-            if (command[1] == null)
-            {
-                mybot.reply(message, "you need to specify a region (from: america, europe, asia, oceania)");
-                break;
-            }
-            command[1] = command[1].toLowerCase();
-            clearRegions(message.channel.server, user);
-            switch (command[1])
-            {
-                case "america":
-                    mybot.addMemberToRole(user, message.channel.server.roles.get("name", "america"));
-                    break;
-                case "europe":
-                    mybot.addMemberToRole(user, message.channel.server.roles.get("name", "europe"));
-                    break;
-                case "asia":
-                    mybot.addMemberToRole(user, message.channel.server.roles.get("name", "asia"));
-                    break;
-                case "oceania":
-                case "australia":
-                    mybot.addMemberToRole(user, message.channel.server.roles.get("name", "oceania"));
-                    break;
-            }
-            mybot.reply(message, "your region has been set.");
+            updateRegion(message);
             break;
         case "!8ball":
             var answer = eightBallAnswers[Math.floor(Math.random() * eightBallAnswers.length)];
@@ -399,6 +376,41 @@ function clearRegions(server, user)
                 break;
         }
     });
+}
+
+function updateRegion(message)
+{
+    var command = message.content.split(" ");
+    if (command[1] == null)
+    {
+        mybot.reply(message, "you need to specify a region (from: america, europe, asia, oceania)");
+        return;
+    }
+    command[1] = command[1].toLowerCase();
+    clearRegions(message.channel.server, user);
+    switch (command[1])
+    {
+        case "america":
+            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "america"));
+            mybot.reply(message, "your region has been set to America.");
+            break;
+        case "europe":
+            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "europe"));
+            mybot.reply(message, "your region has been set to Europe.");
+            break;
+        case "asia":
+            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "asia"));
+            mybot.reply(message, "your region has been to Asia.");
+            break;
+        case "oceania":
+        case "australia":
+            mybot.addMemberToRole(user, message.channel.server.roles.get("name", "oceania"));
+            mybot.reply(message, "your region has been set to Oceania.");
+            break;
+        default:
+            mybot.reply(message, "unrecognized region. Your region settings has been reset.");
+            break;
+    }
 }
 
 function inRole(server, user, needle)
