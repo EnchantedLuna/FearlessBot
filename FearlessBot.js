@@ -105,6 +105,11 @@ mybot.on("message", function (message)
             } else {
                 search = params;
             }
+            if (search.toLowerCase()=="fearlessbot")
+            {
+                mybot.reply(message, "I'm right here!");
+                return;
+            }
             db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
             {
                 if (rows[0] != null)
@@ -151,12 +156,17 @@ mybot.on("message", function (message)
         case "!get":
             if (command[1] == null)
                 return;
-            db.query("SELECT * FROM data_store WHERE keyword = ? AND approved=1", [command[1]], function (err, rows)
+            db.query("SELECT * FROM data_store WHERE keyword = ?", [command[1]], function (err, rows)
             {
                 if (rows[0] == null)
                 {
                     mybot.reply(message, "nothing is stored for keyword " + command[1]);
-                } else
+                }
+                else if (!rows[0].approved)
+                {
+                    mybot.reply(message, "this item has not been approved yet.");
+                }
+                else
                 {
                     mybot.reply(message, rows[0]['value']);
                 }
@@ -254,7 +264,6 @@ mybot.on("message", function (message)
                     {
                         if (!isMod(message.channel.server, person))
                         {
-                            mybot.kickMember(person, message.channel.server);
                             mybot.banMember(person, message.channel.server, 1);
                             mybot.reply(message, person.username + " has been banned.");
                         }
