@@ -29,6 +29,10 @@ var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar
 
 mybot.on("message", function (message)
 {
+    if (message.channel.isPrivate) {
+        handlePM(message);
+        return;
+    }
     var user = message.author;
     var channel = message.channel.name;
     var command = message.content.split(" ");
@@ -350,6 +354,19 @@ mybot.on("serverNewMember", function (server, user)
     var username = user.username;
     mybot.sendMessage(taylorswiftmain, username + " has joined the server. Welcome!");
 });
+
+// Bot functionality for PMs
+function handlePM(message)
+{
+    var command = message.content.split(" ");
+    var params = command.slice(1, command.length).join(" ");
+
+    if (command[0] == "!mods")
+    {
+        var modChannel = mybot.servers.get("id",config.mainServer).channels.get("name", config.modChannel);
+        mybot.sendMessage(modChannel, "PM from " + message.author.username + ": " + params);
+    }
+}
 
 function clearRegions(server, user)
 {
