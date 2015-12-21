@@ -109,6 +109,9 @@ mybot.on("message", function (message)
             {
                 mybot.reply(message, "I'm right here!");
                 return;
+            } else if(search.toLowerCase() == message.author.username.toLowerCase()) {
+                mybot.reply(message, "You don't know if you're here or not? :smirk:");
+                return;
             }
             db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
             {
