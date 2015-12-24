@@ -45,8 +45,10 @@ mybot.on("message", function (message)
     );
 
     // Check user info
-    db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
-        "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",[user.id,user.username,user.username]);
+    var words = command.length;
+    db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
+        "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
+        [user.id,user.username,words,user.username,words]);
 
 
     // Check for commands
