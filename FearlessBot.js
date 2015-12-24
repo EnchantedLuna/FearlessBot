@@ -144,7 +144,7 @@ mybot.on("message", function (message)
             {
                 if (rows[0] != null)
                 {
-                    var average = (rows[0].messages > 0) ? (rows[0].words/rows[0].messages) : 0;
+                    var average = (rows[0].messages > 0) ? Math.round(rows[0].words/rows[0].messages * 100) / 100 : 0;
                     mybot.reply(message, search+" has used " + rows[0].words + " words (average "+average+" per message)");
                 }
             });
