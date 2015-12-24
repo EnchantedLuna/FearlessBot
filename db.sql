@@ -1,7 +1,9 @@
 CREATE TABLE members (
   id VARCHAR(30) PRIMARY KEY,
   username VARCHAR(50)  COLLATE utf8_unicode_ci,
-  lastseen INT(11)
+  lastseen INT(11),
+  words INT(11) DEFAULT 0,
+  messages INT(11) DEFAULT 0
 );
 
 CREATE TABLE data_store (
