@@ -368,7 +368,7 @@ function handlePM(message)
     {
         var modChannel = mybot.servers.get("id",config.mainServer).channels.get("name", config.modChannel);
         mybot.sendMessage(modChannel, "PM from " + message.author.username + ": " + params);
-        mybot.reply(message, "your message has been sent to the mods.");
+        mybot.sendMessage(message.channel, "your message has been sent to the mods.");
     }
 }
 
