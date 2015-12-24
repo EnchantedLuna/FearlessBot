@@ -46,9 +46,16 @@ mybot.on("message", function (message)
 
     // Check user info
     var words = command.length;
-    db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
-        "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
-        [user.id,user.username,words,user.username,words]);
+    if (channel == "taylorswift") {
+        db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
+            "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
+            [user.id,user.username,words,user.username,words]);
+    } else {
+        db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
+            "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",
+            [user.id,user.username,user.username]);
+    }
+
 
 
     // Check for commands
