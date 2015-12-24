@@ -1,5 +1,5 @@
 CREATE TABLE members (
-  id VARCHAR(30),
+  id VARCHAR(30) PRIMARY KEY,
   username VARCHAR(50)  COLLATE utf8_unicode_ci,
   lastseen INT(11)
 );
