@@ -30,7 +30,8 @@ var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar
 
 mybot.on("message", function (message)
 {
-    if (message.channel.isPrivate) {
+    if (message.channel.isPrivate)
+    {
         handlePM(message);
         return;
     }
@@ -47,16 +48,18 @@ mybot.on("message", function (message)
 
     // Check user info
     var words = command.length;
-    if (channel == "taylorswift") {
+    if (channel == "taylorswift")
+    {
         db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
-            [user.id,user.username,words,user.username,words]);
-    } else {
+            [user.id, user.username, words, user.username, words]);
+    }
+    else
+    {
         db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",
-            [user.id,user.username,user.username]);
+            [user.id, user.username, user.username]);
     }
-
 
 
     // Check for commands
@@ -113,16 +116,21 @@ mybot.on("message", function (message)
             });
             break;
         case "!seen":
-            if (message.mentions.length > 0) {
+            if (message.mentions.length > 0)
+            {
                 search = message.mentions[0].username;
-            } else {
+            }
+            else
+            {
                 search = params;
             }
-            if (search.toLowerCase()=="fearlessbot")
+            if (search.toLowerCase() == "fearlessbot")
             {
                 mybot.reply(message, "I'm right here!");
                 return;
-            } else if(search.toLowerCase() == message.author.username.toLowerCase()) {
+            }
+            else if (search.toLowerCase() == message.author.username.toLowerCase())
+            {
                 mybot.reply(message, "You don't know if you're here or not? :smirk:");
                 return;
             }
@@ -130,22 +138,30 @@ mybot.on("message", function (message)
             {
                 if (rows[0] != null)
                 {
-                    mybot.reply(message, search+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
+                    mybot.reply(message, search + " was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
                 }
             });
             break;
         case "!words":
-            if (message.mentions.length > 0) {
+            if (message.mentions.length > 0)
+            {
                 search = message.mentions[0].username;
-            } else {
+            }
+            else if (command[1] != null)
+            {
                 search = params;
             }
+            else
+            {
+                search = user.username;
+            }
+
             db.query("SELECT words, messages FROM members WHERE username = ?", [search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
-                    var average = (rows[0].messages > 0) ? Math.round(rows[0].words/rows[0].messages * 100) / 100 : 0;
-                    mybot.reply(message, search+" has used " + rows[0].words + " words (average "+average+" per message)");
+                    var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
+                    mybot.reply(message, search + " has used " + rows[0].words + " words (average " + average + " per message)");
                 }
             });
             break;
@@ -243,7 +259,8 @@ mybot.on("message", function (message)
                 if (rows[0] == null)
                 {
                     mybot.reply(message, "nothing is stored for keyword " + command[1]);
-                } else
+                }
+                else
                 {
                     mybot.reply(message, rows[0]['value']);
                 }
@@ -390,7 +407,7 @@ function handlePM(message)
 
     if (command[0] == "!mods")
     {
-        var modChannel = mybot.servers.get("id",config.mainServer).channels.get("name", config.modChannel);
+        var modChannel = mybot.servers.get("id", config.mainServer).channels.get("name", config.modChannel);
         mybot.sendMessage(modChannel, "PM from " + message.author.username + ": " + params);
         mybot.sendMessage(message.channel, "your message has been sent to the mods.");
     }
