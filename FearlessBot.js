@@ -9,6 +9,7 @@ var db = mysql.createConnection({
 });
 
 var mybot = new Discord.Client();
+var search;
 
 var eightBallAnswers = ["It is certain", "It is decidedly so", "Without a doubt", "Yes, definitely", "You may rely on it",
     "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes", "Reply hazy try again", "Ask again later",
@@ -112,7 +113,6 @@ mybot.on("message", function (message)
             });
             break;
         case "!seen":
-            var search;
             if (message.mentions.length > 0) {
                 search = message.mentions[0].username;
             } else {
@@ -131,6 +131,21 @@ mybot.on("message", function (message)
                 if (rows[0] != null)
                 {
                     mybot.reply(message, search+" was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
+                }
+            });
+            break;
+        case "!words":
+            if (message.mentions.length > 0) {
+                search = message.mentions[0].username;
+            } else {
+                search = params;
+            }
+            db.query("SELECT words, messages FROM members WHERE username = ?", [search], function (err, rows)
+            {
+                if (rows[0] != null)
+                {
+                    var average = (rows[0].messages > 0) ? (rows[0].words/rows[0].messages) : 0;
+                    mybot.reply(message, search+" has used " + rows[0].words + " words (average "+average+" per message)");
                 }
             });
             break;
