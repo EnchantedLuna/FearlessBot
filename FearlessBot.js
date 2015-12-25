@@ -88,7 +88,8 @@ mybot.on("message", function (message)
                     "!review (keyword): Same as !get but also shows unapproved items.\n" +
                     "!approve (keyword): approves a stored value\n" +
                     "!getunapproved: lists unapproved items (bs only)\n" +
-                    "!delete (keyword): deletes a stored value"
+                    "!delete (keyword): deletes a stored value\n" +
+                    "!rankwords (count): Ranks members by words used, up to the amount specified"
                 );
             }
             break;
