@@ -166,6 +166,22 @@ mybot.on("message", function (message)
                 }
             });
             break;
+        case "!rankwords":
+            var numberToGet = 5;
+            var rankString = "Word Count Ranking:\n";
+            var count = 1;
+            if (parseInt(command[1]) > 0 && parseInt(command[1]) < 60)
+            {
+                numberToGet = parseInt(command[1]);
+            }
+            db.query("SELECT username, words, messages FROM members ORDER BY words DESC LIMIT ?", [numberToGet], function (err, rows)
+            {
+                rows.forEach(function (member) {
+                    rankString += count + ": " + member.username + " - " + member.words + " words\n";
+                });
+            });
+            mybot.sendMessage(message.channel, "Word Count Ranking");
+            break;
         case "!save":
             if (command[1] == null)
                 return;
