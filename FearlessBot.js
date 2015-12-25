@@ -74,7 +74,9 @@ mybot.on("message", function (message)
                 "!save (keyword) (contents) Saves data that can be easily retrieved later (links, text, etc)\n" +
                 "!get (keyword) Retrieves data previously stored using !save\n" +
                 "!seen (username) Gets the time a person has last sent a message.\n" +
-                "!words (username) Gets the word count statistics for the person.");
+                "!words (username) Gets the word count statistics for the person.\n" +
+                "!rankwords (count): Ranks members by words used, up to the amount specified"
+            );
             break;
         case "!fhelpmod":
             if (isMod(message.channel.server, user) && channel == config.modChannel)
@@ -88,8 +90,7 @@ mybot.on("message", function (message)
                     "!review (keyword): Same as !get but also shows unapproved items.\n" +
                     "!approve (keyword): approves a stored value\n" +
                     "!getunapproved: lists unapproved items (bs only)\n" +
-                    "!delete (keyword): deletes a stored value\n" +
-                    "!rankwords (count): Ranks members by words used, up to the amount specified"
+                    "!delete (keyword): deletes a stored value"
                 );
             }
             break;
