@@ -173,7 +173,7 @@ mybot.on("message", function (message)
             {
                 numberToGet = parseInt(command[1]);
             }
-            db.query("SELECT username, words, messages FROM members ORDER BY words DESC LIMIT ?", [numberToGet], function (err, rows)
+            db.query("SELECT username, words, messages FROM members WHERE words > 0 ORDER BY words DESC LIMIT ?", [numberToGet], function (err, rows)
             {
                 var count = 1;
                 rows.forEach(function (member) {
