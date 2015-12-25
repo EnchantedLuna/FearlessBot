@@ -178,6 +178,7 @@ mybot.on("message", function (message)
                 var count = 1;
                 rows.forEach(function (member) {
                     rankString += count + ": " + member.username + " - " + member.words + " words\n";
+                    count++;
                 });
                 mybot.sendMessage(message.channel, rankString);
             });
