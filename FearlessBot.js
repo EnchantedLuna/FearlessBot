@@ -66,8 +66,10 @@ mybot.on("message", function (message)
     switch (command[0])
     {
         case "!fhelp":
-            mybot.reply(message, "my commands are:\n!rules displays the rules" +
-                "\n!8ball Returns a magic 8 ball answer to a yes/no question\n" +
+            mybot.reply(message, "my commands are:\n" +
+                "!rules displays the rules\n" +
+                "!fhelp returns this message (wow such meta)\n" +
+                "!8ball Returns a magic 8 ball answer to a yes/no question\n" +
                 "!region (america|europe|asia|oceania) set your region\n" +
                 "!stats Returns the total number of messages sent in this channel\n" +
                 "!song returns a random Taylor song\n" +
