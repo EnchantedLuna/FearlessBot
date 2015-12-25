@@ -73,7 +73,8 @@ mybot.on("message", function (message)
                 "!song returns a random Taylor song\n" +
                 "!save (keyword) (contents) Saves data that can be easily retrieved later (links, text, etc)\n" +
                 "!get (keyword) Retrieves data previously stored using !save\n" +
-                "!seen (username) Gets the time a person has last sent a message.");
+                "!seen (username) Gets the time a person has last sent a message.\n" +
+                "!words (username) Gets the word count statistics for the person.");
             break;
         case "!fhelpmod":
             if (isMod(message.channel.server, user) && channel == config.modChannel)
