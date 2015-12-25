@@ -364,7 +364,7 @@ mybot.on("message", function (message)
         case "!topic":
             if (isMod(message.channel.server, user) && params !== null)
             {
-                mybot.setTopic(message.channel, params);
+                mybot.setChannelTopic(message.channel, params);
                 mybot.reply(message, "topic updated.");
             }
             else
