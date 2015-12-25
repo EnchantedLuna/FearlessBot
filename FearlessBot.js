@@ -180,7 +180,7 @@ mybot.on("message", function (message)
                     rankString += count + ": " + member.username + " - " + member.words + " words\n";
                 });
             });
-            mybot.sendMessage(message.channel, "Word Count Ranking");
+            mybot.sendMessage(message.channel, rankString);
             break;
         case "!save":
             if (command[1] == null)
