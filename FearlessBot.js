@@ -26,7 +26,7 @@ var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar
     "Stay Stay Stay", "The Last Time", "Holy Ground", "Sad Beautiful Tragic", "The Lucky One", "Everything Has Changed", "Starlight", "Begin Again",
     "The Moment I Knew", "Come Back, Be Here", "Girl At Home", "Welcome To New York", "Blank Space", "Style", "Out of the Woods",
     "All You Had To Do Was Stay", "Shake it Off", "I Wish You Would", "Bad Blood", "Wildest Dreams", "How You Get the Girl", "This Love",
-    "I Know Places", "Clean", "Wonderland", "You Are In Love", "New Romantics", "Safe and Sound", "Eyes Open", "Today Was a Fairytale", "Sweeter Than Fiction"];
+    "I Know Places", "Clean", "Wonderland", "You Are In Love", "New Romantics", "Safe and Sound", "Eyes Open", "Today Was a Fairytale", "Sweeter Than Fiction","Ronan"];
 
 mybot.on("message", function (message)
 {
