@@ -48,7 +48,7 @@ mybot.on("message", function (message)
 
     // Check user info
     var words = command.length;
-    if (channel == "taylorswift")
+    if (message.channel.id == "115332333745340416")
     {
         db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
@@ -422,9 +422,8 @@ mybot.on("message", function (message)
 
 mybot.on("serverNewMember", function (server, user)
 {
-    var taylorswiftmain = server.channels.get("name", "taylorswift");
     var username = user.username;
-    mybot.sendMessage(taylorswiftmain, username + " has joined the server. Welcome!");
+    mybot.sendMessage("115332333745340416", username + " has joined the server. Welcome!");
 });
 
 // Bot functionality for PMs
