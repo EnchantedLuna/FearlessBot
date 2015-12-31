@@ -411,18 +411,6 @@ mybot.on("message", function (message)
                 mybot.reply(message, "nice try.");
             }
             break;
-        case "!tempon":
-            if (isMod(message.channel.server, user))
-            {
-                mybot.overwritePermissions("130759361902542848", message.channel.server.roles.get("name", "@everyone"), {});
-            }
-            break;
-        case "!tempoff":
-            if (isMod(message.channel.server, user))
-            {
-                mybot.overwritePermissions("130759361902542848", message.channel.server.roles.get("name", "@everyone"), {readMessages: false});
-            }
-            break;
     }
 });
 
