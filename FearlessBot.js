@@ -63,7 +63,7 @@ mybot.on("message", function (message)
 
     // Only allow whitelisted commands in serious
     var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic"];
-    if (channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
+    if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
         return;
     }
 
