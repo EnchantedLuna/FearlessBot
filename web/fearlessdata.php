@@ -51,7 +51,7 @@ $db->set_charset("utf8");
             <table>
                 <tr><th>Channel</th><th>Total Messages</th></tr>
                 <?php
-                $query = $db->query("SELECT * FROM channel_stats WHERE channel IN ('119490967253286912', '115332333745340416','130759361902542848')");
+                $query = $db->query("SELECT * FROM channel_stats WHERE channel IN ('119490967253286912', '115332333745340416','131994567602995200')");
                 while ($row = $query->fetch_array())
                 {
                     echo "<tr><td>".$row['name']."</td><td>".$row['total_messages']."</td></tr>";

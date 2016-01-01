@@ -48,7 +48,7 @@ mybot.on("message", function (message)
 
     // Check user info
     var words = command.length;
-    if (channel == "meredith" || channel == "olivia" || channel == "taylordiscussion")
+    if (message.channel.id == "115332333745340416")
     {
         db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
@@ -59,6 +59,12 @@ mybot.on("message", function (message)
         db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",
             [user.id, user.username, user.username]);
+    }
+
+    // Only allow whitelisted commands in serious
+    var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
+    if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
+        return;
     }
 
 
@@ -89,6 +95,7 @@ mybot.on("message", function (message)
                     "!unban @person: Unban member\n" +
                     "!topic (topic): Set topic\n" +
                     "!mute/unmute @member: mute/unmute member (prevents from sending messages)\n" +
+                    "!supermute/!unsupermute @member: like mute, but applies to all channels\n" +
                     "!review (keyword): Same as !get but also shows unapproved items.\n" +
                     "!approve (keyword): approves a stored value\n" +
                     "!getunapproved: lists unapproved items (bs only)\n" +
@@ -411,16 +418,40 @@ mybot.on("message", function (message)
                 mybot.reply(message, "nice try.");
             }
             break;
-        case "!tempon":
+        case "!supermute":
             if (isMod(message.channel.server, user))
             {
-                mybot.overwritePermissions("130759361902542848", message.channel.server.roles.get("name", "@everyone"), {});
+                message.mentions.forEach(function (person)
+                    {
+                        if (!isMod(message.channel.server, person))
+                        {
+                            mybot.addMemberToRole(person, message.channel.server.roles.get("name", "supermute"));
+                            mybot.reply(message, person.username + " has been super muted.");
+                        }
+                    }
+                );
+            }
+            else
+            {
+                mybot.reply(message, "nice try.");
             }
             break;
-        case "!tempoff":
+        case "!unsupermute":
             if (isMod(message.channel.server, user))
             {
-                mybot.overwritePermissions("130759361902542848", message.channel.server.roles.get("name", "@everyone"), {readMessages: false});
+                message.mentions.forEach(function (person)
+                    {
+                        if (!isMod(message.channel.server, person) && inRole(message.channel.server, person, "supermute"))
+                        {
+                            mybot.removeMemberFromRole(person, message.channel.server.roles.get("name", "supermute"));
+                            mybot.reply(message, person.username + " has been un super muted.");
+                        }
+                    }
+                );
+            }
+            else
+            {
+                mybot.reply(message, "nice try.");
             }
             break;
     }
@@ -428,9 +459,8 @@ mybot.on("message", function (message)
 
 mybot.on("serverNewMember", function (server, user)
 {
-    var taylorswiftmain = server.channels.get("name", "taylorswift");
     var username = user.username;
-    mybot.sendMessage(taylorswiftmain, username + " has joined the server. Welcome!");
+    mybot.sendMessage("115332333745340416", username + " has joined the server. Welcome!");
 });
 
 // Bot functionality for PMs
