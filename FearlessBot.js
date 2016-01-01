@@ -425,7 +425,7 @@ mybot.on("message", function (message)
                     {
                         if (!isMod(message.channel.server, person))
                         {
-                            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "supermute"));
+                            mybot.addMemberToRole(person, message.channel.server.roles.get("name", "supermute"));
                             mybot.reply(message, person.username + " has been super muted.");
                         }
                     }
@@ -443,7 +443,7 @@ mybot.on("message", function (message)
                     {
                         if (!isMod(message.channel.server, person) && inRole(server, person, "supermute"))
                         {
-                            mybot.removeMemberFromRole(user, message.channel.server.roles.get("name", "supermute"));
+                            mybot.removeMemberFromRole(person, message.channel.server.roles.get("name", "supermute"));
                             mybot.reply(message, person.username + " has been un super muted.");
                         }
                     }
