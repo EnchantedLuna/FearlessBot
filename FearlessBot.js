@@ -441,7 +441,7 @@ mybot.on("message", function (message)
             {
                 message.mentions.forEach(function (person)
                     {
-                        if (!isMod(message.channel.server, person) && inRole(server, person, "supermute"))
+                        if (!isMod(message.channel.server, person) && inRole(message.channel.server, person, "supermute"))
                         {
                             mybot.removeMemberFromRole(person, message.channel.server.roles.get("name", "supermute"));
                             mybot.reply(message, person.username + " has been un super muted.");
