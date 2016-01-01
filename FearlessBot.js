@@ -62,7 +62,7 @@ mybot.on("message", function (message)
     }
 
     // Only allow whitelisted commands in serious
-    var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic"];
+    var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
         return;
     }
@@ -95,6 +95,7 @@ mybot.on("message", function (message)
                     "!unban @person: Unban member\n" +
                     "!topic (topic): Set topic\n" +
                     "!mute/unmute @member: mute/unmute member (prevents from sending messages)\n" +
+                    "!supermute/!unsupermute @member: like mute, but applies to all channels\n" +
                     "!review (keyword): Same as !get but also shows unapproved items.\n" +
                     "!approve (keyword): approves a stored value\n" +
                     "!getunapproved: lists unapproved items (bs only)\n" +
@@ -411,6 +412,42 @@ mybot.on("message", function (message)
                     }
                 );
 
+            }
+            else
+            {
+                mybot.reply(message, "nice try.");
+            }
+            break;
+        case "!supermute":
+            if (isMod(message.channel.server, user))
+            {
+                message.mentions.forEach(function (person)
+                    {
+                        if (!isMod(message.channel.server, person))
+                        {
+                            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "supermute"));
+                            mybot.reply(message, person.username + " has been super muted.");
+                        }
+                    }
+                );
+            }
+            else
+            {
+                mybot.reply(message, "nice try.");
+            }
+            break;
+        case "!unsupermute":
+            if (isMod(message.channel.server, user))
+            {
+                message.mentions.forEach(function (person)
+                    {
+                        if (!isMod(message.channel.server, person) && inRole(server, person, "supermute"))
+                        {
+                            mybot.removeMemberFromRole(user, message.channel.server.roles.get("name", "supermute"));
+                            mybot.reply(message, person.username + " has been un super muted.");
+                        }
+                    }
+                );
             }
             else
             {
