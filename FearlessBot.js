@@ -48,7 +48,7 @@ mybot.on("message", function (message)
 
     // Check user info
     var words = command.length;
-    if (message.channel.id == "115332333745340416")
+    if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
         db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
