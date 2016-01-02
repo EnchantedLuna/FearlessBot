@@ -11,12 +11,8 @@ $db->set_charset("utf8");
     <head>
         <title>FearlessBot Data Storage</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="sortable-theme-bootstrap.css" />
         <style type="text/css">
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            padding:4px
-        }
         #dataStore {
             margin-bottom: 10px;
             float:left;
@@ -31,13 +27,16 @@ $db->set_charset("utf8");
     <body>
         <div id="dataStore">
             <h1>FearlessBot Data Storage</h1>
-            <table>
+            <table class="sortable-theme-bootstrap" data-sortable>
+                <thead>
                 <tr>
                     <th>Keyword</th>
                     <th>Value</th>
                     <th>Added By</th>
                     <th>Uses</th>
                 </tr>
+                </thead>
+                <tbody>
                 <?php
                 $query = $db->query("SELECT keyword, value, uses, username FROM data_store LEFT JOIN members ON data_store.owner=members.id WHERE approved=1 ORDER BY keyword");
                 while ($row = $query->fetch_array())
@@ -45,6 +44,7 @@ $db->set_charset("utf8");
                     echo "<tr><td>".autolink($row['keyword'],50)."</td><td>".nl2br(autolink($row['value'],50))."</td><td>".$row['username']."</td><td>".$row['uses']."</td></tr>";
                 }
                 ?>
+                </tbody>
             </table>
         </div>
         <div id="channelStats">
@@ -60,5 +60,6 @@ $db->set_charset("utf8");
                 ?>
             </table>
         </div>
+        <script src="sortable.min.js"></script>
     </body>
 </html>
