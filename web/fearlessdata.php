@@ -36,6 +36,7 @@ $db->set_charset("utf8");
                     <th>Keyword</th>
                     <th>Value</th>
                     <th>Added By</th>
+                    <th>Uses</th>
                 </tr>
                 <?php
                 $query = $db->query("SELECT keyword, value, uses, username FROM data_store LEFT JOIN members ON data_store.owner=members.id WHERE approved=1 ORDER BY keyword");
