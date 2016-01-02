@@ -16,5 +16,6 @@ CREATE TABLE data_store (
 CREATE TABLE channel_stats (
   channel VARCHAR(25) PRIMARY KEY,
   total_messages INT(11),
-  name VARCHAR(25)
+  name VARCHAR(25),
+  web TINYINT(1) DEFAULT 0
 );
