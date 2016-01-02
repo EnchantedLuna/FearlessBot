@@ -10,7 +10,8 @@ CREATE TABLE data_store (
   keyword VARCHAR(50) COLLATE utf8_unicode_ci NOT NULL PRIMARY KEY,
   value VARCHAR(255) COLLATE utf8_unicode_ci,
   owner VARCHAR(25),
-  approved TINYINT(1) DEFAULT '0'
+  approved TINYINT(1) DEFAULT '0',
+  uses INT(11) DEFAULT 0
 );
 
 CREATE TABLE channel_stats (

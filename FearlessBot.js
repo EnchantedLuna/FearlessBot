@@ -245,6 +245,7 @@ mybot.on("message", function (message)
                 else
                 {
                     mybot.reply(message, rows[0]['value']);
+                    db.query("UPDATE data_store SET uses=uses+1 WHERE keyword = ?", [command[1]]);
                 }
             });
 
