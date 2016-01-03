@@ -98,7 +98,7 @@ mybot.on("message", function (message)
                     "!supermute/!unsupermute @member: like mute, but applies to all channels\n" +
                     "!review (keyword): Same as !get but also shows unapproved items.\n" +
                     "!approve (keyword): approves a stored value\n" +
-                    "!getunapproved: lists unapproved items (bs only)\n" +
+                    "!getunapproved: lists unapproved items\n" +
                     "!delete (keyword): deletes a stored value"
                 );
             }
@@ -297,7 +297,7 @@ mybot.on("message", function (message)
             });
             break;
         case "!getunapproved":
-            if (channel == config.modChannel)
+            if (isMod(message.channel.server, user))
             {
                 db.query("SELECT * FROM data_store WHERE approved = 0", function (err, rows)
                 {
