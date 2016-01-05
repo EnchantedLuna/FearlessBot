@@ -104,9 +104,7 @@ mybot.on("message", function (message)
             }
             break;
         case "!rules":
-            mybot.reply(message, "rules:\n"
-                + "1. \"No matter what happens in life, be good to people. Being good to people is a wonderful legacy to leave behind.\" -Taylor\n"
-                + "2. Try not to overuse/spam the bots. It clutters up the chat and disrupts the flows of conversation. For testing/spamming, use the #bots channel.");
+            mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
             break;
         case "!region":
         case "!setregion":
