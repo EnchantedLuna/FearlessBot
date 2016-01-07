@@ -569,12 +569,12 @@ function secondsToTime(seconds)
     if (days > 0)
     {
         result += days + " day";
-        result += days > 1 ? "s " : " ";
+        result += days != 1 ? "s " : " ";
     }
     if (hours > 0)
     {
         result += hours + " hour";
-        result += hours > 1 ? "s " : " ";
+        result += hours != 1 ? "s " : " ";
     }
     if (minutes > 0)
     {
@@ -582,7 +582,7 @@ function secondsToTime(seconds)
         result += minutes > 1 ? "s " : " ";
     }
     result += sec + " second";
-    result += sec > 1 ? "s." : ".";
+    result += sec != 1 ? "s" : "";
     return result;
 }
 
