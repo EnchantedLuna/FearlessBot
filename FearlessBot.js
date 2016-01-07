@@ -568,17 +568,21 @@ function secondsToTime(seconds)
     var result = "";
     if (days > 0)
     {
-        result += days + " days ";
+        result += days + " day";
+        result += days > 1 ? "s " : " ";
     }
     if (hours > 0)
     {
-        result += hours + " hours ";
+        result += hours + " hour";
+        result += hours > 1 ? "s " : " ";
     }
     if (minutes > 0)
     {
-        result += minutes + " minutes ";
+        result += minutes + " minute";
+        result += minutes > 1 ? "s " : " ";
     }
-    result += sec + " seconds";
+    result += sec + " second";
+    result += sec > 1 ? "s." : ".";
     return result;
 }
 
