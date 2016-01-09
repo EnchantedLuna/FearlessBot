@@ -462,6 +462,13 @@ mybot.on("serverNewMember", function (server, user)
     mybot.sendMessage("115332333745340416", username + " has joined the server. Welcome!");
 });
 
+mybot.on("messageDeleted", function (message, channel)
+{
+    var words = message.content.split(" ").length;
+    db.query("UPDATE members SET words=words-? WHERE id=?", [words, message.author.id]);
+    db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE id = ?", [words, channel.id]);
+});
+
 // Bot functionality for PMs
 function handlePM(message)
 {
