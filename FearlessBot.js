@@ -148,7 +148,7 @@ mybot.on("message", function (message)
             {
                 if (rows[0] != null)
                 {
-                    mybot.reply(message, search + " was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + " ago.");
+                    mybot.reply(message, search + " was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + "ago.");
                 }
             });
             break;
@@ -588,8 +588,11 @@ function secondsToTime(seconds)
         result += minutes + " minute";
         result += minutes > 1 ? "s " : " ";
     }
-    result += sec + " second";
-    result += sec != 1 ? "s" : "";
+    if(sec > 0)
+    {
+        result += sec + " second";
+        result += sec != 1 ? "s " : " ";
+    }
     return result;
 }
 
