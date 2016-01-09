@@ -466,7 +466,7 @@ mybot.on("messageDeleted", function (message, channel)
 {
     var words = message.content.split(" ").length;
     db.query("UPDATE members SET words=words-? WHERE id=?", [words, message.author.id]);
-    db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE id = ?", [words, channel.id]);
+    db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
 });
 
 // Bot functionality for PMs
