@@ -5,7 +5,8 @@ var db = mysql.createConnection({
     host: config.mysqlHost,
     user: config.mysqlUser,
     password: config.mysqlPass,
-    database: config.mysqlDB
+    database: config.mysqlDB,
+    charset: "UTF8_GENERAL_CI"
 });
 
 var mybot = new Discord.Client();
