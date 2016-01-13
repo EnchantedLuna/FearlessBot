@@ -465,6 +465,10 @@ mybot.on("serverNewMember", function (server, user)
 
 mybot.on("messageDeleted", function (message, channel)
 {
+    if (message == null)
+    {
+        return;
+    }
     var words = message.content.split(" ").length;
     db.query("UPDATE members SET words=words-? WHERE id=?", [words, message.author.id]);
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
