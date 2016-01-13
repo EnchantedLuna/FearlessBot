@@ -74,33 +74,33 @@ mybot.on("message", function (message)
     {
         case "!fhelp":
             mybot.reply(message, "my commands are:\n" +
-                "!rules displays the rules\n" +
-                "!fhelp returns this message (wow such meta)\n" +
-                "!8ball Returns a magic 8 ball answer to a yes/no question\n" +
-                "!region (america|europe|asia|oceania) set your region\n" +
-                "!stats Returns the total number of messages sent in this channel\n" +
-                "!song returns a random Taylor song\n" +
-                "!save (keyword) (contents) Saves data that can be easily retrieved later (links, text, etc)\n" +
-                "!get (keyword) Retrieves data previously stored using !save\n" +
+                "!rules Displays the rules.\n" +
+                "!fhelp Returns this message. (wow such meta)\n" +
+                "!8ball Returns a magic 8 ball answer to a yes/no question.\n" +
+                "!region (america|europe|asia|oceania) Sets your region.\n" +
+                "!stats Returns the total number of messages sent in this channel.\n" +
+                "!song Returns a random Taylor song.\n" +
+                "!save (keyword) (contents) Saves data that can be easily retrieved later. (links, text, etc)\n" +
+                "!get (keyword) Retrieves data previously stored using !save.\n" +
                 "!seen (username) Gets the time a person has last sent a message.\n" +
                 "!words (username) Gets the word count statistics for the person.\n" +
-                "!rankwords (count): Ranks members by words used, up to the amount specified"
+                "!rankwords (count): Ranks members by words used, up to the amount specified."
             );
             break;
         case "!fhelpmod":
             if (isMod(message.channel.server, user) && channel == config.modChannel)
             {
                 mybot.reply(message, "my mod commands are:\n" +
-                    "!kick @person: Kick member\n" +
-                    "!ban @person: Ban member\n" +
-                    "!unban @person: Unban member\n" +
-                    "!topic (topic): Set topic\n" +
-                    "!mute/unmute @member: mute/unmute member (prevents from sending messages)\n" +
-                    "!supermute/!unsupermute @member: like mute, but applies to all channels\n" +
+                    "!kick @person: Kicks member.\n" +
+                    "!ban @person: Bans member.\n" +
+                    "!unban @person: Unbans member.\n" +
+                    "!topic (topic): Sets topic.\n" +
+                    "!mute/unmute @member: Mutes/unmutes member. (prevents from sending messages)\n" +
+                    "!supermute/!unsupermute @member: Like mute, but applies to all channels.\n" +
                     "!review (keyword): Same as !get but also shows unapproved items.\n" +
-                    "!approve (keyword): approves a stored value\n" +
-                    "!getunapproved: lists unapproved items\n" +
-                    "!delete (keyword): deletes a stored value"
+                    "!approve (keyword): Approves a stored value.\n" +
+                    "!getunapproved: Lists unapproved items.\n" +
+                    "!delete (keyword): Deletes a stored value."
                 );
             }
             break;
@@ -117,7 +117,7 @@ mybot.on("message", function (message)
             break;
         case "!song":
             var song = taylorSwiftSongs[Math.floor(Math.random() * taylorSwiftSongs.length)];
-            mybot.reply(message, "you should listen to " + song);
+            mybot.reply(message, "you should listen to " + song + ".");
             break;
         case "!stats":
             db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
@@ -172,7 +172,7 @@ mybot.on("message", function (message)
                 if (rows[0] != null)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
-                    mybot.reply(message, search + " has used " + rows[0].words + " words (average " + average + " per message)");
+                    mybot.reply(message, search + " has used " + rows[0].words + " words. (average " + average + " per message)");
                 }
             });
             break;
@@ -235,7 +235,7 @@ mybot.on("message", function (message)
             {
                 if (rows[0] == null)
                 {
-                    mybot.reply(message, "nothing is stored for keyword " + command[1]);
+                    mybot.reply(message, "nothing is stored for keyword " + command[1] + ".");
                 }
                 else if (!rows[0].approved)
                 {
@@ -287,7 +287,7 @@ mybot.on("message", function (message)
             {
                 if (rows[0] == null)
                 {
-                    mybot.reply(message, "nothing is stored for keyword " + command[1]);
+                    mybot.reply(message, "nothing is stored for keyword " + command[1] + ".");
                 }
                 else
                 {
@@ -520,7 +520,7 @@ function updateRegion(message)
     var command = message.content.split(" ");
     if (command[1] == null)
     {
-        mybot.reply(message, "you need to specify a region (from: america, europe, asia, oceania)");
+        mybot.reply(message, "you need to specify a region. (from: america, europe, asia, oceania)");
         return;
     }
     command[1] = command[1].toLowerCase();
