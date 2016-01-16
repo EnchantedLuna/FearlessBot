@@ -6,7 +6,7 @@ var db = mysql.createConnection({
     user: config.mysqlUser,
     password: config.mysqlPass,
     database: config.mysqlDB,
-    charset: "UTF8_GENERAL_CI"
+    charset: "utf8mb4"
 });
 
 var mybot = new Discord.Client();
@@ -124,6 +124,26 @@ mybot.on("message", function (message)
             {
                 var total = rows[0].total_messages;
                 mybot.reply(message, "there have been " + total + " messages sent since December 5, 2015 in this channel.");
+            });
+            break;
+        case "!name":
+            if (command[1] == null || (command[1].toLowerCase() != 'm' && command[1].toLowerCase() != 'f'))
+            {
+                mybot.reply(message, "you must specify a gender (M or F)");
+                break;
+            }
+            var year = 2014;
+            if (parseInt(command[2]) >= 1970 && parseInt(command[2]) <= 2014)
+                year = command[2];
+            var limit = 300;
+            if (parseInt(command[3]))
+                limit = command[3];
+            db.query("SELECT * FROM names WHERE gender = ? AND rank <= ? AND year = ? ORDER BY RAND() LIMIT 1", [command[1], limit, year], function (err, rows)
+            {
+                if (rows[0] != null)
+                {
+                    mybot.reply(message, "your new name is " + rows[0].name);
+                }
             });
             break;
         case "!seen":
