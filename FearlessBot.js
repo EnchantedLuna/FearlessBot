@@ -62,7 +62,7 @@ mybot.on("message", function (message)
             [user.id, user.username, user.username]);
     }
 
-    // Only allow whitelisted commands in serious
+    // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
         return;
@@ -73,36 +73,7 @@ mybot.on("message", function (message)
     switch (command[0])
     {
         case "!fhelp":
-            mybot.reply(message, "my commands are:\n" +
-                "!rules Displays the rules.\n" +
-                "!fhelp Returns this message. (wow such meta)\n" +
-                "!8ball Returns a magic 8 ball answer to a yes/no question.\n" +
-                "!region (america|europe|asia|oceania) Sets your region.\n" +
-                "!stats Returns the total number of messages sent in this channel.\n" +
-                "!song Returns a random Taylor song.\n" +
-                "!save (keyword) (contents) Saves data that can be easily retrieved later. (links, text, etc)\n" +
-                "!get (keyword) Retrieves data previously stored using !save.\n" +
-                "!seen (username) Gets the time a person has last sent a message.\n" +
-                "!words (username) Gets the word count statistics for the person.\n" +
-                "!rankwords (count): Ranks members by words used, up to the amount specified."
-            );
-            break;
-        case "!fhelpmod":
-            if (isMod(message.channel.server, user) && channel == config.modChannel)
-            {
-                mybot.reply(message, "my mod commands are:\n" +
-                    "!kick @person: Kicks member.\n" +
-                    "!ban @person: Bans member.\n" +
-                    "!unban @person: Unbans member.\n" +
-                    "!topic (topic): Sets topic.\n" +
-                    "!mute/unmute @member: Mutes/unmutes member. (prevents from sending messages)\n" +
-                    "!supermute/!unsupermute @member: Like mute, but applies to all channels.\n" +
-                    "!review (keyword): Same as !get but also shows unapproved items.\n" +
-                    "!approve (keyword): Approves a stored value.\n" +
-                    "!getunapproved: Lists unapproved items.\n" +
-                    "!delete (keyword): Deletes a stored value."
-                );
-            }
+            mybot.reply(message, "a list of commands is available at https://www.reddit.com/r/TaylorSwift/wiki/discord");
             break;
         case "!rules":
             mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
