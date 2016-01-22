@@ -62,6 +62,27 @@ mybot.on("message", function (message)
             [user.id, user.username, user.username]);
     }
 
+    if (message.mentions.length > 0) {
+        message.mentions.forEach(function (mention) {
+            // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
+            if (message.mentions[0].id == mention.id && inRole(message.channel.server, message.author, "bots"))
+                return;
+
+            // I would use hasPermission for these, but there seems to be a bug in it currently (not taking into account @everyone overrides)
+            if (message.channel.id == "130759361902542848" && !inRole(message.channel.server, mention, "beta")
+                && !isMod(message.channel.server, mention) && !inRole(message.channel.server, mention, "bots"))
+                return;
+
+            if (message.channel.id == "117809670156058633" && !inRole(message.channel.server, mention, "bots")
+                && !isMod(message.channel.server, mention) && mention.id != 118114929474666502)
+                return;
+
+            db.query("INSERT INTO mention_log (user, timestamp, channel, author, message) VALUES (?,?,?,?,?)",
+                    [mention.id, message.timestamp / 1000, message.channel.name, message.author.id, unmention(message.content, message.mentions)]);
+
+        });
+    }
+
     // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
@@ -231,12 +252,41 @@ mybot.on("message", function (message)
                 }
                 else
                 {
+
                     mybot.reply(message, rows[0]['value']);
                     db.query("UPDATE data_store SET uses=uses+1 WHERE keyword = ?", [command[1]]);
                 }
             });
 
             break;
+        case "!mentions":
+            if (channel != "botdev")
+                return;
+            db.query("SELECT username, timestamp, channel, author, message FROM mention_log " +
+                "JOIN members ON mention_log.author=members.id " +
+                "WHERE user = ? ORDER BY mention_log.id ASC", [user.id], function (err, rows) {
+                if (rows.length == 0)
+                {
+                    mybot.sendMessage(user, "No mentions. :(");
+                    return;
+                }
+                var msg = "Mention log: \n";
+                rows.forEach(function (row) {
+                    var newmsg = "**" + row.username + " - " + row.channel + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp) + "**\n";
+                    newmsg += row.message + "\n\n";
+
+                    if (msg.length + newmsg.length > 1900) {
+                        mybot.sendMessage(user, msg);
+                        msg = "Continued:\n";
+                    }
+                    msg += newmsg;
+                });
+                mybot.sendMessage(user, msg);
+                db.query("DELETE FROM mention_log WHERE user = ?", [message.author.id]);
+                mybot.reply(message, "PM sent.");
+            });
+            break;
+        // Mod commands below
         case "!approve":
             if (isMod(message.channel.server, user))
             {
@@ -587,6 +637,15 @@ function secondsToTime(seconds)
         result += sec != 1 ? "s " : " ";
     }
     return result;
+}
+
+function unmention(message, mentions)
+{
+    for (var i = 0; i < mentions.length; i++)
+    {
+        message = message.replace("<@" + mentions[i].id + ">", "@"+mentions[i].username);
+    }
+    return message;
 }
 
 mybot.login(config.email, config.password);
