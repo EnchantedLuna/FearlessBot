@@ -64,8 +64,9 @@ mybot.on("message", function (message)
 
     if (message.mentions.length > 0) {
         message.mentions.forEach(function (mention) {
+            var msg = unmention(message.content, message.mentions);
             // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
-            if (message.mentions[0].id == mention.id && inRole(message.channel.server, message.author, "bots"))
+            if (inRole(message.channel.server, message.author, "bots") && msg.startsWith("@"+mention.username))
                 return;
 
             // I would use hasPermission for these, but there seems to be a bug in it currently (not taking into account @everyone overrides)
@@ -78,7 +79,7 @@ mybot.on("message", function (message)
                 return;
 
             db.query("INSERT INTO mention_log (user, timestamp, channel, author, message) VALUES (?,?,?,?,?)",
-                    [mention.id, message.timestamp / 1000, message.channel.name, message.author.id, unmention(message.content, message.mentions)]);
+                    [mention.id, message.timestamp / 1000, message.channel.name, message.author.id, msg]);
 
         });
     }
