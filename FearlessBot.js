@@ -263,29 +263,7 @@ mybot.on("message", function (message)
         case "!mentions":
             if (channel != "botdev")
                 return;
-            db.query("SELECT username, timestamp, channel, author, message FROM mention_log " +
-                "JOIN members ON mention_log.author=members.id " +
-                "WHERE user = ? ORDER BY mention_log.id ASC", [user.id], function (err, rows) {
-                if (rows.length == 0)
-                {
-                    mybot.sendMessage(user, "No mentions. :(");
-                    return;
-                }
-                var msg = "Mention log: \n";
-                rows.forEach(function (row) {
-                    var newmsg = "**" + row.username + " - " + row.channel + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp) + "**\n";
-                    newmsg += row.message + "\n\n";
-
-                    if (msg.length + newmsg.length > 1900) {
-                        mybot.sendMessage(user, msg);
-                        msg = "Continued:\n";
-                    }
-                    msg += newmsg;
-                });
-                mybot.sendMessage(user, msg);
-                db.query("DELETE FROM mention_log WHERE user = ?", [message.author.id]);
-                mybot.reply(message, "PM sent.");
-            });
+            sendMentionLog(message);
             break;
         // Mod commands below
         case "!approve":
@@ -519,12 +497,48 @@ function handlePM(message)
     var command = message.content.split(" ");
     var params = command.slice(1, command.length).join(" ");
 
-    if (command[0] == "!mods")
+    switch (command[0])
     {
-        var modChannel = mybot.servers.get("id", config.mainServer).channels.get("name", config.modChannel);
-        mybot.sendMessage(modChannel, "PM from " + message.author.username + ": " + params);
-        mybot.sendMessage(message.channel, "your message has been sent to the mods.");
+        case "!mods":
+            var modChannel = mybot.servers.get("id", config.mainServer).channels.get("name", config.modChannel);
+            mybot.sendMessage(modChannel, "PM from " + message.author.username + ": " + params);
+            mybot.sendMessage(message.channel, "your message has been sent to the mods.");
+            break;
+        case "!mentions":
+            sendMentionLog(message);
+            break;
     }
+}
+
+function sendMentionLog(message)
+{
+    var user = message.author;
+    db.query("SELECT username, timestamp, channel, author, message FROM mention_log " +
+        "JOIN members ON mention_log.author=members.id " +
+        "WHERE user = ? ORDER BY mention_log.id ASC", [user.id], function (err, rows) {
+        if (rows.length == 0)
+        {
+            mybot.sendMessage(user, "No mentions. :(");
+            return;
+        }
+        var msg = "Mention log: \n";
+        rows.forEach(function (row) {
+            var newmsg = "**" + row.username + " - " + row.channel + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp) + "**\n";
+            newmsg += row.message + "\n\n";
+
+            if (msg.length + newmsg.length > 1900) {
+                mybot.sendMessage(user, msg);
+                msg = "Continued:\n";
+            }
+            msg += newmsg;
+        });
+        mybot.sendMessage(user, msg);
+        db.query("DELETE FROM mention_log WHERE user = ?", [user.id]);
+        if (!message.channel.isPrivate)
+        {
+            mybot.reply(message, "PM sent.");
+        }
+    });
 }
 
 function clearRegions(server, user)
