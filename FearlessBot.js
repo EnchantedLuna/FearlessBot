@@ -122,7 +122,7 @@ mybot.on("message", function (message)
         case "!name":
             var genders = ['m', 'f'];
             var gender = command[1] == null || (command[1].toLowerCase() != 'm' && command[1].toLowerCase() != 'f') ? genders[Math.floor(Math.random() * genders.length)] : command[1];
-            var year = 2014;
+            var year = 2000;
             if (parseInt(command[2]) >= 1970 && parseInt(command[2]) <= 2014)
                 year = command[2];
             var limit = 300;
