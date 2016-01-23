@@ -20,3 +20,12 @@ CREATE TABLE channel_stats (
   name VARCHAR(25),
   web TINYINT(1) DEFAULT 0
 );
+
+CREATE TABLE mention_log (
+  id INT(11) PRIMARY KEY AUTO_INCREMENT,
+  user VARCHAR(30),
+  timestamp INT(11),
+  channel VARCHAR(20),
+  author VARCHAR(30),
+  message VARCHAR(1800)
+);

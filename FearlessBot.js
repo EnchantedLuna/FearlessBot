@@ -261,8 +261,6 @@ mybot.on("message", function (message)
 
             break;
         case "!mentions":
-            if (channel != "botdev")
-                return;
             sendMentionLog(message);
             break;
         // Mod commands below
