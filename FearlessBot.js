@@ -357,6 +357,7 @@ mybot.on("message", function (message)
                         if (!isMod(message.channel.server, person))
                         {
                             mybot.banMember(person, message.channel.server, 1);
+                            db.query("DELETE FROM members WHERE id = ?", [person.id]);
                             mybot.reply(message, person.username + " has been banned.");
                         }
                     }
