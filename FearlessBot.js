@@ -485,6 +485,13 @@ mybot.on("message", function (message)
                 mybot.reply(message, "user removed from FearlessBot database.");
             }
             break;
+        case "!fsay":
+            if (inRole(message.channel.server, user, "admins"))
+            {
+                mybot.deleteMessage(message);
+                mybot.sendMessage(message.channel, params);
+            }
+            break;
     }
 });
 
