@@ -263,6 +263,14 @@ mybot.on("message", function (message)
         case "!mentions":
             sendMentionLog(message);
             break;
+        case "!randmember":
+            var day = Math.floor(new Date()/1000) - 86400;
+            db.query("SELECT username FROM members WHERE lastseen > ? ORDER BY RAND() LIMIT 1", [day], function (err, rows) {
+                if (rows != null) {
+                    mybot.reply(message, "random member: " + rows[0].username);
+                }
+            });
+            break;
         // Mod commands below
         case "!approve":
             if (isMod(message.channel.server, user))
