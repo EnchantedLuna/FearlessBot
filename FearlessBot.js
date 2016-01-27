@@ -493,6 +493,11 @@ mybot.on("message", function (message)
                 mybot.sendMessage(message.channel, params);
             }
             break;
+        case "!setstatus":
+            if (inRole(message.channel.server, user, "admins"))
+            {
+                mybot.setStatus("online",params);
+            }
     }
 });
 
