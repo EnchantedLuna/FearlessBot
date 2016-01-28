@@ -93,7 +93,7 @@ mybot.on("message", function (message)
 
 
     // Check for commands
-    switch (command[0])
+    switch (command[0].toLowerCase())
     {
         case "!fhelp":
             mybot.reply(message, "a list of commands is available at https://www.reddit.com/r/TaylorSwift/wiki/discord");
