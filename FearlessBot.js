@@ -604,7 +604,6 @@ function updateRegion(message)
         return;
     }
     command[1] = command[1].toLowerCase();
-    clearRegions(message.channel.server, message.author);
     switch (command[1])
     {
         case "america":
@@ -624,8 +623,11 @@ function updateRegion(message)
             mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "oceania"));
             mybot.reply(message, "your region has been set to Oceania.");
             break;
+        case "clear":
+            clearRegions(message.channel.server, message.author);
+            break;
         default:
-            mybot.reply(message, "unrecognized region. Your region settings has been reset.");
+            mybot.reply(message, "unrecognized region. Accepted values: america, europe, asia, oceania, clear");
             break;
     }
 }
