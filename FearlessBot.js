@@ -224,7 +224,8 @@ mybot.on("message", function (message)
         case "!get":
             if (command[1] == null)
                 return;
-            db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
+            var dataserver = (command[2] == "ts") ? config.mainServer : message.channel.server.id;
+            db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [dataserver, command[1]], function (err, rows)
             {
                 if (rows[0] == null)
                 {
