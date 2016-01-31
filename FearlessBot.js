@@ -44,31 +44,31 @@ mybot.on("message", function (message)
 
     // Increment total count
     db.query(
-        'INSERT INTO channel_stats (channel, server, total_messages, name, web) VALUES (?,?,1,?,0) ' +
+        'INSERT INTO channel_stats (channel, server, total_messages, name, web, startdate) VALUES (?,?,1,?,0,UNIX_TIMESTAMP()) ' +
         'ON DUPLICATE KEY UPDATE total_messages=total_messages+1',
         [message.channel.id, message.channel.server.id, message.channel.name]
     );
 
     // Check user info
     var words = command.length;
-    if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
+    if (message.channel.server.id != config.mainServer || message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
-        db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
+        db.query("INSERT INTO members (server, id, username, lastseen, words, messages) VALUES (?,?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
-            [user.id, user.username, words, user.username, words]);
+            [message.channel.server.id, user.id, user.username, words, user.username, words]);
     }
     else
     {
-        db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
+        db.query("INSERT INTO members (server, id, username, lastseen) VALUES (?,?,?,UNIX_TIMESTAMP())" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",
-            [user.id, user.username, user.username]);
+            [message.channel.server.id, user.id, user.username, user.username]);
     }
 
     if (message.mentions.length > 0) {
         message.mentions.forEach(function (mention) {
             var msg = unmention(message.content, message.mentions);
             // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
-            if (inRole(message.channel.server, message.author, "bots") && msg.startsWith("@"+mention.username))
+            if ((inRole(message.channel.server, message.author, "bots") || message.author.id == mybot.user.id) && msg.startsWith("@"+mention.username))
                 return;
 
             // I would use hasPermission for these, but there seems to be a bug in it currently (not taking into account @everyone overrides)
@@ -80,8 +80,8 @@ mybot.on("message", function (message)
                 && !isMod(message.channel.server, mention) && mention.id != 118114929474666502)
                 return;
 
-            db.query("INSERT INTO mention_log (user, timestamp, channel, author, message) VALUES (?,?,?,?,?)",
-                    [mention.id, message.timestamp / 1000, message.channel.name, message.author.id, msg]);
+            db.query("INSERT INTO mention_log (server, user, timestamp, channel, author, message) VALUES (?,?,?,?,?,?)",
+                    [message.channel.server.id, mention.id, message.timestamp / 1000, message.channel.name, message.author.id, msg]);
 
         });
     }
@@ -89,6 +89,12 @@ mybot.on("message", function (message)
     // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
+        return;
+    }
+
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words","!save","!mentions","!rankwords"];
+    // Limited functionality outside the ts server
+    if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
     }
 
@@ -101,6 +107,9 @@ mybot.on("message", function (message)
             break;
         case "!rules":
             mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
+            break;
+        case "!id":
+            mybot.reply(message, "your user id is " + user.id);
             break;
         case "!region":
         case "!setregion":
@@ -118,7 +127,8 @@ mybot.on("message", function (message)
             db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
             {
                 var total = rows[0].total_messages;
-                mybot.reply(message, "there have been " + total + " messages sent since December 5, 2015 in this channel.");
+                var startdate = new Date(rows[0].startdate*1000);
+                mybot.reply(message, "there have been " + total + " messages sent since "+ startdate.toDateString() +" in this channel.");
             });
             break;
         case "!name":
@@ -157,7 +167,7 @@ mybot.on("message", function (message)
                 mybot.reply(message, "You don't know if you're here or not? :smirk:");
                 return;
             }
-            db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
+            db.query("SELECT lastseen FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
@@ -179,12 +189,14 @@ mybot.on("message", function (message)
                 search = user.username;
             }
 
-            db.query("SELECT words, messages FROM members WHERE username = ?", [search], function (err, rows)
+            db.query("SELECT words, messages FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
-                    mybot.reply(message, search + " has used " + rows[0].words + " words. (average " + average + " per message)");
+                    // Don't show message count in main server, TaylorBot has been doing that longer
+                    var msgcount = (message.channel.server.id == config.mainServer) ? "" : " in " + rows[0].messages + " messages";
+                    mybot.reply(message, search + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
                 }
             });
             break;
@@ -195,7 +207,7 @@ mybot.on("message", function (message)
             {
                 numberToGet = parseInt(command[1]);
             }
-            db.query("SELECT username, words, messages FROM members WHERE words > 0 ORDER BY words DESC LIMIT ?", [numberToGet], function (err, rows)
+            db.query("SELECT username, words, messages FROM members WHERE server = ? AND words > 0 ORDER BY words DESC LIMIT ?", [message.channel.server.id, numberToGet], function (err, rows)
             {
                 var count = 1;
                 rows.forEach(function (member) {
@@ -206,44 +218,14 @@ mybot.on("message", function (message)
             });
             break;
         case "!save":
-            if (command[1] == null)
-                return;
-            if (command[2] == null)
-            {
-                mybot.reply(message, "you need to specify a value (the thing you want saved) for that keyword.");
-                return;
-            }
-            var key = command[1];
-            var value = command.slice(2, command.length).join(" ");
-            // check for existing
-            db.query("SELECT * FROM data_store WHERE keyword = ?", [command[1]], function (err, rows)
-            {
-                if (isMod(message.channel.server, user))
-                {
-                    db.query("REPLACE INTO data_store (keyword, value, owner, approved) VALUES (?,?,?,1)", [key, value, user.id]);
-                    mybot.reply(message, "updated and ready to use.");
-                }
-                else if (rows[0] == null)
-                {
-                    db.query("INSERT INTO data_store (keyword, value, owner) VALUES (?,?,?)", [key, value, user.id]);
-                    mybot.reply(message, "created. This will need to be approved before it can be used.");
-                }
-                else if (rows[0]['owner'] == user.id)
-                {
-                    db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ?", [value, key]);
-                    mybot.reply(message, "updated. This will need to be approved before it can be used.");
-                }
-                else
-                {
-                    mybot.reply(message, "this keyword already exists.");
-                }
-            });
+            saveThing(message);
             break;
         case "!g":
         case "!get":
             if (command[1] == null)
                 return;
-            db.query("SELECT * FROM data_store WHERE keyword = ?", [command[1]], function (err, rows)
+            var dataserver = (command[2] == "ts") ? config.mainServer : message.channel.server.id;
+            db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [dataserver, command[1]], function (err, rows)
             {
                 if (rows[0] == null)
                 {
@@ -505,7 +487,7 @@ mybot.on("message", function (message)
 mybot.on("serverNewMember", function (server, user)
 {
     var username = user.username;
-    mybot.sendMessage("115332333745340416", username + " has joined the server. Welcome!");
+    mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
 });
 
 mybot.on("messageDeleted", function (message, channel)
@@ -538,11 +520,49 @@ function handlePM(message)
     }
 }
 
+function saveThing(message)
+{
+    var command = message.content.split(" ");
+    if (command[1] == null)
+        return;
+    if (command[2] == null)
+    {
+        mybot.reply(message, "you need to specify a value (the thing you want saved) for that keyword.");
+        return;
+    }
+    var key = command[1];
+    var value = command.slice(2, command.length).join(" ");
+    // check for existing
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
+    {
+        if (isMod(message.channel.server, message.author) ||
+            (message.channel.server.id != config.mainServer && (rows[0] == null || rows[0]['owner'] == message.author.id)))
+        {
+            db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.server.id, key, value, message.author.id]);
+            mybot.reply(message, "updated and ready to use.");
+        }
+        else if (rows[0] == null)
+        {
+            db.query("INSERT INTO data_store (server, keyword, value, owner) VALUES (?,?,?,?)", [message.channel.server.id, key, value, message.author.id]);
+            mybot.reply(message, "created. This will need to be approved before it can be used.");
+        }
+        else if (rows[0]['owner'] == message.author.id)
+        {
+            db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ? AND server = ?", [value, key, message.channel.server.id]);
+            mybot.reply(message, "updated. This will need to be approved before it can be used.");
+        }
+        else
+        {
+            mybot.reply(message, "this keyword already exists.");
+        }
+    });
+}
+
 function sendMentionLog(message)
 {
     var user = message.author;
     db.query("SELECT username, timestamp, channel, author, message FROM mention_log " +
-        "JOIN members ON mention_log.author=members.id " +
+        "JOIN members ON mention_log.author=members.id AND mention_log.server=members.server " +
         "WHERE user = ? ORDER BY mention_log.id ASC", [user.id], function (err, rows) {
         if (rows.length == 0)
         {
