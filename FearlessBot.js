@@ -44,7 +44,7 @@ mybot.on("message", function (message)
 
     // Increment total count
     db.query(
-        'INSERT INTO channel_stats (channel, server, total_messages, name, web) VALUES (?,?,1,?,0) ' +
+        'INSERT INTO channel_stats (channel, server, total_messages, name, web, startdate) VALUES (?,?,1,?,0,UNIX_TIMESTAMP()) ' +
         'ON DUPLICATE KEY UPDATE total_messages=total_messages+1',
         [message.channel.id, message.channel.server.id, message.channel.name]
     );
