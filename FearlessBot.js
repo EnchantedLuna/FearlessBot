@@ -44,30 +44,31 @@ mybot.on("message", function (message)
 
     // Increment total count
     db.query(
-        'UPDATE channel_stats SET total_messages=total_messages+1 WHERE channel = ?',
-        [message.channel.id]
+        'INSERT INTO channel_stats (channel, server, total_messages, name, web) VALUES (?,?,1,?,0) ' +
+        'ON DUPLICATE KEY UPDATE total_messages=total_messages+1',
+        [message.channel.id, message.channel.server.id, message.channel.name]
     );
 
     // Check user info
     var words = command.length;
-    if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
+    if (message.channel.server.id != "115332333745340416" || message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
-        db.query("INSERT INTO members (id, username, lastseen, words, messages) VALUES (?,?,UNIX_TIMESTAMP(),?,1)" +
+        db.query("INSERT INTO members (server, id, username, lastseen, words, messages) VALUES (?,?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
-            [user.id, user.username, words, user.username, words]);
+            [message.channel.server.id, user.id, user.username, words, user.username, words]);
     }
     else
     {
-        db.query("INSERT INTO members (id, username, lastseen) VALUES (?,?,UNIX_TIMESTAMP())" +
+        db.query("INSERT INTO members (server, id, username, lastseen) VALUES (?,?,?,UNIX_TIMESTAMP())" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP()",
-            [user.id, user.username, user.username]);
+            [message.channel.server.id, user.id, user.username, user.username]);
     }
 
     if (message.mentions.length > 0) {
         message.mentions.forEach(function (mention) {
             var msg = unmention(message.content, message.mentions);
             // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
-            if (inRole(message.channel.server, message.author, "bots") && msg.startsWith("@"+mention.username))
+            if ((inRole(message.channel.server, message.author, "bots") || message.author.id == mybot.user.id) && msg.startsWith("@"+mention.username))
                 return;
 
             // I would use hasPermission for these, but there seems to be a bug in it currently (not taking into account @everyone overrides)
@@ -88,6 +89,12 @@ mybot.on("message", function (message)
     // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
+        return;
+    }
+
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song"];
+    // Limited functionality outside the ts server
+    if (message.channel.server.id != "115332333745340416" && nontscommands.indexOf(command[0]) == -1) {
         return;
     }
 
@@ -504,7 +511,7 @@ mybot.on("message", function (message)
 mybot.on("serverNewMember", function (server, user)
 {
     var username = user.username;
-    mybot.sendMessage("115332333745340416", username + " has joined the server. Welcome!");
+    mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
 });
 
 mybot.on("messageDeleted", function (message, channel)
