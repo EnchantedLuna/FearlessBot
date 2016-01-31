@@ -92,7 +92,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen"];
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != "115332333745340416" && nontscommands.indexOf(command[0]) == -1) {
         return;
