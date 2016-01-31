@@ -51,7 +51,7 @@ mybot.on("message", function (message)
 
     // Check user info
     var words = command.length;
-    if (message.channel.server.id != "115332333745340416" || message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
+    if (message.channel.server.id != config.mainServer || message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
         db.query("INSERT INTO members (server, id, username, lastseen, words, messages) VALUES (?,?,?,UNIX_TIMESTAMP(),?,1)" +
             "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1",
@@ -94,7 +94,7 @@ mybot.on("message", function (message)
 
     var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words"];
     // Limited functionality outside the ts server
-    if (message.channel.server.id != "115332333745340416" && nontscommands.indexOf(command[0]) == -1) {
+    if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
     }
 
@@ -195,7 +195,7 @@ mybot.on("message", function (message)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
                     // Don't show message count in main server, TaylorBot has been doing that longer
-                    var msgcount = (message.channel.server.id == "115332333745340416") ? "" : " in " + rows[0].messages + " messages";
+                    var msgcount = (message.channel.server.id == config.mainServer) ? "" : " in " + rows[0].messages + " messages";
                     mybot.reply(message, search + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
                 }
             });
@@ -218,38 +218,7 @@ mybot.on("message", function (message)
             });
             break;
         case "!save":
-            if (command[1] == null)
-                return;
-            if (command[2] == null)
-            {
-                mybot.reply(message, "you need to specify a value (the thing you want saved) for that keyword.");
-                return;
-            }
-            var key = command[1];
-            var value = command.slice(2, command.length).join(" ");
-            // check for existing
-            db.query("SELECT * FROM data_store WHERE keyword = ?", [command[1]], function (err, rows)
-            {
-                if (isMod(message.channel.server, user))
-                {
-                    db.query("REPLACE INTO data_store (keyword, value, owner, approved) VALUES (?,?,?,1)", [key, value, user.id]);
-                    mybot.reply(message, "updated and ready to use.");
-                }
-                else if (rows[0] == null)
-                {
-                    db.query("INSERT INTO data_store (keyword, value, owner) VALUES (?,?,?)", [key, value, user.id]);
-                    mybot.reply(message, "created. This will need to be approved before it can be used.");
-                }
-                else if (rows[0]['owner'] == user.id)
-                {
-                    db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ?", [value, key]);
-                    mybot.reply(message, "updated. This will need to be approved before it can be used.");
-                }
-                else
-                {
-                    mybot.reply(message, "this keyword already exists.");
-                }
-            });
+            saveThing(message);
             break;
         case "!g":
         case "!get":
@@ -548,6 +517,44 @@ function handlePM(message)
             sendMentionLog(message);
             break;
     }
+}
+
+function saveThing(message)
+{
+    var command = message.split(" ");
+    if (command[1] == null)
+        return;
+    if (command[2] == null)
+    {
+        mybot.reply(message, "you need to specify a value (the thing you want saved) for that keyword.");
+        return;
+    }
+    var key = command[1];
+    var value = command.slice(2, command.length).join(" ");
+    // check for existing
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
+    {
+        if (isMod(message.channel.server, message.author) ||
+            (message.channel.server.id != config.mainServer && (rows[0] == null || rows[0]['owner'] == message.author.id)))
+        {
+            db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.server.id, key, value, message.author.id]);
+            mybot.reply(message, "updated and ready to use.");
+        }
+        else if (rows[0] == null)
+        {
+            db.query("INSERT INTO data_store (server, keyword, value, owner) VALUES (?,?,?,?)", [message.channel.server.id, key, value, message.author.id]);
+            mybot.reply(message, "created. This will need to be approved before it can be used.");
+        }
+        else if (rows[0]['owner'] == message.author.id)
+        {
+            db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ? AND server = ?", [value, key, message.channel.server.id]);
+            mybot.reply(message, "updated. This will need to be approved before it can be used.");
+        }
+        else
+        {
+            mybot.reply(message, "this keyword already exists.");
+        }
+    });
 }
 
 function sendMentionLog(message)
