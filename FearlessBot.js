@@ -127,7 +127,8 @@ mybot.on("message", function (message)
             db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
             {
                 var total = rows[0].total_messages;
-                mybot.reply(message, "there have been " + total + " messages sent since December 5, 2015 in this channel.");
+                var startdate = new Date(rows[0].startdate*1000);
+                mybot.reply(message, "there have been " + total + " messages sent since "+ startdate.toDateString() +" in this channel.");
             });
             break;
         case "!name":
