@@ -38,10 +38,15 @@ $db->set_charset("utf8");
                 </thead>
                 <tbody>
                 <?php
-                $query = $db->query("SELECT keyword, value, uses, username FROM data_store LEFT JOIN members ON data_store.owner=members.id WHERE approved=1 ORDER BY keyword");
-                while ($row = $query->fetch_array())
+                $stmt = $db->prepare("SELECT keyword, value, uses, username FROM data_store
+                LEFT JOIN members ON data_store.owner=members.id AND data_store.server=members.server WHERE approved=1 AND data_store.server= ? ORDER BY keyword ");
+                $server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
+                $stmt->bind_param("s", $server);
+                $stmt->execute();
+                $stmt->bind_result($keyword, $value, $uses, $username);
+                while ($stmt->fetch())
                 {
-                    echo "<tr><td>".autolink($row['keyword'],50)."</td><td>".nl2br(autolink($row['value'],50))."</td><td>".$row['username']."</td><td>".$row['uses']."</td></tr>";
+                    echo "<tr><td>".$keyword."</td><td>".nl2br(autolink($value,50))."</td><td>".$username."</td><td>".$uses."</td></tr>";
                 }
                 ?>
                 </tbody>
