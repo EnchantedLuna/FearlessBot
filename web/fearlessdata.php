@@ -5,6 +5,7 @@ require_once "lib_autolink.php";
 
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8");
+$server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,34 +41,40 @@ $db->set_charset("utf8");
                 <?php
                 $stmt = $db->prepare("SELECT keyword, value, uses, username FROM data_store
                 LEFT JOIN members ON data_store.owner=members.id AND data_store.server=members.server WHERE approved=1 AND data_store.server= ? ORDER BY keyword ");
-                $server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
                 $stmt->bind_param("s", $server);
                 $stmt->execute();
                 $stmt->bind_result($keyword, $value, $uses, $username);
                 while ($stmt->fetch())
                 {
-                    echo "<tr><td>".$keyword."</td><td>".nl2br(autolink($value,50))."</td><td>".$username."</td><td>".$uses."</td></tr>";
+                    echo "<tr><td>".htmlspecialchars($keyword)."</td><td>".nl2br(autolink(htmlspecialchars($value,50)))."</td><td>".htmlspecialchars($username)."</td><td>".$uses."</td></tr>";
                 }
                 ?>
                 </tbody>
             </table>
         </div>
-        <div id="channelStats">
-            <h1>Channel Stats</h1>
-            <table>
-                <tr><th>Channel</th><th>Total Messages</th></tr>
-                <?php
-                $query = $db->query("SELECT * FROM channel_stats WHERE web=1");
-                $total = 0;
-                while ($row = $query->fetch_array())
-                {
-                    echo "<tr><td>".$row['name']."</td><td>".$row['total_messages']."</td></tr>";
-                    $total += $row['total_messages'];
-                }
-                echo "<tr><td><b>Total</b></td><td>$total</td></tr>";
-                ?>
-            </table>
-        </div>
+        <?php
+        if ($server == "115332333745340416")
+        {
+        ?>
+            <div id="channelStats">
+                <h1>Channel Stats</h1>
+                <table>
+                    <tr><th>Channel</th><th>Total Messages</th></tr>
+                    <?php
+                    $query = $db->query("SELECT * FROM channel_stats WHERE web=1");
+                    $total = 0;
+                    while ($row = $query->fetch_array())
+                    {
+                        echo "<tr><td>".$row['name']."</td><td>".$row['total_messages']."</td></tr>";
+                        $total += $row['total_messages'];
+                    }
+                    echo "<tr><td><b>Total</b></td><td>$total</td></tr>";
+                    ?>
+                </table>
+            </div>
+        <?php
+        }
+        ?>
         <script src="sortable.min.js"></script>
     </body>
 </html>

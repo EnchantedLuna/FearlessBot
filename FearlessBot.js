@@ -92,7 +92,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words","!save","!mentions","!rankwords"];
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -244,6 +244,9 @@ mybot.on("message", function (message)
             });
 
             break;
+        case "!getlist":
+                mybot.reply(message, "https://youregoingtolove.me/fearlessdata.php?server=" + message.channel.server.id);
+            break;
         case "!mentions":
             sendMentionLog(message);
             break;
@@ -290,7 +293,7 @@ mybot.on("message", function (message)
         case "!review":
             if (!isMod(message.channel.server, user))
                 return;
-            db.query("SELECT * FROM data_store WHERE keyword = ?", [command[1]], function (err, rows)
+            db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
             {
                 if (rows[0] == null)
                 {
