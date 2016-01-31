@@ -92,7 +92,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song"];
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != "115332333745340416" && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -107,6 +107,9 @@ mybot.on("message", function (message)
             break;
         case "!rules":
             mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
+            break;
+        case "!id":
+            mybot.reply(message, "your user id is " + user.id);
             break;
         case "!region":
         case "!setregion":
