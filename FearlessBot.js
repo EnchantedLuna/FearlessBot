@@ -521,7 +521,7 @@ function handlePM(message)
 
 function saveThing(message)
 {
-    var command = message.split(" ");
+    var command = message.content.split(" ");
     if (command[1] == null)
         return;
     if (command[2] == null)
