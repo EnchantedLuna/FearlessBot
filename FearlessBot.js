@@ -92,7 +92,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id"];
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != "115332333745340416" && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -167,7 +167,7 @@ mybot.on("message", function (message)
                 mybot.reply(message, "You don't know if you're here or not? :smirk:");
                 return;
             }
-            db.query("SELECT lastseen FROM members WHERE username = ?", [search], function (err, rows)
+            db.query("SELECT lastseen FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
