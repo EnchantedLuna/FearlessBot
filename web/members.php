@@ -24,7 +24,7 @@ $db->set_charset("utf8");
         </thead>
         <tbody>
         <?php
-        $query = $db->query("SELECT * FROM members ORDER BY username");
+        $query = $db->query("SELECT * FROM members WHERE server='115332333745340416' ORDER BY username");
         while ($row = $query->fetch_array())
         {
             $average = ($row['messages'] > 0) ? round($row['words']/$row['messages'],2) : 0;
