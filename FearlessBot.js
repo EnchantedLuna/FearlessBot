@@ -189,12 +189,14 @@ mybot.on("message", function (message)
                 search = user.username;
             }
 
-            db.query("SELECT words, messages FROM members WHERE username = ?", [search], function (err, rows)
+            db.query("SELECT words, messages FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
-                    mybot.reply(message, search + " has used " + rows[0].words + " words. (average " + average + " per message)");
+                    // Don't show message count in main server, TaylorBot has been doing that longer
+                    var msgcount = (message.channel.server.id == "115332333745340416") ? "" : " in " + rows[0].messages + " messages";
+                    mybot.reply(message, search + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
                 }
             });
             break;
