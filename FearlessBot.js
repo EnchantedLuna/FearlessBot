@@ -92,7 +92,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words","!save","!mentions"];
+    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words","!save","!mentions","!rankwords"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -207,7 +207,7 @@ mybot.on("message", function (message)
             {
                 numberToGet = parseInt(command[1]);
             }
-            db.query("SELECT username, words, messages FROM members WHERE words > 0 ORDER BY words DESC LIMIT ?", [numberToGet], function (err, rows)
+            db.query("SELECT username, words, messages FROM members WHERE server = ? AND words > 0 ORDER BY words DESC LIMIT ?", [message.channel.server.id, numberToGet], function (err, rows)
             {
                 var count = 1;
                 rows.forEach(function (member) {
