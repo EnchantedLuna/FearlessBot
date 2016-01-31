@@ -53,10 +53,13 @@ $db->set_charset("utf8");
                 <tr><th>Channel</th><th>Total Messages</th></tr>
                 <?php
                 $query = $db->query("SELECT * FROM channel_stats WHERE web=1");
+                $total = 0;
                 while ($row = $query->fetch_array())
                 {
                     echo "<tr><td>".$row['name']."</td><td>".$row['total_messages']."</td></tr>";
+                    $total += $row['total_messages'];
                 }
+                echo "<tr><td><b>Total</b></td><td>$total</td></tr>";
                 ?>
             </table>
         </div>
