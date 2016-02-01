@@ -273,7 +273,7 @@ mybot.on("message", function (message)
         case "!delete":
             if (isMod(message.channel.server, user))
             {
-                db.query("DELETE FROM data_store WHERE keyword = ?", [command[1]], function (err, result)
+                db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, result)
                 {
                     if (result.affectedRows > 0)
                     {
@@ -469,7 +469,10 @@ mybot.on("message", function (message)
             if (inRole(message.channel.server, user, "admins") || user.id == "119341483219353602") // Enchanted13
             {
                 db.query("DELETE FROM members WHERE id = ?", [command[1]]);
-                mybot.reply(message, "user removed from FearlessBot database.");
+                if (command[2] != "s")
+                {
+                    mybot.reply(message, "user removed from FearlessBot database.");
+                }
             }
             break;
         case "!fsay":
