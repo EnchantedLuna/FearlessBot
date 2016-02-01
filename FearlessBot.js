@@ -262,7 +262,7 @@ mybot.on("message", function (message)
         case "!convert":
             try{
                 var value = units.convert(params);
-                mybot.reply(message, value);
+                mybot.reply(message, (Math.round(value * 100) / 100) + " " + command[command.length - 1]);
             } catch(e){
                 mybot.reply(message, e);
             }
