@@ -1,6 +1,7 @@
 var Discord = require("discord.js");
 var config = require("./auth.json");
 var mysql = require("mysql");
+var units = require("node-units");
 var db = mysql.createConnection({
     host: config.mysqlHost,
     user: config.mysqlUser,
@@ -257,6 +258,14 @@ mybot.on("message", function (message)
                     mybot.reply(message, "random member: " + rows[0].username);
                 }
             });
+            break;
+        case "!convert":
+            try{
+                var value = units.convert(params);
+                mybot.reply(message, value);
+            } catch(e){
+                mybot.reply(message, e);
+            }
             break;
         // Mod commands below
         case "!approve":
