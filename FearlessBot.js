@@ -322,7 +322,7 @@ mybot.on("message", function (message)
                     {
                         list = list + rows[i].keyword + " ";
                     }
-                    mybot.reply(message, "unapproved: " + list);
+                    mybot.reply(message, "unapproved: ``" + list + "``");
                 });
             }
             break;
