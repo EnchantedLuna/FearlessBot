@@ -93,7 +93,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!stats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -110,7 +110,7 @@ mybot.on("message", function (message)
             mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
             break;
         case "!id":
-            mybot.reply(message, "your user id is " + user.id);
+            mybot.reply(message, "your user id is " + user.id + ".");
             break;
         case "!region":
         case "!setregion":
@@ -118,13 +118,13 @@ mybot.on("message", function (message)
             break;
         case "!8ball":
             var answer = eightBallAnswers[Math.floor(Math.random() * eightBallAnswers.length)];
-            mybot.reply(message, answer);
+            mybot.reply(message, answer + ".");
             break;
         case "!song":
             var song = taylorSwiftSongs[Math.floor(Math.random() * taylorSwiftSongs.length)];
             mybot.reply(message, "you should listen to " + song + ".");
             break;
-        case "!stats":
+        case "!channelstats":
             db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
             {
                 var total = rows[0].total_messages;
