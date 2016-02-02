@@ -514,7 +514,7 @@ mybot.on("messageDeleted", function (message, channel)
     if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
         var words = message.content.split(" ").length;
-        var removedWords = Math.round(words * 1.5); // To help discourage spamming for wordcount
+        var removedWords = (words > 20) ? Math.round(words * 1.5) : words; // To help discourage spamming for wordcount
         db.query("UPDATE members SET words=words-? WHERE id=?", [removedWords, message.author.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
     }
