@@ -474,16 +474,6 @@ mybot.on("message", function (message)
                 mybot.reply(message, "nice try.");
             }
             break;
-        case "!deleteuser":
-            if (inRole(message.channel.server, user, "admins") || user.id == "119341483219353602") // Enchanted13
-            {
-                db.query("DELETE FROM members WHERE id = ?", [command[1]]);
-                if (command[2] != "s")
-                {
-                    mybot.reply(message, "user removed from FearlessBot database.");
-                }
-            }
-            break;
         case "!fsay":
             if (inRole(message.channel.server, user, "admins"))
             {
