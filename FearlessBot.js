@@ -208,7 +208,7 @@ mybot.on("message", function (message)
             {
                 numberToGet = parseInt(command[1]);
             }
-            db.query("SELECT username, words, messages FROM members WHERE server = ? AND words > 0 ORDER BY words DESC LIMIT ?", [message.channel.server.id, numberToGet], function (err, rows)
+            db.query("SELECT username, words, messages FROM members WHERE server = ? AND words > 0 AND active=1 ORDER BY words DESC LIMIT ?", [message.channel.server.id, numberToGet], function (err, rows)
             {
                 var count = 1;
                 rows.forEach(function (member) {
@@ -486,6 +486,23 @@ mybot.on("message", function (message)
             {
                 mybot.setStatus("online",params);
             }
+            break;
+        case "!checkactive":
+            if (inRole(message.channel.server, user, "admins"))
+            {
+                db.query("SELECT id FROM members WHERE server = ?", [message.channel.server.id], function (err, rows)
+                {
+                    for (var i=0; i < rows.length; i++)
+                    {
+                        var member = message.channel.server.members.get("id",rows[i].id);
+                        if (member == null)
+                        {
+                            db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [message.channel.server.id, rows[i].id]);
+                        }
+                    }
+                });
+            }
+            break;
     }
 });
 
