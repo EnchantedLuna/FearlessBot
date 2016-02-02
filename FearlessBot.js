@@ -532,6 +532,22 @@ mybot.on("messageDeleted", function (message, channel)
     }
 });
 
+setInterval(function() {
+    console.log("Starting hourly cleanup.");
+    db.query("SELECT id, username FROM members WHERE server = ?", [config.mainServer], function (err, rows)
+    {
+        for (var i=0; i < rows.length; i++)
+        {
+            var member = mybot.servers.get("id",config.mainServer).members.get("id",rows[i].id);
+            if (member == null)
+            {
+                console.log(rows[i].username + " has become inactive - id: " + rows[i].id);
+                db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [message.channel.server.id, rows[i].id]);
+            }
+        }
+    });
+}, 3600000);
+
 // Bot functionality for PMs
 function handlePM(message)
 {
