@@ -703,15 +703,14 @@ function updateRegion(message)
 function inRole(server, user, needle)
 {
     var roles = server.rolesOfUser(user);
-    var inRole = false;
-    roles.forEach(function (role)
+    for(var i = 0; i < roles.length; ++i)
     {
-        if (role.name == needle)
-        {
-            inRole = true;
-        }
-    });
-    return inRole;
+      if (roles[i].name === needle)
+      {
+        return true;
+      } 
+    }
+    return false;
 }
 
 
