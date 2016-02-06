@@ -51,7 +51,7 @@ mybot.on("message", function (message)
     );
 
     // Check user info
-    var words = command.length;
+    var words = command.filter(function(e){ return e === 0 || e }).length;
     if (message.channel.server.id != config.mainServer || message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
         db.query("INSERT INTO members (server, id, username, lastseen, words, messages) VALUES (?,?,?,UNIX_TIMESTAMP(),?,1)" +
