@@ -366,7 +366,7 @@ mybot.on("message", function (message)
                         if (!isMod(message.channel.server, person))
                         {
                             mybot.banMember(person, message.channel.server, 1);
-                            db.query("DELETE FROM members WHERE id = ?", [person.id]);
+                            db.query("UPDATE members SET active = 0 WHERE id = ? AND server = ?", [person.id, message.channel.server.id]);
                             mybot.reply(message, person.username + " has been banned.");
                         }
                     }
@@ -534,11 +534,11 @@ mybot.on("messageDeleted", function (message, channel)
 
 setInterval(function() {
     console.log("Starting hourly cleanup.");
-    db.query("SELECT id, username FROM members WHERE server = ? AND active=1", [config.mainServer], function (err, rows)
+    db.query("SELECT id, username, server FROM members WHERE active=1", function (err, rows)
     {
         for (var i=0; i < rows.length; i++)
         {
-            var member = mybot.servers.get("id",config.mainServer).members.get("id",rows[i].id);
+            var member = mybot.servers.get("id",rows[i].server).members.get("id",rows[i].id);
             if (member == null)
             {
                 console.log(rows[i].username + " has become inactive - id: " + rows[i].id);
