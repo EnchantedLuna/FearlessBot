@@ -12,7 +12,17 @@ $server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
     <head>
         <title>FearlessBot Data Storage</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="sortable-theme-bootstrap.css" />
+
+        <?php
+        if ($_GET['theme']=="dark") {
+            echo '<link rel="stylesheet" href="sortable-theme-dark.css" />';
+            echo '<link rel="stylesheet" href="dark.css" />';
+            $theme = "sortable-theme-dark";
+        } else {
+            echo '<link rel="stylesheet" href="sortable-theme-bootstrap.css" />';
+            $theme = "sortable-theme-bootstrap";
+        }
+        ?>
         <style type="text/css">
         #dataStore {
             margin-bottom: 10px;
@@ -28,7 +38,7 @@ $server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
     <body>
         <div id="dataStore">
             <h1>FearlessBot Data Storage</h1>
-            <table class="sortable-theme-bootstrap" data-sortable>
+            <table class="<?php echo $theme; ?>" data-sortable>
                 <thead>
                 <tr>
                     <th>Keyword</th>
