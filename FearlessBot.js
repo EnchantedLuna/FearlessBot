@@ -542,7 +542,7 @@ setInterval(function() {
             if (member == null)
             {
                 console.log(rows[i].username + " has become inactive - id: " + rows[i].id);
-                db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [config.mainServer, rows[i].id]);
+                db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [rows[i].server, rows[i].id]);
             }
         }
     });
