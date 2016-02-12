@@ -532,6 +532,21 @@ mybot.on("messageDeleted", function (message, channel)
     }
 });
 
+mybot.on("presence", function (oldUser, newUser)
+{
+    if (oldUser.username != newUser.username)
+    {
+        db.query("SELECT server, username FROM members WHERE id = ? AND active=1", [newUser.id], function (err, rows)
+        {
+            for (var i=0; i < rows.length; i++)
+            {
+                mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                db.query("UPDATE members SET username=? WHERE id = ?", [newUser.username, newUser.id]);
+            }
+        });
+    }
+});
+
 setInterval(function() {
     console.log("Starting hourly cleanup.");
     db.query("SELECT id, username, server FROM members WHERE active=1", function (err, rows)
