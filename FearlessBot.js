@@ -544,10 +544,7 @@ mybot.on("presence", function (oldUser, newUser)
         {
             for (var i=0; i < rows.length; i++)
             {
-                if (!inRole(rows[i].server, rows[i].id, "supermute"))
-                {
-                    mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
-                }
+                mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
                 db.query("UPDATE members SET username=? WHERE id = ?", [newUser.username, newUser.id]);
             }
         });
