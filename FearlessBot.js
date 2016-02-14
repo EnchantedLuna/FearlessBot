@@ -38,6 +38,10 @@ mybot.on("message", function (message)
         handlePM(message);
         return;
     }
+    if (message.everyoneMentioned)
+    {
+        return;
+    }
     var user = message.author;
     var channel = message.channel.name;
     var command = message.content.split(" ");
@@ -540,7 +544,10 @@ mybot.on("presence", function (oldUser, newUser)
         {
             for (var i=0; i < rows.length; i++)
             {
-                mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                if (!inRole(rows[i].server, rows[i].id, "supermute"))
+                {
+                    mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                }
                 db.query("UPDATE members SET username=? WHERE id = ?", [newUser.username, newUser.id]);
             }
         });
