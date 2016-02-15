@@ -280,8 +280,17 @@ mybot.on("message", function (message)
         case "!approve":
             if (isMod(message.channel.server, user))
             {
-                db.query("UPDATE data_store SET  approved=1 WHERE keyword = ?", [command[1]]);
-                mybot.reply(message, "approved.");
+                db.query("UPDATE data_store SET  approved=1 WHERE keyword = ? AND server = ?", [command[1], message.channel.server.id], function (err, result)
+                {
+                    if (result.affectedRows > 0)
+                    {
+                        mybot.reply(message, "approved.");
+                    }
+                    else
+                    {
+                        mybot.reply(message, "nothing to approve.");
+                    }
+                });
             }
             else
             {
