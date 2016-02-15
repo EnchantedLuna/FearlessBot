@@ -114,7 +114,9 @@ mybot.on("message", function (message)
             mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
             break;
         case "!id":
-            mybot.reply(message, "your user id is " + user.id + ".");
+            if (message.channel.server.id != config.mainServer) {
+                mybot.reply(message, "your user id is " + user.id + ".");
+            }
             break;
         case "!region":
         case "!setregion":
