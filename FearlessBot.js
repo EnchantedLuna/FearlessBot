@@ -560,6 +560,7 @@ mybot.on("presence", function (oldUser, newUser)
     }
 });
 
+/*
 setInterval(function() {
     console.log("Starting hourly cleanup.");
     db.query("SELECT id, username, server FROM members WHERE active=1", function (err, rows)
@@ -575,6 +576,7 @@ setInterval(function() {
         }
     });
 }, 3600000);
+*/
 
 // Bot functionality for PMs
 function handlePM(message)
