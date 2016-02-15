@@ -129,7 +129,7 @@ mybot.on("message", function (message)
             if (choices.length > 1)
             {
                 var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
-                mybot.reply(message, "I pick: " + selectedChoice);
+                mybot.reply(message, "I pick: " + selectedChoice.trim());
             }
             break;
         case "!song":
