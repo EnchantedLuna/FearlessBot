@@ -97,7 +97,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -123,6 +123,14 @@ mybot.on("message", function (message)
         case "!8ball":
             var answer = eightBallAnswers[Math.floor(Math.random() * eightBallAnswers.length)];
             mybot.reply(message, answer + ".");
+            break;
+        case "!choose":
+            var choices = params.split(",");
+            if (choices.length > 1)
+            {
+                var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
+                mybot.reply(message, "I pick: " + selectedChoice);
+            }
             break;
         case "!song":
             var song = taylorSwiftSongs[Math.floor(Math.random() * taylorSwiftSongs.length)];
