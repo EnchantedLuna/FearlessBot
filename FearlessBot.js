@@ -55,7 +55,7 @@ mybot.on("message", function (message)
     );
 
     // Check user info
-    var words = command.filter(function(e){ return e === 0 || e }).length;
+    var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
     if (message.channel.server.id != config.mainServer || message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
         db.query("INSERT INTO members (server, id, username, lastseen, words, messages) VALUES (?,?,?,UNIX_TIMESTAMP(),?,1)" +
@@ -548,7 +548,7 @@ mybot.on("messageDeleted", function (message, channel)
     }
     if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
-        var words = message.content.split(" ").filter(function(e){ return e === 0 || e }).length;
+        var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
         var removedWords = (words > 20) ? Math.round(words * 1.5) : words; // To help discourage spamming for wordcount
         db.query("UPDATE members SET words=words-? WHERE id=?", [removedWords, message.author.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
