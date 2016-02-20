@@ -648,6 +648,7 @@ function saveThing(message)
 function sendMentionLog(message)
 {
     var user = message.author;
+    var allMessages = [];
     db.query("SELECT username, timestamp, channel, author, message FROM mention_log " +
         "JOIN members ON mention_log.author=members.id AND mention_log.server=members.server " +
         "WHERE user = ? ORDER BY mention_log.id ASC", [user.id], function (err, rows) {
@@ -662,12 +663,18 @@ function sendMentionLog(message)
             newmsg += row.message + "\n\n";
 
             if (msg.length + newmsg.length > 1900) {
-                mybot.sendMessage(user, msg);
+                allMessages.push(msg);
                 msg = "Continued:\n";
             }
             msg += newmsg;
         });
-        mybot.sendMessage(user, msg);
+        allMessages.push(msg);
+        for (var i = 0; i < allMessages.length; i++)
+        {
+            setTimeout(function(time) {
+                mybot.sendMessage(user, allMessages[time]);
+            }, i*200, i);
+        }
         db.query("DELETE FROM mention_log WHERE user = ?", [user.id]);
         if (!message.channel.isPrivate)
         {
