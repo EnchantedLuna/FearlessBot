@@ -19,6 +19,7 @@ $db->set_charset("utf8");
         <tr>
             <th>Username</th>
             <th>Words</th>
+            <th>Messages*</th>
             <th>Words/Msg</th>
             <th>Last Seen</th>
         </tr>
@@ -29,12 +30,13 @@ $db->set_charset("utf8");
         while ($row = $query->fetch_array())
         {
             $average = ($row['messages'] > 0) ? round($row['words']/$row['messages'],2) : 0;
-            echo "<tr><td>".$row['username']."</td><td>".$row['words']."</td><td>$average</td><td>".date('Y-m-d',$row['lastseen'])."</td></tr>";
+            echo "<tr><td>".$row['username']."</td><td>".$row['words']."</td><td>".$row['messages']."</td><td>$average</td><td>".date('Y-m-d',$row['lastseen'])."</td></tr>";
         }
         ?>
         </tbody>
     </table>
 </div>
+*messages based on FearlessBot total. This will be less than TaylorBot's count if you have joined before words started being counted.
 <script src="sortable.min.js"></script>
 </body>
 </html>
