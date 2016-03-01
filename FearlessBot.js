@@ -518,16 +518,20 @@ mybot.on("message", function (message)
         case "!checkactive":
             if (inRole(message.channel.server, user, "admins"))
             {
-                db.query("SELECT id FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
+                mybot.forceFetchUsers();
+                db.query("SELECT id, username FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
                 {
+                    var resultList = "";
                     for (var i=0; i < rows.length; i++)
                     {
                         var member = message.channel.server.members.get("id",rows[i].id);
                         if (member == null)
                         {
                             db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [message.channel.server.id, rows[i].id]);
+                            resultList += rows[i].username + " - " + rows[i].id + "\n";
                         }
                     }
+                    mybot.sendMessage(message.channel, resultList);
                 });
             }
             break;
@@ -807,3 +811,4 @@ function unmention(message, mentions)
 }
 
 mybot.login(config.email, config.password);
+mybot.forceFetchUsers();

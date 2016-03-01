@@ -1,0 +1,9 @@
+{
+  "name": "FearlessBot",
+  "version": "2016.02.29a",
+  "dependencies": {
+    "mysql": "*",
+    "discord.js": "*",
+    "node-units": "*"
+  }
+}
