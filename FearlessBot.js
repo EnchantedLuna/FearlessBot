@@ -535,6 +535,27 @@ mybot.on("message", function (message)
                 });
             }
             break;
+        case "!counter++":
+            if (isMod(message.channel.server, user))
+            {
+                db.query("SELECT * FROM data_store WHERE server='1989' AND keyword=?", [command[1]], function(err, rows)
+                {
+                    if (rows[0] != null) {
+                        rows[0].value++;
+                        mybot.reply(message, "woah there. The  counter is now " + rows[0].value);
+                        db.query("UPDATE data_store SET value=value+1 WHERE server='1989' AND keyword=?", command[1]);
+                    }
+                });
+            }
+            break;
+        case "!counter":
+            db.query("SELECT * FROM data_store WHERE server='1989' AND keyword=?", [command[1]], function(err, rows)
+            {
+                if (rows[0] != null) {
+                    mybot.reply(message, "The "+command[1]+" counter is " + rows[0].value);
+                }
+            });
+            break;
     }
 });
 
