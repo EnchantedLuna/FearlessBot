@@ -373,6 +373,10 @@ mybot.on("message", function (message)
                             mybot.kickMember(person, message.channel.server);
                             mybot.reply(message, person.username + " has been kicked.");
                         }
+                        else
+                        {
+                            mybot.reply(message, ":smirk:");
+                        }
                     }
                 );
             }
@@ -391,6 +395,10 @@ mybot.on("message", function (message)
                             mybot.banMember(person, message.channel.server, 1);
                             db.query("UPDATE members SET active = 0 WHERE id = ? AND server = ?", [person.id, message.channel.server.id]);
                             mybot.reply(message, person.username + " has been banned.");
+                        }
+                        else
+                        {
+                            mybot.reply(message, ":smirk:");
                         }
                     }
                 );
@@ -438,6 +446,10 @@ mybot.on("message", function (message)
                         {
                             mybot.overwritePermissions(message.channel, person, {sendMessages: false});
                             mybot.reply(message, person.username + " has been muted.");
+                        }
+                        else
+                        {
+                            mybot.reply(message, ":smirk:");
                         }
                     }
                 );
