@@ -706,6 +706,8 @@ function sendMentionLog(message)
             msg += newmsg;
         });
         allMessages.push(msg);
+        // Due to the way Discord sorts messages, they may appear out of order if messages are sent too swiftly together (<~100ms)
+        // So, we add a delay to avoid this.
         for (var i = 0; i < allMessages.length; i++)
         {
             setTimeout(function(time) {

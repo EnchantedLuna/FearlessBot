@@ -75,10 +75,10 @@ $server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
                     $total = 0;
                     while ($row = $query->fetch_array())
                     {
-                        echo "<tr><td>".$row['name']."</td><td>".$row['total_messages']."</td></tr>";
+                        echo "<tr><td>".$row['name']."</td><td>".number_format($row['total_messages'])."</td></tr>";
                         $total += $row['total_messages'];
                     }
-                    echo "<tr><td><b>Total</b></td><td>$total</td></tr>";
+                    echo "<tr><td><b>Total</b></td><td>".number_format($total)."</td></tr>";
                     ?>
                 </table>
             </div>
