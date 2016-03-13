@@ -586,8 +586,8 @@ mybot.on("messageDeleted", function (message, channel)
     if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
     {
         var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
-        var removedWords = (words > 20) ? Math.round(words * 1.5) : words; // To help discourage spamming for wordcount
-        db.query("UPDATE members SET words=words-? WHERE id=?", [removedWords, message.author.id]);
+        var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
+        db.query("UPDATE members SET words=words-? WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
     }
 });
