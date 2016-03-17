@@ -16,7 +16,7 @@ var search;
 var eightBallAnswers = ["it is certain", "it is decidedly so", "without a doubt", "yes, definitely", "you may rely on it",
     "as I see it, yes", "most likely", "outlook good", "yes", "signs point to yes", "reply hazy try again", "ask again later",
     "better not tell you now", "cannot predict now", "concentrate and try again", "don't count on it", "my reply is no", "my sources say no",
-    "very doubtful", "lol no", "no way", "odds are about the same as you meeting Taylor", "the probability is the same as Taylor ever ever getting back together (i.e. never)",
+    "very doubtful", "lol no", "no way", "odds are about the same as you meeting Taylor", "the probability is the same as Taylor ever getting back together (i.e. never)",
     "http://i.imgur.com/faYfXxE.gif :smirk:"];
 
 var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar", "A Place in This World", "Cold As You", "The Outside",
@@ -64,7 +64,7 @@ mybot.on("message", function (message)
     }
     else
     {
-        db.query("INSERT INTO members (server, id, username, lastseen) VALUES (?,?,?,?,UNIX_TIMESTAMP())" +
+        db.query("INSERT INTO members (server, id, username, discriminator, lastseen) VALUES (?,?,?,?,UNIX_TIMESTAMP())" +
             "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), active=1",
             [message.channel.server.id, user.id, user.username, user.discriminator, user.username, user.discriminator]);
     }
@@ -540,7 +540,7 @@ mybot.on("message", function (message)
                         if (member == null)
                         {
                             db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [message.channel.server.id, rows[i].id]);
-                            resultList += rows[i].username + " - " + rows[i].id + "\n";
+                            resultList += rows[i].username + " (" + rows[i].discriminator + ") - " + rows[i].id + "\n";
                         }
                     }
                     mybot.sendMessage(message.channel, resultList);
