@@ -531,7 +531,7 @@ mybot.on("message", function (message)
             if (inRole(message.channel.server, user, "admins"))
             {
                 mybot.forceFetchUsers();
-                db.query("SELECT id, username FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
+                db.query("SELECT id, username, discriminator FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
                 {
                     var resultList = "";
                     for (var i=0; i < rows.length; i++)
@@ -575,6 +575,11 @@ mybot.on("serverNewMember", function (server, user)
 {
     var username = user.username;
     mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
+});
+
+
+mybot.on("serverMemberRemoved", function (server, user) {
+   db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
 });
 
 mybot.on("messageDeleted", function (message, channel)
