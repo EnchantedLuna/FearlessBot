@@ -570,15 +570,15 @@ mybot.on("message", function (message)
             });
             break;
         case "!ncon":
-            if (user.id == "115329261350420487") {
+            if (inRole(message.channel.server, user, "admins")) {
                 nameChangeeNoticesEnabled = true;
-                mybot.reply("name notices are now on.");
+                mybot.reply(message, "name notices are now on.");
             }
             break;
         case "!ncoff":
-            if (user.id == "115329261350420487") {
+            if (inRole(message.channel.server, user, "admins")) {
                 nameChangeeNoticesEnabled = false;
-                mybot.reply("name notices are now off.");
+                mybot.reply(message, "name notices are now off.");
             }
             break;
     }
@@ -612,13 +612,20 @@ mybot.on("messageDeleted", function (message, channel)
 
 mybot.on("presence", function (oldUser, newUser)
 {
-    if (oldUser.username != newUser.username && nameChangeeNoticesEnabled)
+    if (oldUser.username != newUser.username)
     {
         db.query("SELECT server, username FROM members WHERE id = ? AND active=1", [newUser.id], function (err, rows)
         {
             for (var i=0; i < rows.length; i++)
             {
-                mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                if (nameChangeeNoticesEnabled)
+                {
+                    mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                }
+                else
+                {
+                    console.log(rows[i].username + " / " + newUser.id +" has changed username to " + newUser.username + ".");
+                }
                 db.query("UPDATE members SET username=? WHERE id = ?", [newUser.username, newUser.id]);
             }
         });
