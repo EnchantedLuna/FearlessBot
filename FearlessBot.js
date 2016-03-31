@@ -12,12 +12,13 @@ var db = mysql.createConnection({
 
 var mybot = new Discord.Client();
 var search;
+var nameChangeeNoticesEnabled = true;
 
 var eightBallAnswers = ["it is certain", "it is decidedly so", "without a doubt", "yes, definitely", "you may rely on it",
     "as I see it, yes", "most likely", "outlook good", "yes", "signs point to yes", "reply hazy try again", "ask again later",
     "better not tell you now", "cannot predict now", "concentrate and try again", "don't count on it", "my reply is no", "my sources say no",
     "very doubtful", "lol no", "no way", "odds are about the same as you meeting Taylor", "the probability is the same as Taylor ever getting back together (i.e. never)",
-    "http://i.imgur.com/faYfXxE.gif :smirk:"];
+    "http://i.imgur.com/faYfXxE.gif (no)"];
 
 var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar", "A Place in This World", "Cold As You", "The Outside",
     "Tied Together With a Smile", "Stay Beautiful", "Should've Said No", "Mary's Song", "Our Song", "I'm Only Me When I'm With You",
@@ -568,6 +569,18 @@ mybot.on("message", function (message)
                 }
             });
             break;
+        case "!ncon":
+            if (user.id == "115329261350420487") {
+                nameChangeeNoticesEnabled = true;
+                mybot.reply("name notices are now on.");
+            }
+            break;
+        case "!ncoff":
+            if (user.id == "115329261350420487") {
+                nameChangeeNoticesEnabled = false;
+                mybot.reply("name notices are now off.");
+            }
+            break;
     }
 });
 
@@ -599,7 +612,7 @@ mybot.on("messageDeleted", function (message, channel)
 
 mybot.on("presence", function (oldUser, newUser)
 {
-    if (oldUser.username != newUser.username)
+    if (oldUser.username != newUser.username && nameChangeeNoticesEnabled)
     {
         db.query("SELECT server, username FROM members WHERE id = ? AND active=1", [newUser.id], function (err, rows)
         {
@@ -611,24 +624,6 @@ mybot.on("presence", function (oldUser, newUser)
         });
     }
 });
-
-/*
-setInterval(function() {
-    console.log("Starting hourly cleanup.");
-    db.query("SELECT id, username, server FROM members WHERE active=1", function (err, rows)
-    {
-        for (var i=0; i < rows.length; i++)
-        {
-            var member = mybot.servers.get("id",rows[i].server).members.get("id",rows[i].id);
-            if (member == null)
-            {
-                console.log(rows[i].username + " has become inactive - id: " + rows[i].id);
-                db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [rows[i].server, rows[i].id]);
-            }
-        }
-    });
-}, 3600000);
-*/
 
 // Bot functionality for PMs
 function handlePM(message)
