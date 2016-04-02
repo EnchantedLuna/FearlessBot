@@ -599,9 +599,9 @@ mybot.on("serverNewMember", function (server, user)
 {
     var username = user.username;
     mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
-    if (message.server == config.mainServer)
+    if (server.id == config.mainServer)
     {
-        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has joined the server.");
+        mybot.sendMessage("165309673849880579",username + " (id " + user.id + ") has joined the server.");
     }
 });
 
