@@ -296,6 +296,7 @@ mybot.on("message", function (message)
                     if (result.affectedRows > 0)
                     {
                         mybot.reply(message, "approved.");
+                        mybot.sendMessage("165309673849880579", "Saved item " + command[1] + " has been approved by " + message.author.username);
                     }
                     else
                     {
@@ -316,6 +317,7 @@ mybot.on("message", function (message)
                     if (result.affectedRows > 0)
                     {
                         mybot.reply(message, "deleted.");
+                        mybot.sendMessage("165309673849880579", "Saved item " + command[1] + " has been deleted by " + message.author.username);
                     }
                     else
                     {
@@ -373,6 +375,7 @@ mybot.on("message", function (message)
                         {
                             mybot.kickMember(person, message.channel.server);
                             mybot.reply(message, person.username + " has been kicked.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been kicked by " + message.author.username);
                         }
                         else
                         {
@@ -396,6 +399,7 @@ mybot.on("message", function (message)
                             mybot.banMember(person, message.channel.server, 1);
                             db.query("UPDATE members SET active = 0 WHERE id = ? AND server = ?", [person.id, message.channel.server.id]);
                             mybot.reply(message, person.username + " has been banned.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been banned by " + message.author.username);
                         }
                         else
                         {
@@ -418,6 +422,7 @@ mybot.on("message", function (message)
                         {
                             mybot.unbanMember(person, message.channel.server);
                             mybot.reply(message, person.username + " has been unbanned.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been unbanned by " + message.author.username);
                         }
                     }
                 );
@@ -432,6 +437,7 @@ mybot.on("message", function (message)
             {
                 mybot.setChannelTopic(message.channel, params);
                 mybot.reply(message, "topic updated.");
+                mybot.sendMessage("165309673849880579", user.username + " has been changed the topic in " + message.channel.name + " to " + params);
             }
             else
             {
@@ -447,6 +453,7 @@ mybot.on("message", function (message)
                         {
                             mybot.overwritePermissions(message.channel, person, {sendMessages: false});
                             mybot.reply(message, person.username + " has been muted.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been muted in " + message.channel.name + " by " + message.author.username);
                         }
                         else
                         {
@@ -469,6 +476,7 @@ mybot.on("message", function (message)
                         {
                             mybot.overwritePermissions(message.channel, person, {});
                             mybot.reply(message, person.username + " has been unmuted.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been unmuted in " + message.channel.name + " by " + message.author.username);
                         }
                     }
                 );
@@ -488,6 +496,7 @@ mybot.on("message", function (message)
                         {
                             mybot.addMemberToRole(person, message.channel.server.roles.get("name", "supermute"));
                             mybot.reply(message, person.username + " has been super muted.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been super muted by " + message.author.username);
                         }
                     }
                 );
@@ -506,6 +515,7 @@ mybot.on("message", function (message)
                         {
                             mybot.removeMemberFromRole(person, message.channel.server.roles.get("name", "supermute"));
                             mybot.reply(message, person.username + " has been un super muted.");
+                            mybot.sendMessage("165309673849880579", person.username + " has been un super muted by " + message.author.username);
                         }
                     }
                 );
@@ -579,6 +589,7 @@ mybot.on("message", function (message)
             if (inRole(message.channel.server, user, "admins")) {
                 nameChangeeNoticesEnabled = false;
                 mybot.reply(message, "name notices are now off.");
+
             }
             break;
     }
@@ -588,11 +599,19 @@ mybot.on("serverNewMember", function (server, user)
 {
     var username = user.username;
     mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
+    if (message.server == config.mainServer)
+    {
+        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has joined the server.");
+    }
 });
 
 
 mybot.on("serverMemberRemoved", function (server, user) {
    db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
+    if (message.server == config.mainServer)
+    {
+        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has left the server.");
+    }
 });
 
 mybot.on("messageDeleted", function (message, channel)
@@ -607,6 +626,7 @@ mybot.on("messageDeleted", function (message, channel)
         var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
         db.query("UPDATE members SET words=words-? WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
+        mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n" + message.content);
     }
 });
 
@@ -621,9 +641,17 @@ mybot.on("presence", function (oldUser, newUser)
                 if (nameChangeeNoticesEnabled)
                 {
                     mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                    if (rows[i].server==config.mainServer)
+                    {
+                        mybot.sendMessage("165309673849880579", rows[i].username + " has changed username to " + newUser.username + ".");
+                    }
                 }
                 else
                 {
+                    if (rows[i].server == config.mainServer)
+                    {
+                        mybot.sendMessage("165309673849880579", rows[i].username + " has changed username to " + newUser.username + ".");
+                    }
                     console.log(rows[i].username + " / " + newUser.id +" has changed username to " + newUser.username + ".");
                 }
                 db.query("UPDATE members SET username=? WHERE id = ?", [newUser.username, newUser.id]);
