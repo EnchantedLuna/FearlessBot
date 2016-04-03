@@ -608,9 +608,9 @@ mybot.on("serverNewMember", function (server, user)
 
 mybot.on("serverMemberRemoved", function (server, user) {
    db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
-    if (message.server == config.mainServer)
+    if (server.id == config.mainServer)
     {
-        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has left the server.");
+        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has left the server (or was kicked).");
     }
 });
 
