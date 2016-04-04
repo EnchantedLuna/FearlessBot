@@ -287,6 +287,9 @@ mybot.on("message", function (message)
                 mybot.reply(message, e);
             }
             break;
+        case "!mod13":
+            mybot.reply(message, command[1] + " mod 13 = " + (command[1] % 13));
+            break;
         // Mod commands below
         case "!approve":
             if (isMod(message.channel.server, user))
@@ -620,7 +623,7 @@ mybot.on("messageDeleted", function (message, channel)
     {
         return;
     }
-    if (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912" || message.channel.id == "131994567602995200")
+    if (message.channel.server.id == config.mainServer)
     {
         var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
         var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
