@@ -440,7 +440,7 @@ mybot.on("message", function (message)
             {
                 mybot.setChannelTopic(message.channel, params);
                 mybot.reply(message, "topic updated.");
-                mybot.sendMessage("165309673849880579", user.username + " has been changed the topic in " + message.channel.name + " to " + params);
+                mybot.sendMessage("165309673849880579", user.username + " changed the topic in " + message.channel.name + " to " + params);
             }
             else
             {
