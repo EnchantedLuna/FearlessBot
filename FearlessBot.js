@@ -160,7 +160,7 @@ mybot.on("message", function (message)
             {
                 if (rows[0] != null)
                 {
-                    mybot.reply(message, "your new name is " + rows[0].name);
+                    mybot.reply(message, "your new name is " + rows[0].name + ".");
                 }
             });
             break;
