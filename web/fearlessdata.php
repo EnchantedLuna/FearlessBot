@@ -69,13 +69,15 @@ $server = empty($_GET['server']) ? "115332333745340416" : $_GET['server'];
             <div id="channelStats">
                 <h1>Channel Stats</h1>
                 <table>
-                    <tr><th>Channel</th><th>Total Messages</th></tr>
+                    <tr><th>Channel</th><th>Total Messages</th><th>Date Tracking Started</th><th>Avg Msgs/Day</th></tr>
                     <?php
                     $query = $db->query("SELECT * FROM channel_stats WHERE web=1");
                     $total = 0;
                     while ($row = $query->fetch_array())
                     {
-                        echo "<tr><td>".$row['name']."</td><td>".number_format($row['total_messages'])."</td></tr>";
+                        $days = ceil((time()-$row['startdate'])/86400);
+                        $messagesPerDay = round($row['total_messages'] / $days);
+                        echo "<tr><td>".$row['name']."</td><td>".number_format($row['total_messages'])."</td><td>".date("Y-m-d",$row['startdate'])."</td><td>$messagesPerDay</td></tr>";
                         $total += $row['total_messages'];
                     }
                     echo "<tr><td><b>Total</b></td><td>".number_format($total)."</td></tr>";
