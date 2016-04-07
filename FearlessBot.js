@@ -93,7 +93,7 @@ mybot.on("message", function (message)
     }
 
     // Only allow whitelisted commands in taylordiscussion
-    var allowed = ["!mute","!unmute","!kick","!ban","!unban","!topic","!supermute","!unsupermute"];
+    var allowed = ["!mute","!unmute","!kick","!ban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
         return;
     }
@@ -416,25 +416,6 @@ mybot.on("message", function (message)
                 mybot.reply(message, "nice try.");
             }
             break;
-        case "!unban":
-            if (isMod(message.channel.server, user))
-            {
-                message.mentions.forEach(function (person)
-                    {
-                        if (!isMod(message.channel.server, person))
-                        {
-                            mybot.unbanMember(person, message.channel.server);
-                            mybot.reply(message, person.username + " has been unbanned.");
-                            mybot.sendMessage("165309673849880579", person.username + " has been unbanned by " + message.author.username);
-                        }
-                    }
-                );
-            }
-            else
-            {
-                mybot.reply(message, "nice try.");
-            }
-            break;
         case "!topic":
             if (isMod(message.channel.server, user) && params !== null)
             {
@@ -568,7 +549,7 @@ mybot.on("message", function (message)
                 {
                     if (rows[0] != null) {
                         rows[0].value++;
-                        mybot.reply(message, "woah there. The  counter is now " + rows[0].value);
+                        mybot.reply(message, "woah there. The "+command[1]+" counter is now " + rows[0].value);
                         db.query("UPDATE data_store SET value=value+1 WHERE server='1989' AND keyword=?", command[1]);
                     }
                 });
