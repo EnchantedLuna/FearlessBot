@@ -330,7 +330,15 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                db.query("SELECT owner FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
+                {
+                    if (rows[0] == null || rows[0].owner != user.id) {
+                        mybot.reply(message, "you can only delete items that you have saved.");
+                    } else {
+                        db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]]);
+                        mybot.reply(message, "deleted.");
+                    }
+                });
             }
             break;
         case "!review":
