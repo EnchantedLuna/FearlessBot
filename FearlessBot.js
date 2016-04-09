@@ -471,7 +471,7 @@ mybot.on("message", function (message)
                     {
                         if (!isMod(message.channel.server, person))
                         {
-                            mybot.overwritePermissions(message.channel, person, {});
+                            mybot.overwritePermissions(message.channel, person, {"sendMessages" : true});
                             mybot.reply(message, person.username + " has been unmuted.");
                             mybot.sendMessage("165309673849880579", person.username + " has been unmuted in " + message.channel.name + " by " + message.author.username);
                         }
