@@ -71,7 +71,12 @@ mybot.on("message", function (message)
     }
 
     if (message.mentions.length > 0) {
+        var mentioned = [];
         message.mentions.forEach(function (mention) {
+            if (mentioned.indexOf(mention.id) >= 0) {
+                return;
+            }
+            mentioned.push(mention.id);
             var msg = unmention(message.content, message.mentions);
             // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
             if ((inRole(message.channel.server, message.author, "bots") || message.author.id == mybot.user.id) && msg.startsWith("@"+mention.username))
