@@ -877,5 +877,5 @@ function unmention(message, mentions)
     return message;
 }
 
-mybot.login(config.email, config.password);
+mybot.loginWithToken(config.token);
 mybot.forceFetchUsers();
