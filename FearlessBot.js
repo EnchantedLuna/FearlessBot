@@ -188,17 +188,20 @@ mybot.on("message", function (message)
                 mybot.reply(message, "You don't know if you're here or not? :smirk:");
                 return;
             }
-            db.query("SELECT lastseen, active FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
+            db.query("SELECT discriminator, lastseen, active FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
-                if (rows[0] != null)
-                {
-                    var response = search + " was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[0].lastseen) + "ago.";
-                    if (rows[0].active == 0)
+                var response = "";
+                for (var i = 0; i < rows.length; i++) {
+                    response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[i].lastseen) + "ago.";
+                    if (rows[i].active == 0)
                     {
-                        response += "\nThis person does not appear to be on the member list. This may mean that he or she may have left the server or have been pruned or kicked.";
+                        response += "\nThis person does not appear to be on the member list. This may mean that he or she may have left the server or have been pruned or kicked.\n\n";
                     }
-                    mybot.reply(message, response);
                 }
+                if (rows.length == 0) {
+                    response = "user not found. Please double check the username.";
+                }
+                mybot.reply(message, response);
             });
             break;
         case "!words":
