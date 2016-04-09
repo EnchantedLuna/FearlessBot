@@ -77,7 +77,7 @@ mybot.on("message", function (message)
                 return;
             }
             mentioned.push(mention.id);
-            var msg = unmention(message.content, message.mentions);
+            var msg = message.cleanContent;
             // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
             if ((inRole(message.channel.server, message.author, "bots") || message.author.id == mybot.user.id) && msg.startsWith("@"+mention.username))
                 return;
@@ -623,7 +623,7 @@ mybot.on("messageDeleted", function (message, channel)
         var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
         db.query("UPDATE members SET words=words-? WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
-        mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + unmention(message.content,message.mentions) + "```");
+        mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent + "```");
     }
 });
 
@@ -866,15 +866,6 @@ function secondsToTime(seconds)
         result += sec != 1 ? "s " : " ";
     }
     return result;
-}
-
-function unmention(message, mentions)
-{
-    for (var i = 0; i < mentions.length; i++)
-    {
-        message = message.replace("<@" + mentions[i].id + ">", "@"+mentions[i].username);
-    }
-    return message;
 }
 
 mybot.loginWithToken(config.token);
