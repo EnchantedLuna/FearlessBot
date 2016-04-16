@@ -109,6 +109,7 @@ mybot.on("message", function (message)
         return;
     }
 
+    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id]);
 
     // Check for commands
     switch (command[0].toLowerCase())
@@ -626,8 +627,14 @@ mybot.on("messageDeleted", function (message, channel)
         var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
         db.query("UPDATE members SET words=words-? WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
+        db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
         mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent + "```");
     }
+});
+
+mybot.on("messageUpdated", function (oldMessage, newMessage)
+{
+    db.query("UPDATE messages SET message=?, edited=now() WHERE discord_id=?", [newMessage.cleanContent, oldMessage.id]);
 });
 
 mybot.on("presence", function (oldUser, newUser)
@@ -666,7 +673,7 @@ function handlePM(message)
     var command = message.content.split(" ");
     var params = command.slice(1, command.length).join(" ");
 
-    switch (command[0])
+    switch (command[0].toLowerCase())
     {
         case "!mods":
             var modChannel = mybot.servers.get("id", config.mainServer).channels.get("name", config.modChannel);
@@ -675,6 +682,9 @@ function handlePM(message)
             break;
         case "!mentions":
             sendMentionLog(message);
+            break;
+        case "le":
+            mybot.sendMessage(message.channel, "Good le.");
             break;
     }
 }
