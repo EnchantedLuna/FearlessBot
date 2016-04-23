@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var mybot = new Discord.Client();
+var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
 
@@ -97,6 +97,8 @@ mybot.on("message", function (message)
         });
     }
 
+    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id]);
+
     // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
@@ -108,8 +110,6 @@ mybot.on("message", function (message)
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
     }
-
-    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id]);
 
     // Check for commands
     switch (command[0].toLowerCase())
@@ -201,6 +201,31 @@ mybot.on("message", function (message)
                 }
                 if (rows.length == 0) {
                     response = "user not found. Please double check the username.";
+                }
+                mybot.reply(message, response);
+            });
+            break;
+        case "!last":
+            if (message.mentions.length > 0)
+            {
+                search = message.mentions[0].username;
+            }
+            else
+            {
+                search = params;
+            }
+            db.query("SELECT mem.username, mem.discriminator, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, c.name FROM messages msg " +
+                "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
+                "JOIN channel_stats c ON msg.channel=c.channel " +
+                "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != '115332333745340416') " +
+                "ORDER BY msg.id DESC LIMIT 1", [message.channel.server.id, search], function (err, rows)
+            {
+                var response = "";
+                if (rows.length == 0) {
+                    response = "no messages found. Please double check the username.";
+                } else {
+                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage) + "ago in " + rows[0].name + ")\n" +
+                        rows[0].message;
                 }
                 mybot.reply(message, response);
             });
@@ -542,7 +567,6 @@ mybot.on("message", function (message)
         case "!checkactive":
             if (inRole(message.channel.server, user, "admins"))
             {
-                mybot.forceFetchUsers();
                 db.query("SELECT id, username, discriminator FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
                 {
                     var resultList = "";
@@ -774,6 +798,7 @@ function clearRegions(server, user)
     var europe = server.roles.get("name", "europe");
     var asia = server.roles.get("name", "asia");
     var oceania = server.roles.get("name", "oceania");
+    var africa = server.roles.get("name", "africa");
     roles.forEach(function (role)
     {
         switch (role.name)
@@ -789,6 +814,9 @@ function clearRegions(server, user)
                 break;
             case "asia":
                 mybot.removeMemberFromRole(user, asia);
+                break;
+            case "africa":
+                mybot.removeMemberFromRole(user, africa);
                 break;
         }
     });
@@ -813,6 +841,10 @@ function updateRegion(message)
             mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "europe"));
             mybot.reply(message, "your region has been set to Europe.");
             break;
+        case "africa":
+            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "africa"));
+            mybot.reply(message, "your region has been set to Africa.");
+            break;
         case "asia":
             mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "asia"));
             mybot.reply(message, "your region has been to Asia.");
@@ -824,6 +856,7 @@ function updateRegion(message)
             break;
         case "clear":
             clearRegions(message.channel.server, message.author);
+            mybot.reply(message, "your region has been removed.");
             break;
         default:
             mybot.reply(message, "unrecognized region. Accepted values: america, europe, asia, oceania, clear");
@@ -882,4 +915,3 @@ function secondsToTime(seconds)
 }
 
 mybot.loginWithToken(config.token);
-mybot.forceFetchUsers();
