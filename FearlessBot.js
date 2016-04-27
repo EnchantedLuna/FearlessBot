@@ -455,7 +455,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!topic":
@@ -729,7 +729,7 @@ function saveThing(message)
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
     {
         if (isMod(message.channel.server, message.author) ||
-            (message.channel.server.id != config.mainServer && (rows[0] == null || rows[0]['owner'] == message.author.id)))
+            ((message.channel.server.id != config.mainServer || inRole(message.channel.server, message.author, "alpha")) && (rows[0] == null || rows[0]['owner'] == message.author.id)))
         {
             db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.server.id, key, value, message.author.id]);
             mybot.reply(message, "updated and ready to use.");
