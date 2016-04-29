@@ -324,6 +324,13 @@ mybot.on("message", function (message)
         case "!mod13":
             mybot.reply(message, command[1] + " mod 13 = " + (command[1] % 13));
             break;
+        case "!shitpost":
+            db.query("SELECT shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
+                if (rows != null) {
+                    mybot.reply(message, rows[0].shitpost);
+                }
+            });
+            break;
         // Mod commands below
         case "!approve":
             if (isMod(message.channel.server, user))
@@ -615,6 +622,12 @@ mybot.on("message", function (message)
                 nameChangeeNoticesEnabled = false;
                 mybot.reply(message, "name notices are now off.");
 
+            }
+            break;
+        case "!addshitpost":
+            if (inRole(message.channel.server, user, "alpha") || isMod(message.channel.server, user)) {
+                db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())", [params, user.id]);
+                mybot.reply(message, "added.");
             }
             break;
     }
