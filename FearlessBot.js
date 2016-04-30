@@ -91,8 +91,8 @@ mybot.on("message", function (message)
                 && !isMod(message.channel.server, mention) && mention.id != 118114929474666502)
                 return;
 
-            db.query("INSERT INTO mention_log (server, user, timestamp, channel, author, message) VALUES (?,?,?,?,?,?)",
-                    [message.channel.server.id, mention.id, message.timestamp / 1000, message.channel.name, message.author.id, msg]);
+            db.query("INSERT INTO mention_log (server, user, timestamp, channel, author, message, discord_id) VALUES (?,?,?,?,?,?,?)",
+                    [message.channel.server.id, mention.id, message.timestamp / 1000, message.channel.name, message.author.id, msg, message.id]);
 
         });
     }
