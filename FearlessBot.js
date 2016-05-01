@@ -105,7 +105,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
