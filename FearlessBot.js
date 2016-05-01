@@ -708,15 +708,9 @@ mybot.on("presence", function (oldUser, newUser)
 function handlePM(message)
 {
     var command = message.content.split(" ");
-    var params = command.slice(1, command.length).join(" ");
 
     switch (command[0].toLowerCase())
     {
-        case "!mods":
-            var modChannel = mybot.servers.get("id", config.mainServer).channels.get("name", config.modChannel);
-            mybot.sendMessage(modChannel, "PM from " + message.author.username + ": " + params);
-            mybot.sendMessage(message.channel, "your message has been sent to the mods.");
-            break;
         case "!mentions":
             sendMentionLog(message);
             break;
