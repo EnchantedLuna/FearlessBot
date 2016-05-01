@@ -325,9 +325,9 @@ mybot.on("message", function (message)
             mybot.reply(message, command[1] + " mod 13 = " + (command[1] % 13));
             break;
         case "!shitpost":
-            db.query("SELECT shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
+            db.query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
                 if (rows != null) {
-                    mybot.reply(message, rows[0].shitpost);
+                    mybot.reply(message, rows[0].shitpost + " (#"+rows[0].id+")");
                 }
             });
             break;
