@@ -735,8 +735,7 @@ function saveThing(message)
     // check for existing
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
     {
-        if (isMod(message.channel.server, message.author) ||
-            ((message.channel.server.id != config.mainServer || inRole(message.channel.server, message.author, "alpha")) && (rows[0] == null || rows[0]['owner'] == message.author.id)))
+        if ((isMod(message.channel.server, message.author) || message.channel.server.id != config.mainServer || inRole(message.channel.server, message.author, "alpha")) && (rows[0] == null || rows[0]['owner'] == message.author.id))
         {
             db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.server.id, key, value, message.author.id]);
             mybot.reply(message, "updated and ready to use.");
