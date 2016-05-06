@@ -325,11 +325,20 @@ mybot.on("message", function (message)
             mybot.reply(message, command[1] + " mod 13 = " + (command[1] % 13));
             break;
         case "!shitpost":
-            db.query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
-                if (rows != null) {
-                    mybot.reply(message, rows[0].shitpost + " (#"+rows[0].id+")");
-                }
-            });
+            var number = parseInt(command[1], 10);
+            if (number > 0) {
+                db.query("SELECT id, shitpost FROM shitposts WHERE id=?", [number], function (err, rows) {
+                    if (rows != null) {
+                        mybot.reply(message, rows[0].shitpost + " (#"+rows[0].id+")");
+                    }
+                });
+            } else {
+                db.query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
+                    if (rows != null) {
+                        mybot.reply(message, rows[0].shitpost + " (#"+rows[0].id+")");
+                    }
+                });
+            }
             break;
         // Mod commands below
         case "!approve":
