@@ -350,7 +350,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!delete":
@@ -361,7 +361,7 @@ mybot.on("message", function (message)
                     if (result.affectedRows > 0)
                     {
                         mybot.reply(message, "deleted.");
-                        mybot.sendMessage("165309673849880579", "Saved item " + command[1] + " has been deleted by " + message.author.username);
+                        log("Saved item " + command[1] + " has been deleted by " + message.author.username, message.channel.server.id);
                     }
                     else
                     {
@@ -377,6 +377,7 @@ mybot.on("message", function (message)
                         mybot.reply(message, "you can only delete items that you have saved.");
                     } else {
                         db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]]);
+                        log("Saved item " + command[1] + " has been deleted by " + message.author.username, message.channel.server.id);
                         mybot.reply(message, "deleted.");
                     }
                 });
@@ -438,7 +439,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!ban":
@@ -470,11 +471,11 @@ mybot.on("message", function (message)
             {
                 mybot.setChannelTopic(message.channel, params);
                 mybot.reply(message, "topic updated.");
-                mybot.sendMessage("165309673849880579", user.username + " changed the topic in " + message.channel.name + " to " + params);
+                log(user.username + " changed the topic in " + message.channel.name + " to " + params,message.channel.server.id);
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!mute":
@@ -497,7 +498,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!unmute":
@@ -517,7 +518,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!supermute":
@@ -536,7 +537,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!unsupermute":
@@ -555,7 +556,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try.");
+                mybot.reply(message, "nice try. :rolling_eyes:");
             }
             break;
         case "!fsay":
@@ -918,6 +919,14 @@ function secondsToTime(seconds)
         result += sec != 1 ? "s " : " ";
     }
     return result;
+}
+
+function log(message, serverID)
+{
+    if (serverID == config.mainServer)
+    {
+        mybot.sendMessage("165309673849880579", message);
+    }
 }
 
 mybot.loginWithToken(config.token);
