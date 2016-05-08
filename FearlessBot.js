@@ -294,7 +294,7 @@ mybot.on("message", function (message)
                 {
 
                     mybot.reply(message, rows[0]['value']);
-                    db.query("UPDATE data_store SET uses=uses+1 WHERE keyword = ? AND server = ?", [command[1], dataserver]);
+                    db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [command[1], dataserver]);
                 }
             });
 
