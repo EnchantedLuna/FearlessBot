@@ -321,9 +321,6 @@ mybot.on("message", function (message)
                 mybot.reply(message, e);
             }
             break;
-        case "!mod13":
-            mybot.reply(message, command[1] + " mod 13 = " + (command[1] % 13));
-            break;
         case "!shitpost":
             var number = parseInt(command[1], 10);
             if (number > 0) {
