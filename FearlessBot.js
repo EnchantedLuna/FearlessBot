@@ -675,7 +675,7 @@ mybot.on("messageDeleted", function (message, channel)
         db.query("UPDATE members SET words=words-? WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
         db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
-        mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent + "```");
+        mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent.replace('`','\\`') + "```");
     }
 });
 
