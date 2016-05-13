@@ -640,6 +640,10 @@ mybot.on("message", function (message)
                 mybot.reply(message, "added.");
             }
             break;
+        case "!fbotrestart":
+            if (inRole(message.channel.server, user, "admins")) {
+                process.exit(-1);
+            }
     }
 });
 
