@@ -97,7 +97,29 @@ mybot.on("message", function (message)
         });
     }
 
-    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id]);
+    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id], function (err, result) {
+        if (message.mentions.length > 0) {
+            var mentioned = [];
+            message.mentions.forEach(function (mention) {
+                if (mentioned.indexOf(mention.id) >= 0) {
+                    return;
+                }
+                mentioned.push(mention.id);
+                var msg = message.cleanContent;
+                // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
+                if ((inRole(message.channel.server, message.author, "bots") || message.author.id == mybot.user.id) && msg.startsWith("@"+mention.username))
+                    return;
+
+                if (!message.channel.permissionsOf(mention).hasPermission('readMessages')) {
+                    console.log(mention.username + " has no read access in " + message.channel.name +", skipping.");
+                    return;
+                }
+
+                db.query("INSERT INTO mentions (message_id, user_id) VALUES (?,?)",
+                    [result.insertId, mention.id]);
+            });
+        }
+    });
 
     // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!topic","!supermute","!unsupermute"];
@@ -193,7 +215,7 @@ mybot.on("message", function (message)
             {
                 var response = "";
                 for (var i = 0; i < rows.length; i++) {
-                    response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[i].lastseen) + "ago.";
+                    response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[i].lastseen, false) + "ago.";
                     if (rows[i].active == 0)
                     {
                         response += "\nThis person does not appear to be on the member list. This may mean that he or she may have left the server or have been pruned or kicked.\n\n";
@@ -224,7 +246,7 @@ mybot.on("message", function (message)
                 if (rows.length == 0) {
                     response = "no messages found. Please double check the username.";
                 } else {
-                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage) + "ago in " + rows[0].name + ")\n" +
+                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, false) + "ago in " + rows[0].name + ")\n" +
                         rows[0].message;
                 }
                 mybot.reply(message, response);
@@ -641,6 +663,12 @@ mybot.on("message", function (message)
             if (inRole(message.channel.server, user, "admins")) {
                 process.exit(-1);
             }
+            break;
+        case "!nmentions":
+            if (inRole(message.channel.server, user, "beta") || inRole(message.channel.server, user, "alpha") || inRole(message.channel.server, user, "chat mods")) {
+                sendNewMentionLog(message);
+            }
+            break;
     }
 });
 
@@ -728,6 +756,29 @@ function handlePM(message)
         case "le":
             mybot.sendMessage(message.channel, "Good le.");
             break;
+        case "!context":
+            db.query("(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
+                "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
+                "WHERE messages.id <= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id DESC LIMIT 4) " +
+                " UNION " +
+                "(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
+                "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
+                "WHERE messages.id > ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id LIMIT 3) ORDER BY id ASC", [command[1], command[1], command[1], command[1]], function (err, rows) {
+                if (err !== null) {
+                    console.log(err);
+                }
+                var res = '';
+                for (var i=0; i < rows.length; i++) {
+                    if (mybot.channels.get('id',rows[i].channel).permissionsOf(message.author).hasPermission('readMessages')) {
+                        res += '**<' + rows[i].username + '>** ' + rows[i].message + '\n';
+                    } else {
+                        mybot.reply(message, "you do not have access to this.");
+                        return;
+                    }
+                }
+                mybot.reply(message, res);
+            });
+            break;
     }
 }
 
@@ -782,7 +833,7 @@ function sendMentionLog(message)
         }
         var msg = "Mention log: \n";
         rows.forEach(function (row) {
-            var newmsg = "**" + row.username + " - " + row.channel + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp) + "**\n";
+            var newmsg = "**" + row.username + " - " + row.channel + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp, false) + "**\n";
             newmsg += row.message + "\n\n";
 
             if (msg.length + newmsg.length > 1900) {
@@ -804,6 +855,56 @@ function sendMentionLog(message)
         if (!message.channel.isPrivate)
         {
             mybot.reply(message, "PM sent.");
+        }
+    });
+}
+
+function sendNewMentionLog(message)
+{
+    var user = message.author;
+    var command = message.content.split(" ");
+    var allMessages = [];
+    var limit = 10;
+    var newlimit = parseInt(command[1]);
+    if (newlimit > 0 && newlimit < 100) {
+        limit = newlimit;
+    }
+    db.query("SELECT mentions.message_id, members.username, channel_stats.name, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message FROM mentions" +
+        " JOIN messages ON mentions.message_id = messages.id" +
+        " JOIN members ON messages.server=members.server AND messages.author=members.id" +
+        " JOIN channel_stats ON messages.server=channel_stats.server AND messages.channel=channel_stats.channel" +
+        " WHERE user_id = ?" +
+        " ORDER BY mentionid DESC LIMIT ?", [user.id, limit], function (err, rows) {
+        console.log(err);
+        if (rows.length == 0)
+        {
+            mybot.sendMessage(user, "No mentions. :(");
+            return;
+        }
+        rows = rows.reverse();
+        var msg = "Mention log: \n";
+        rows.forEach(function (row) {
+            var newmsg = "**" + row.username + " - " + row.name + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp, true) + "** - #" + row.message_id + "\n";
+            newmsg += row.message + "\n\n";
+
+            if (msg.length + newmsg.length > 1900) {
+                allMessages.push(msg);
+                msg = "Continued:\n";
+            }
+            msg += newmsg;
+        });
+        allMessages.push(msg);
+        // Due to the way Discord sorts messages, they may appear out of order if messages are sent too swiftly together (<~100ms)
+        // So, we add a delay to avoid this.
+        for (var i = 0; i < allMessages.length; i++)
+        {
+            setTimeout(function(time) {
+                mybot.sendMessage(user, allMessages[time]);
+            }, i*200, i);
+        }
+        if (!message.channel.isPrivate)
+        {
+            //mybot.reply(message, "PM sent.");
         }
     });
 }
@@ -900,7 +1001,7 @@ function isMod(server, user)
     return inRole(server, user, "admins") || inRole(server, user, "chat mods");
 }
 
-function secondsToTime(seconds)
+function secondsToTime(seconds, short)
 {
     var sec = seconds % 60;
     var minutes = Math.floor(seconds / 60) % 60;
@@ -910,23 +1011,31 @@ function secondsToTime(seconds)
     var result = "";
     if (days > 0)
     {
-        result += days + " day";
-        result += days != 1 ? "s " : " ";
+        result += days + (short ? "d" : " day");
+        if (!short) {
+            result += days != 1 ? "s " : " ";
+        }
     }
     if (hours > 0)
     {
-        result += hours + " hour";
-        result += hours != 1 ? "s " : " ";
+        result += hours + (short ? "h" : " hour");
+        if (!short) {
+            result += hours != 1 ? "s " : " ";
+        }
     }
     if (minutes > 0)
     {
-        result += minutes + " minute";
-        result += minutes > 1 ? "s " : " ";
+        result += minutes + (short ? "m" : " minute");
+        if (!short) {
+            result += minutes > 1 ? "s " : " ";
+        }
     }
     if(sec > 0)
     {
-        result += sec + " second";
-        result += sec != 1 ? "s " : " ";
+        result += sec + (short ? "s" : " second");
+        if (!short) {
+            result += sec != 1 ? "s " : " ";
+        }
     }
     return result;
 }
