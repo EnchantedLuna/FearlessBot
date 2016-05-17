@@ -124,6 +124,9 @@ mybot.on("message", function (message)
     // Only allow whitelisted commands in taylordiscussion
     var allowed = ["!mute","!unmute","!kick","!ban","!topic","!supermute","!unsupermute"];
     if (message.channel.id == "131994567602995200" && allowed.indexOf(command[0]) == -1) {
+        if (message.content.startsWith('!')) {
+            mybot.deleteMessage(message);
+        }
         return;
     }
 
