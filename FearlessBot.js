@@ -668,9 +668,7 @@ mybot.on("message", function (message)
             }
             break;
         case "!nmentions":
-            if (inRole(message.channel.server, user, "beta") || inRole(message.channel.server, user, "alpha") || inRole(message.channel.server, user, "chat mods")) {
-                sendNewMentionLog(message);
-            }
+            sendNewMentionLog(message);
             break;
     }
 });
@@ -762,11 +760,11 @@ function handlePM(message)
         case "!context":
             db.query("(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
                 "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
-                "WHERE messages.id <= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id DESC LIMIT 4) " +
+                "WHERE messages.id <= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id DESC LIMIT 5) " +
                 " UNION " +
                 "(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
                 "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
-                "WHERE messages.id > ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id LIMIT 3) ORDER BY id ASC", [command[1], command[1], command[1], command[1]], function (err, rows) {
+                "WHERE messages.id > ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id LIMIT 4) ORDER BY id ASC", [command[1], command[1], command[1], command[1]], function (err, rows) {
                 if (err !== null) {
                     console.log(err);
                 }
@@ -867,7 +865,7 @@ function sendNewMentionLog(message)
     var user = message.author;
     var command = message.content.split(" ");
     var allMessages = [];
-    var limit = 10;
+    var limit = 5;
     var newlimit = parseInt(command[1]);
     if (newlimit > 0 && newlimit < 100) {
         limit = newlimit;
