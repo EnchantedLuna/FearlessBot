@@ -69,34 +69,7 @@ mybot.on("message", function (message)
             "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), active=1",
             [message.channel.server.id, user.id, user.username, user.discriminator, user.username, user.discriminator]);
     }
-
-    if (message.mentions.length > 0) {
-        var mentioned = [];
-        message.mentions.forEach(function (mention) {
-            if (mentioned.indexOf(mention.id) >= 0) {
-                return;
-            }
-            mentioned.push(mention.id);
-            var msg = message.cleanContent;
-            // Ignore bots if this is the first user mentioned (likely a response to a command initiated by that user)
-            if ((inRole(message.channel.server, message.author, "bots") || message.author.id == mybot.user.id) && msg.startsWith("@"+mention.username))
-                return;
-
-            // I would use hasPermission for these, but there seems to be a bug in it currently (not taking into account @everyone overrides)
-            if (message.channel.id == "130759361902542848" && !inRole(message.channel.server, mention, "beta")
-                && !isMod(message.channel.server, mention) && !inRole(message.channel.server, mention, "bots"))
-                return;
-
-            if (message.channel.id == "117809670156058633" && !inRole(message.channel.server, mention, "bots")
-                && !isMod(message.channel.server, mention) && mention.id != 118114929474666502)
-                return;
-
-            db.query("INSERT INTO mention_log (server, user, timestamp, channel, author, message, discord_id) VALUES (?,?,?,?,?,?,?)",
-                    [message.channel.server.id, mention.id, message.timestamp / 1000, message.channel.name, message.author.id, msg, message.id]);
-
-        });
-    }
-
+    
     db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id], function (err, result) {
         if (message.mentions.length > 0) {
             var mentioned = [];
@@ -328,7 +301,7 @@ mybot.on("message", function (message)
                 mybot.reply(message, "https://youregoingtolove.me/fearlessdata.php?server=" + message.channel.server.id);
             break;
         case "!mentions":
-            sendMentionLog(message);
+            sendNewMentionLog(message);
             break;
         case "!randmember":
             var day = Math.floor(new Date()/1000) - 86400;
@@ -667,9 +640,6 @@ mybot.on("message", function (message)
                 process.exit(-1);
             }
             break;
-        case "!nmentions":
-            sendNewMentionLog(message);
-            break;
     }
 });
 
@@ -752,7 +722,7 @@ function handlePM(message)
     switch (command[0].toLowerCase())
     {
         case "!mentions":
-            sendMentionLog(message);
+            sendNewMentionLog(message);
             break;
         case "le":
             mybot.sendMessage(message.channel, "Good le.");
@@ -816,46 +786,6 @@ function saveThing(message)
         else
         {
             mybot.reply(message, "this keyword already exists.");
-        }
-    });
-}
-
-function sendMentionLog(message)
-{
-    var user = message.author;
-    var allMessages = [];
-    db.query("SELECT username, timestamp, channel, author, message FROM mention_log " +
-        "JOIN members ON mention_log.author=members.id AND mention_log.server=members.server " +
-        "WHERE user = ? ORDER BY mention_log.id ASC", [user.id], function (err, rows) {
-        if (rows.length == 0)
-        {
-            mybot.sendMessage(user, "No mentions. :(");
-            return;
-        }
-        var msg = "Mention log: \n";
-        rows.forEach(function (row) {
-            var newmsg = "**" + row.username + " - " + row.channel + " - " + secondsToTime(Math.floor(new Date() / 1000) - row.timestamp, false) + "**\n";
-            newmsg += row.message + "\n\n";
-
-            if (msg.length + newmsg.length > 1900) {
-                allMessages.push(msg);
-                msg = "Continued:\n";
-            }
-            msg += newmsg;
-        });
-        allMessages.push(msg);
-        // Due to the way Discord sorts messages, they may appear out of order if messages are sent too swiftly together (<~100ms)
-        // So, we add a delay to avoid this.
-        for (var i = 0; i < allMessages.length; i++)
-        {
-            setTimeout(function(time) {
-                mybot.sendMessage(user, allMessages[time]);
-            }, i*200, i);
-        }
-        db.query("DELETE FROM mention_log WHERE user = ?", [user.id]);
-        if (!message.channel.isPrivate)
-        {
-            mybot.reply(message, "PM sent.");
         }
     });
 }
