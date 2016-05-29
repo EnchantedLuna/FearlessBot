@@ -302,6 +302,7 @@ mybot.on("message", function (message)
             break;
         case "!mentions":
             sendNewMentionLog(message);
+            mybot.deleteMessage(message);
             break;
         case "!randmember":
             var day = Math.floor(new Date()/1000) - 86400;
