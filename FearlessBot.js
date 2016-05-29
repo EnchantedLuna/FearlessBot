@@ -103,7 +103,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!id","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -117,11 +117,6 @@ mybot.on("message", function (message)
             break;
         case "!rules":
             mybot.reply(message, "for the current rules, see the wiki: https://www.reddit.com/r/TaylorSwift/wiki/discord");
-            break;
-        case "!id":
-            if (message.channel.server.id != config.mainServer) {
-                mybot.reply(message, "your user id is " + user.id + ".");
-            }
             break;
         case "!region":
         case "!setregion":
