@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.01a";
+var version = "2016.06.02a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -286,7 +286,6 @@ mybot.on("message", function (message)
                 }
                 else
                 {
-
                     mybot.reply(message, rows[0]['value']);
                     db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [command[1], dataserver]);
                 }
@@ -628,8 +627,9 @@ mybot.on("message", function (message)
             break;
         case "!addshitpost":
             if (inRole(message.channel.server, user, "alpha") || isMod(message.channel.server, user)) {
-                db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())", [params, user.id]);
-                mybot.reply(message, "added.");
+                db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())", [params, user.id], function (err, result) {
+                    mybot.reply(message, "added #"+result.insertId+".");
+                });
             }
             break;
         case "!fbotrestart":
@@ -897,7 +897,7 @@ function updateRegion(message)
     var command = message.content.split(" ");
     if (command[1] == null)
     {
-        mybot.reply(message, "you need to specify a region. (from: america, europe, asia, oceania)");
+        mybot.reply(message, "you need to specify a region. (from: america, europe, asia, africa, oceania)");
         return;
     }
     command[1] = command[1].toLowerCase();
