@@ -10,6 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
+var version = "2016.06.01a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -636,6 +637,9 @@ mybot.on("message", function (message)
                 process.exit(-1);
             }
             break;
+        case "!version":
+            mybot.reply(message, "running version: " + version);
+            break;
     }
 });
 
@@ -690,7 +694,7 @@ mybot.on("presence", function (oldUser, newUser)
             {
                 if (nameChangeeNoticesEnabled)
                 {
-                    mybot.sendMessage(rows[i].server, rows[i].username + " has changed username to " + newUser.username + ".");
+                    mybot.sendMessage(mybot.servers.get('id',rows[i].server).defaultChannel, rows[i].username + " has changed username to " + newUser.username + ".");
                     if (rows[i].server==config.mainServer)
                     {
                         mybot.sendMessage("165309673849880579", rows[i].username + " has changed username to " + newUser.username + ".");
@@ -737,6 +741,7 @@ function handlePM(message)
                 var res = '';
                 for (var i=0; i < rows.length; i++) {
                     if (mybot.channels.get('id',rows[i].channel).permissionsOf(message.author).hasPermission('readMessages')) {
+                        res += rows[i].id + ' ';
                         res += '**<' + rows[i].username + '>** ' + rows[i].message + '\n';
                     } else {
                         mybot.reply(message, "you do not have access to this.");
@@ -746,6 +751,26 @@ function handlePM(message)
                 mybot.reply(message, res);
             });
             break;
+        case "!next":
+        db.query("SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
+            "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
+            "WHERE messages.id >= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id LIMIT 10", [command[1], command[1], command[1], command[1]], function (err, rows) {
+            if (err !== null) {
+                console.log(err);
+            }
+            var res = '';
+            for (var i=0; i < rows.length; i++) {
+                if (mybot.channels.get('id',rows[i].channel).permissionsOf(message.author).hasPermission('readMessages')) {
+                    res += rows[i].id + ' ';
+                    res += '**<' + rows[i].username + '>** ' + rows[i].message + '\n';
+                } else {
+                    mybot.reply(message, "you do not have access to this.");
+                    return;
+                }
+            }
+            mybot.reply(message, res);
+        });
+        break;
     }
 }
 
