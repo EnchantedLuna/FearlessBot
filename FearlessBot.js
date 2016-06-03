@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.02b";
+var version = "2016.06.02c";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -646,11 +646,15 @@ mybot.on("message", function (message)
 mybot.on("serverNewMember", function (server, user)
 {
     var username = user.username;
-    mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
-    if (server.id == config.mainServer)
-    {
-        mybot.sendMessage("165309673849880579",username + " (id " + user.id + ") has joined the server.");
-    }
+    db.query("SELECT * FROM members WHERE server = ? AND id = ?", [server.id, user.id], function (err, rows) {
+        if (rows.length > 0) {
+            mybot.sendMessage(server.defaultChannel, username + " has rejoined the server. Welcome back!");
+            log(username + " (id " + user.id + ") has rejoined the server.",server.id);
+        } else {
+            mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
+            log(username + " (id " + user.id + ") has joined the server.",server.id);
+        }
+    });
 });
 
 
