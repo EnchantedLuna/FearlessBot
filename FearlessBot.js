@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.02a";
+var version = "2016.06.02b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -659,6 +659,14 @@ mybot.on("serverMemberRemoved", function (server, user) {
     if (server.id == config.mainServer)
     {
         mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has left the server (or was kicked).");
+    }
+});
+
+mybot.on("userBanned", function (user, server) {
+    db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
+    if (server.id == config.mainServer)
+    {
+        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has been banned.");
     }
 });
 
