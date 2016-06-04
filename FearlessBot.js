@@ -962,7 +962,7 @@ function inRole(server, user, needle)
 
 function isMod(server, user)
 {
-    return inRole(server, user, "admins") || inRole(server, user, "chat mods");
+    return inRole(server, user, "admins") || inRole(server, user, "mods");
 }
 
 function secondsToTime(seconds, short)
