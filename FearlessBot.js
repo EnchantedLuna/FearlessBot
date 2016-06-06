@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.04b";
+var version = "2016.06.05b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -337,7 +337,7 @@ mybot.on("message", function (message)
             {
                 db.query("UPDATE data_store SET  approved=1 WHERE keyword = ? AND server = ?", [command[1], message.channel.server.id], function (err, result)
                 {
-                    if (result.affectedRows > 0)
+                    if (result.changedRows  > 0)
                     {
                         mybot.reply(message, "approved.");
                         mybot.sendMessage("165309673849880579", "Saved item " + command[1] + " has been approved by " + message.author.username);
@@ -821,7 +821,7 @@ function saveThing(message)
     // check for existing
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.server.id, command[1]], function (err, rows)
     {
-        if ((isMod(message.channel.server, message.author) || message.channel.server.id != config.mainServer || inRole(message.channel.server, message.author, "alpha")) && (rows[0] == null || rows[0]['owner'] == message.author.id))
+        if ((isMod(message.channel.server, message.author) || message.channel.server.id != config.mainServer || inRole(message.channel.server, message.author, "alpha") || key == 'tsst') && (rows[0] == null || rows[0]['owner'] == message.author.id))
         {
             db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.server.id, key, value, message.author.id]);
             mybot.reply(message, "updated and ready to use.");
