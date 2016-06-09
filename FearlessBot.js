@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.05b";
+var version = "2016.06.09a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -825,16 +825,19 @@ function saveThing(message)
         {
             db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.server.id, key, value, message.author.id]);
             mybot.reply(message, "updated and ready to use.");
+            log(message.author.username + " created item " + key + " - auto approved",message.channel.server.id);
         }
         else if (rows[0] == null)
         {
             db.query("INSERT INTO data_store (server, keyword, value, owner) VALUES (?,?,?,?)", [message.channel.server.id, key, value, message.author.id]);
             mybot.reply(message, "created. This will need to be approved before it can be used.");
+            log(message.author.username + "created item " + key + " - pending approval",message.channel.server.id);
         }
         else if (rows[0]['owner'] == message.author.id)
         {
             db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ? AND server = ?", [value, key, message.channel.server.id]);
             mybot.reply(message, "updated. This will need to be approved before it can be used.");
+            log(message.author.username + "updated item " + key + " - pending approval",message.channel.server.id);
         }
         else
         {
