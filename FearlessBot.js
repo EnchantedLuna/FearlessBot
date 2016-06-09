@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.09a";
+var version = "2016.06.09b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -639,6 +639,11 @@ mybot.on("message", function (message)
             break;
         case "!version":
             mybot.reply(message, "running version: " + version);
+            break;
+        case "\uD83D\uDE44":
+            if (user.id == 115329261350420487) {
+                db.query("UPDATE data_store SET value=value+1 WHERE server='1989' AND keyword='lunaeyeroll'", command[1]);
+            }
             break;
     }
 });
