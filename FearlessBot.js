@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.09b";
+var version = "2016.06.09c";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -771,15 +771,21 @@ function handlePM(message)
         case "!next":
             db.query("SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
                 "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
-                "WHERE messages.id >= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id LIMIT 10", [command[1], command[1], command[1], command[1]], function (err, rows) {
+                "WHERE messages.id >= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id LIMIT 35", [command[1], command[1], command[1], command[1]], function (err, rows) {
                 if (err !== null) {
                     console.log(err);
                 }
                 var res = '';
+                var next = '';
                 for (var i=0; i < rows.length; i++) {
                     if (mybot.channels.get('id',rows[i].channel).permissionsOf(message.author).hasPermission('readMessages')) {
-                        res += rows[i].id + ' ';
-                        res += '**<' + rows[i].username + '>** ' + rows[i].message + '\n';
+                        next = rows[i].id + ' **<' + rows[i].username + '>** ' + rows[i].message + '\n';
+                        if ((res.length + next.length) > 1900) {
+                            mybot.reply(message, res);
+                            return;
+                        } else {
+                            res += next;
+                        }
                     } else {
                         mybot.reply(message, "you do not have access to this.");
                         return;
@@ -791,15 +797,21 @@ function handlePM(message)
         case "!prev":
             db.query("(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
                 "FROM messages JOIN members ON messages.server=members.server AND messages.author=members.id " +
-                "WHERE messages.id <= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id DESC LIMIT 10) ORDER BY id", [command[1], command[1], command[1], command[1]], function (err, rows) {
+                "WHERE messages.id <= ? AND messages.channel = (SELECT channel FROM messages WHERE id=?) ORDER BY id DESC LIMIT 40) ORDER BY id", [command[1], command[1], command[1], command[1]], function (err, rows) {
                 if (err !== null) {
                     console.log(err);
                 }
                 var res = '';
+                var next = '';
                 for (var i=0; i < rows.length; i++) {
                     if (mybot.channels.get('id',rows[i].channel).permissionsOf(message.author).hasPermission('readMessages')) {
-                        res += rows[i].id + ' ';
-                        res += '**<' + rows[i].username + '>** ' + rows[i].message + '\n';
+                        next = rows[i].id + ' **<' + rows[i].username + '>** ' + rows[i].message + '\n';
+                        if ((res.length + next.length) > 1900) {
+                            mybot.reply(message, res);
+                            return;
+                        } else {
+                            res += next;
+                        }
                     } else {
                         mybot.reply(message, "you do not have access to this.");
                         return;
