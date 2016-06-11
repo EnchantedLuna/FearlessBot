@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.09c";
+var version = "2016.06.11b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -218,7 +218,7 @@ mybot.on("message", function (message)
                 if (rows.length == 0) {
                     response = "no messages found. Please double check the username.";
                 } else {
-                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, false) + "ago in " + rows[0].name + ")\n" +
+                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, true) + "ago in " + rows[0].name + ")\n" +
                         rows[0].message;
                 }
                 mybot.reply(message, response);
