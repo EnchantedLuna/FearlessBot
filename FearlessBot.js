@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.11b";
+var version = "2016.06.11c";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -705,7 +705,7 @@ mybot.on("presence", function (oldUser, newUser)
 {
     if (oldUser.username != newUser.username)
     {
-        db.query("SELECT server, username FROM members WHERE id = ? AND active=1", [newUser.id], function (err, rows)
+        db.query("SELECT server, username FROM members WHERE id = ? AND active=1 AND lastseen > UNIX_TIMESTAMP()-604800", [newUser.id], function (err, rows)
         {
             for (var i=0; i < rows.length; i++)
             {
