@@ -10,7 +10,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.07.20a";
+var version = "2016.08.21a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -251,10 +251,16 @@ mybot.on("message", function (message)
             break;
         case "!rankwords":
             var numberToGet = 5;
+            var overflowNotice = false;
             var rankString = "Word Count Ranking:\n";
             if (parseInt(command[1]) > 0 && parseInt(command[1]) < 60)
             {
                 numberToGet = parseInt(command[1]);
+                if (numberToGet > 10 && (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912"))
+                {
+                    numberToGet = 10;
+                    overflowNotice = true;
+                }
             }
             db.query("SELECT username, words, messages FROM members WHERE server = ? AND words > 0 AND active=1 ORDER BY words DESC LIMIT ?", [message.channel.server.id, numberToGet], function (err, rows)
             {
@@ -263,6 +269,9 @@ mybot.on("message", function (message)
                     rankString += count + ": " + member.username + " - " + member.words + " words\n";
                     count++;
                 });
+                if (overflowNotice) {
+                    rankString += "Note: Rankings of more than 10 users can only be used in #bots.";
+                }
                 mybot.sendMessage(message.channel, rankString);
             });
             break;
