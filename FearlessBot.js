@@ -10,8 +10,8 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.06.11c";
-var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true });
+var version = "2016.07.20a";
+var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
 
@@ -656,7 +656,15 @@ mybot.on("serverNewMember", function (server, user)
             mybot.sendMessage(server.defaultChannel, username + " has rejoined the server. Welcome back!");
             log(username + " (id " + user.id + ") has rejoined the server.",server.id);
         } else {
-            mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
+            if (server.id == config.mainServer) {
+                mybot.sendMessage(user, "Welcome to the /r/TaylorSwift discord chat! " +
+                    "Please take some time to read the rules on the wiki page located at https://www.reddit.com/r/TaylorSwift/wiki/discord. " +
+                    "Please say hi and introduce yourself when you are ready to join the conversation. Don't worry if it's been quiet lately or there's some conversation going on. We'll welcome you and help you get started! " +
+                    "(P.S. Expect to be asked what your favorite Taylor album is!)");
+
+            } else {
+                mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
+            }
             log(username + " (id " + user.id + ") has joined the server.",server.id);
         }
     });
@@ -689,7 +697,7 @@ mybot.on("messageDeleted", function (message, channel)
     {
         var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
         var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
-        db.query("UPDATE members SET words=words-? WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
+        db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
         db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
         mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent.replace('`','\\`') + "```");
