@@ -238,14 +238,14 @@ mybot.on("message", function (message)
                 search = user.username;
             }
 
-            db.query("SELECT words, messages FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
+            db.query("SELECT words, messages, username FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
                     // Don't show message count in main server, TaylorBot has been doing that longer
                     var msgcount = (message.channel.server.id == config.mainServer) ? "" : " in " + rows[0].messages + " messages";
-                    mybot.reply(message, search + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
+                    mybot.reply(message, rows[0].username + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
                 }
             });
             break;
