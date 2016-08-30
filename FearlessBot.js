@@ -1,7 +1,6 @@
 var Discord = require("discord.js");
 var config = require("./auth.json");
 var mysql = require("mysql");
-var units = require("node-units");
 var db = mysql.createConnection({
     host: config.mysqlHost,
     user: config.mysqlUser,
@@ -10,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.08.21a";
+var version = "2016.08.29a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -315,14 +314,6 @@ mybot.on("message", function (message)
                     mybot.reply(message, "random member: " + rows[0].username);
                 }
             });
-            break;
-        case "!convert":
-            try{
-                var value = units.convert(params);
-                mybot.reply(message, (Math.round(value * 100) / 100) + " " + command[command.length - 1]);
-            } catch(e){
-                mybot.reply(message, e);
-            }
             break;
         case "!shitpost":
             var number = parseInt(command[1], 10);
