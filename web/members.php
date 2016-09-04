@@ -26,11 +26,19 @@ $db->set_charset("utf8");
         </thead>
         <tbody>
         <?php
-        $query = $db->query("SELECT * FROM members WHERE server='115332333745340416' AND active=1 ORDER BY username");
+        if (isset($_GET['showinactive']))
+        {
+            $query = $db->query("SELECT * FROM members WHERE server='115332333745340416' ORDER BY username");
+        }
+        else
+        {
+            $query = $db->query("SELECT * FROM members WHERE server='115332333745340416' AND active=1 ORDER BY username");
+        }
         while ($row = $query->fetch_array())
         {
             $average = ($row['messages'] > 0) ? round($row['words']/$row['messages'],2) : 0;
-            echo "<tr><td>".$row['username']."</td><td>".$row['words']."</td><td>".$row['messages']."</td><td>$average</td><td>".date('Y-m-d',$row['lastseen'])."</td></tr>";
+            $style =  ($row['active']) ? '' : 'color:red';
+            echo "<tr style='$style'><td>".$row['username']."</td><td>".$row['words']."</td><td>".$row['messages']."</td><td>$average</td><td>".date('Y-m-d',$row['lastseen'])."</td></tr>";
         }
         ?>
         </tbody>
