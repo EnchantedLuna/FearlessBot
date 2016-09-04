@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.08.29a";
+var version = "2016.09.04a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -207,7 +207,7 @@ mybot.on("message", function (message)
             {
                 search = params;
             }
-            db.query("SELECT mem.username, mem.discriminator, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, c.name FROM messages msg " +
+            db.query("SELECT mem.username, mem.discriminator, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM messages msg " +
                 "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
                 "JOIN channel_stats c ON msg.channel=c.channel " +
                 "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != '115332333745340416') " +
@@ -217,7 +217,7 @@ mybot.on("message", function (message)
                 if (rows.length == 0) {
                     response = "no messages found. Please double check the username.";
                 } else {
-                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name + ")\n" +
+                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name + " - #" + rows[0].id + ")\n" +
                         rows[0].message;
                 }
                 mybot.reply(message, response);
@@ -237,14 +237,14 @@ mybot.on("message", function (message)
                 search = user.username;
             }
 
-            db.query("SELECT words, messages FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
+            db.query("SELECT words, messages, username FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
                 if (rows[0] != null)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
                     // Don't show message count in main server, TaylorBot has been doing that longer
                     var msgcount = (message.channel.server.id == config.mainServer) ? "" : " in " + rows[0].messages + " messages";
-                    mybot.reply(message, search + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
+                    mybot.reply(message, rows[0].username + " has used " + rows[0].words + " words" +  msgcount + ". (average " + average + " per message)");
                 }
             });
             break;
