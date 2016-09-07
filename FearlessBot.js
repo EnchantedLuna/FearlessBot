@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.09.04a";
+var version = "2016.09.06a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -989,7 +989,7 @@ function updateRegion(message)
             mybot.reply(message, "your region has been removed.");
             break;
         default:
-            mybot.reply(message, "unrecognized region. Accepted values: america, europe, asia, oceania, clear");
+            mybot.reply(message, "unrecognized region. Accepted values: america, europe, asia, oceania, africa, clear");
             break;
     }
 }
