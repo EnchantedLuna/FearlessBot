@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.09.06a";
+var version = "2016.09.09a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -689,7 +689,7 @@ mybot.on("userBanned", function (user, server) {
 
 mybot.on("messageDeleted", function (message, channel)
 {
-    if (message == null)
+    if (message == null || message.author.id == '223638525105405952') // bluebot
     {
         return;
     }
