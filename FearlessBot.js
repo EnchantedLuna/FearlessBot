@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.09.09a";
+var version = "2016.09.10a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -508,7 +508,7 @@ mybot.on("message", function (message)
                     {
                         if (!isMod(message.channel.server, person))
                         {
-                            mybot.overwritePermissions(message.channel, person, {"sendMessages" : true});
+                            mybot.overwritePermissions(message.channel, person, { "sendMessages" : null });
                             mybot.reply(message, person.username + " has been unmuted.");
                             mybot.sendMessage("165309673849880579", person.username + " has been unmuted in " + message.channel.name + " by " + message.author.username);
                         }
