@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.09.10a";
+var version = "2016.09.13a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -751,6 +751,9 @@ function handlePM(message)
             break;
         case "le":
             mybot.sendMessage(message.channel, "Good le.");
+            break;
+        case "xd":
+            mybot.sendMessage(message.channel, "http://i.imgur.com/XPuAcUq.png");
             break;
         case "!context":
             db.query("(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
