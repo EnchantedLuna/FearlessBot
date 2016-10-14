@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.09.13a";
+var version = "2016.09.13b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -672,19 +672,12 @@ mybot.on("serverNewMember", function (server, user)
 
 
 mybot.on("serverMemberRemoved", function (server, user) {
-   db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
-    if (server.id == config.mainServer)
-    {
-        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has left the server (or was kicked).");
-    }
+    db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
+    log(user.username + " (id " + user.id + ") has left the server (or was kicked).",server.id);
 });
 
 mybot.on("userBanned", function (user, server) {
-    db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [server.id, user.id]);
-    if (server.id == config.mainServer)
-    {
-        mybot.sendMessage("165309673849880579",user.username + " (id " + user.id + ") has been banned.");
-    }
+    log(user.username + " (id " + user.id + ") has been banned.", server.id);
 });
 
 mybot.on("messageDeleted", function (message, channel)
