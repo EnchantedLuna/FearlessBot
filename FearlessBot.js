@@ -331,6 +331,13 @@ mybot.on("message", function (message)
                 });
             }
             break;
+        case "!activity":
+            if (inRole(message.channel.server, user, 'beta') || inRole(message.channel.server, user, 'alpha') || isMod(message.channel.server, user))
+            {
+                var search  = (message.mentions.length > 0) ? message.mentions[0].id : user.id;
+                mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search);
+            }
+            break;
         // Mod commands below
         case "!approve":
             if (isMod(message.channel.server, user))
