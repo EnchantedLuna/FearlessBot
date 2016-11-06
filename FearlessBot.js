@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.11.05a";
+var version = "2016.11.05c";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -332,11 +332,8 @@ mybot.on("message", function (message)
             }
             break;
         case "!activity":
-            if (inRole(message.channel.server, user, 'beta') || inRole(message.channel.server, user, 'alpha') || isMod(message.channel.server, user))
-            {
-                var search  = (message.mentions.length > 0) ? message.mentions[0].id : user.id;
-                mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search);
-            }
+            search  = (message.mentions.length > 0) ? message.mentions[0].id : user.id;
+            mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search);
             break;
         // Mod commands below
         case "!approve":
@@ -663,15 +660,7 @@ mybot.on("serverNewMember", function (server, user)
             mybot.sendMessage(server.defaultChannel, username + " has rejoined the server. Welcome back!");
             log(username + " (id " + user.id + ") has rejoined the server.",server.id);
         } else {
-            if (server.id == config.mainServer) {
-                mybot.sendMessage(user, "Welcome to the /r/TaylorSwift discord chat! " +
-                    "Please take some time to read the rules on the wiki page located at https://www.reddit.com/r/TaylorSwift/wiki/discord. " +
-                    "Please say hi and introduce yourself when you are ready to join the conversation. Don't worry if it's been quiet lately or there's some conversation going on. We'll welcome you and help you get started! " +
-                    "(P.S. Expect to be asked what your favorite Taylor album is!)");
-
-            } else {
-                mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
-            }
+            mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
             log(username + " (id " + user.id + ") has joined the server.",server.id);
         }
     });
