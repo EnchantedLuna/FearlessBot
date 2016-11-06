@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.11.05c";
+var version = "2016.11.06a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -688,8 +688,8 @@ mybot.on("messageDeleted", function (message, channel)
         if (channel.id == '115332333745340416' || channel.id == "119490967253286912" || channel.id == "131994567602995200")
         {
             var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
+            db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         }
-        db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
         db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
         mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent.replace('`','\\`') + "```");
