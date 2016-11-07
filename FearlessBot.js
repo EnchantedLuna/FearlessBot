@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.11.06a";
+var version = "2016.11.06b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -333,7 +333,8 @@ mybot.on("message", function (message)
             break;
         case "!activity":
             search  = (message.mentions.length > 0) ? message.mentions[0].id : user.id;
-            mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search);
+            var botsString = (command[1] == 'bots') ? '&includebots=true' : '';
+            mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search+botsString);
             break;
         // Mod commands below
         case "!approve":

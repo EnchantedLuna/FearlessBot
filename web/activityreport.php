@@ -3,9 +3,10 @@ require_once "config.php";
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8mb4");
 
+$bots = (isset($_GET['includebots'])) ? '' : "AND channel != '132026417725702145'";
 $query = $db->prepare("SELECT MONTH(messages.date) month, YEAR(messages.date) year, COUNT(*)
 FROM messages
-WHERE server=? AND author=? AND channel != '132026417725702145'
+WHERE server=? AND author=? $bots
 GROUP BY year, month");
 $query->bind_param('ss', $_GET['server'], $_GET['user']);
 $query->execute();
@@ -43,7 +44,7 @@ $query->bind_result($month, $year, $count);
             ]);
 
             // Set chart options
-            var options = {'title':'Messages By Month <?php echo ($_GET['server']=='115332333745340416') ? ' (excluding bots)' : ''; ?>'};
+            var options = {'title':'Messages By Month <?php echo ($_GET['server']=='115332333745340416' && !isset($_GET['includebots'])) ? ' (excluding bots)' : ''; ?>'};
 
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
