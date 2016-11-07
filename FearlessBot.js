@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.11.06b";
+var version = "2016.11.06c";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -103,7 +103,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete","!activity"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
