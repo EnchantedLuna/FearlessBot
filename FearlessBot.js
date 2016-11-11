@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.11.06c";
+var version = "2016.11.10a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -295,7 +295,9 @@ mybot.on("message", function (message)
                 else
                 {
                     mybot.reply(message, rows[0]['value']);
-                    db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [command[1], dataserver]);
+                    if (channel != 'bots') {
+                        db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [command[1], dataserver]);
+                    }
                 }
             });
 
