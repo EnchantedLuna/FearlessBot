@@ -2,7 +2,7 @@
   "name": "FearlessBot",
   "version": "2016.04.03a",
   "dependencies": {
-    "discord.js": ">=6.1.0",
+    "discord.js": "8.*.*",
     "mysql": "*",
     "node-units": "*"
   },
