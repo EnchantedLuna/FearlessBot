@@ -105,7 +105,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete","!activity"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -301,7 +301,9 @@ mybot.on("message", function (message)
                 else
                 {
                     mybot.reply(message, rows[0]['value']);
-                    db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [command[1], dataserver]);
+                    if (channel != 'bots') {
+                        db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [command[1], dataserver]);
+                    }
                 }
             });
 
@@ -336,6 +338,11 @@ mybot.on("message", function (message)
                     }
                 });
             }
+            break;
+        case "!activity":
+            search  = (message.mentions.length > 0) ? message.mentions[0].id : user.id;
+            var botsString = (command[1] == 'bots') ? '&includebots=true' : '';
+            mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search+botsString);
             break;
         // Mod commands below
         case "!approve":
@@ -662,15 +669,7 @@ mybot.on("serverNewMember", function (server, user)
             mybot.sendMessage(server.defaultChannel, username + " has rejoined the server. Welcome back!");
             log(username + " (id " + user.id + ") has rejoined the server.",server.id);
         } else {
-            if (server.id == config.mainServer) {
-                mybot.sendMessage(user, "Welcome to the /r/TaylorSwift discord chat! " +
-                    "Please take some time to read the rules on the wiki page located at https://www.reddit.com/r/TaylorSwift/wiki/discord. " +
-                    "Please say hi and introduce yourself when you are ready to join the conversation. Don't worry if it's been quiet lately or there's some conversation going on. We'll welcome you and help you get started! " +
-                    "(P.S. Expect to be asked what your favorite Taylor album is!)");
-
-            } else {
-                mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
-            }
+            mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
             log(username + " (id " + user.id + ") has joined the server.",server.id);
         }
     });
@@ -695,8 +694,11 @@ mybot.on("messageDeleted", function (message, channel)
     if (message.channel.server.id == config.mainServer)
     {
         var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
-        var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
-        db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
+        if (channel.id == '115332333745340416' || channel.id == "119490967253286912" || channel.id == "131994567602995200")
+        {
+            var removedWords = (words > 20) ? Math.round(words * 1.25) : words; // To help discourage spamming for wordcount
+            db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?", [removedWords, message.author.id, message.channel.server.id]);
+        }
         db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, channel.id]);
         db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
         mybot.sendMessage("165309673849880579","deleted message by " + message.author.username + " in "+message.channel.name+":\n```" + message.cleanContent.replace('`','\\`') + "```");
@@ -753,6 +755,9 @@ function handlePM(message)
             break;
         case "xd":
             mybot.sendMessage(message.channel, "http://i.imgur.com/XPuAcUq.png");
+            break;
+        case "tay":
+            mybot.sendMessage(message.channel, "lor");
             break;
         case "!context":
             db.query("(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
