@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.09.19a";
+var version = "2016.09.20a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -648,6 +648,8 @@ mybot.on("message", function (message)
         case "!fbotrestart":
             if (inRole(message.channel.server, user, "admins")) {
                 process.exit(-1);
+            } else {
+                mybot.reply(message, ":poop:");
             }
             break;
         case "!version":
