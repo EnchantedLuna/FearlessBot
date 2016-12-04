@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.11.29a";
+var version = "2016.12.04a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -845,6 +845,10 @@ function saveThing(message)
     var command = message.content.split(" ");
     if (command[1] == null)
         return;
+    if (command[1].startsWith("http")) {
+        mybot.reply(message, "you probably dun goof'd your command. The keyword comes first!");
+        return;
+    }
     if (command[2] == null)
     {
         mybot.reply(message, "you need to specify a value (the thing you want saved) for that keyword.");
