@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.12.24a";
+var version = "2016.12.25a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -315,7 +315,7 @@ mybot.on("message", function (message)
 
             break;
         case "!getlist":
-                mybot.reply(message, "https://youregoingtolove.me/fearlessdata.php?server=" + message.channel.server.id);
+                mybot.reply(message, "https://tay.rocks/fearlessdata.php?server=" + message.channel.server.id);
             break;
         case "!mentions":
             sendNewMentionLog(message);
