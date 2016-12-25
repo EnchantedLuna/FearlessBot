@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.12.04a";
+var version = "2016.12.24a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -192,7 +192,13 @@ mybot.on("message", function (message)
             {
                 var response = "";
                 for (var i = 0; i < rows.length; i++) {
-                    response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(Math.floor(new Date() / 1000) - rows[i].lastseen, false) + "ago.";
+                    var seconds = Math.floor(new Date() / 1000) - rows[i].lastseen;
+                    response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(seconds, false) + "ago.";
+                    if (seconds > 60*60*24*7)
+                    {
+                        var dateActive = new Date(rows[i].lastseen*1000);
+                        response += " ("+dateActive.toDateString()+")";
+                    }
                     if (rows[i].active == 0)
                     {
                         response += "\nThis person does not appear to be on the member list. This may mean that he or she may have left the server or have been pruned or kicked.\n\n";
