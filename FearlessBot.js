@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.12.25a";
+var version = "2016.12.25b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -323,7 +323,7 @@ mybot.on("message", function (message)
             break;
         case "!randmember":
             var day = Math.floor(new Date()/1000) - 86400;
-            db.query("SELECT username FROM members WHERE lastseen > ? ORDER BY RAND() LIMIT 1", [day], function (err, rows) {
+            db.query("SELECT username FROM members WHERE server = ? AND lastseen > ? ORDER BY RAND() LIMIT 1", [message.channel.server.id, day], function (err, rows) {
                 if (rows != null) {
                     mybot.reply(message, "random member: " + rows[0].username);
                 }
