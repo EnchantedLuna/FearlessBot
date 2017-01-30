@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2016.12.25b";
+var version = "2017.01.26a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -251,6 +251,11 @@ mybot.on("message", function (message)
 
             db.query("SELECT words, messages, username FROM members WHERE server = ? AND username = ?", [message.channel.server.id, search], function (err, rows)
             {
+                if (err != null)
+                {
+                    console.log(err);
+                    return;
+                }
                 if (rows[0] != null)
                 {
                     var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
@@ -482,7 +487,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "nice try. :rolling_eyes:");
+                mybot.reply(message, "no way! :rolling_eyes:");
             }
             break;
         case "!topic":
@@ -943,7 +948,7 @@ function sendNewMentionLog(message)
 function clearRegions(server, user)
 {
     var roles = server.rolesOfUser(user);
-    var america = server.roles.get("name", "america");
+    var america = server.roles.get("name", "southamerica");
     var europe = server.roles.get("name", "europe");
     var asia = server.roles.get("name", "asia");
     var oceania = server.roles.get("name", "oceania");
@@ -956,6 +961,9 @@ function clearRegions(server, user)
                 mybot.removeMemberFromRole(user, oceania);
                 break;
             case "america":
+                mybot.removeMemberFromRole(user, america);
+                break;
+            case "southamerica":
                 mybot.removeMemberFromRole(user, america);
                 break;
             case "europe":
@@ -982,9 +990,14 @@ function updateRegion(message)
     command[1] = command[1].toLowerCase();
     switch (command[1])
     {
+        case "northamerica":
         case "america":
             mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "america"));
-            mybot.reply(message, "your region has been set to America.");
+            mybot.reply(message, "your region has been set to North America.");
+            break;
+        case "southamerica":
+            mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "southamerica"));
+            mybot.reply(message, "your region has been set to South America.");
             break;
         case "europe":
             mybot.addMemberToRole(message.author, message.channel.server.roles.get("name", "europe"));
@@ -1008,7 +1021,7 @@ function updateRegion(message)
             mybot.reply(message, "your region has been removed.");
             break;
         default:
-            mybot.reply(message, "unrecognized region. Accepted values: america, europe, asia, oceania, africa, clear");
+            mybot.reply(message, "unrecognized region. Accepted values: america, southamerica, europe, asia, oceania, africa, clear");
             break;
     }
 }
