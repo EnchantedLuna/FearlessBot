@@ -10,6 +10,7 @@ $db->set_charset("utf8");
     <title>/r/TaylorSwift Discord Member Statistics</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="darkly.css"/>
 </head>
 <body>
 <div class="container">
@@ -31,7 +32,6 @@ $db->set_charset("utf8");
                 <ul class="nav navbar-nav">
                     <li><a href="fearlessdata.php">Saved Items</a></li>
                     <li><a href="members.php">Members</a></li>
-                    <li><a href="daily.php">Daily Stats</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
