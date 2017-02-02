@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2017.01.26a";
+var version = "2017.02.01a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -948,7 +948,8 @@ function sendNewMentionLog(message)
 function clearRegions(server, user)
 {
     var roles = server.rolesOfUser(user);
-    var america = server.roles.get("name", "southamerica");
+    var america = server.roles.get("name", "america");
+    var southamerica = server.roles.get("name", "southamerica");
     var europe = server.roles.get("name", "europe");
     var asia = server.roles.get("name", "asia");
     var oceania = server.roles.get("name", "oceania");
@@ -964,7 +965,7 @@ function clearRegions(server, user)
                 mybot.removeMemberFromRole(user, america);
                 break;
             case "southamerica":
-                mybot.removeMemberFromRole(user, america);
+                mybot.removeMemberFromRole(user, southamerica);
                 break;
             case "europe":
                 mybot.removeMemberFromRole(user, europe);
@@ -984,7 +985,7 @@ function updateRegion(message)
     var command = message.content.split(" ");
     if (command[1] == null)
     {
-        mybot.reply(message, "you need to specify a region. (from: america, europe, asia, africa, oceania)");
+        mybot.reply(message, "you need to specify a region. (from:  america, southamerica, europe, asia, africa, oceania)");
         return;
     }
     command[1] = command[1].toLowerCase();
