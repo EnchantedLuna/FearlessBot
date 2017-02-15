@@ -2,91 +2,85 @@
 require_once "config.php";
 require_once "lib_autolink.php";
 
-
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
-$db->set_charset("utf8mb4");
+$db->set_charset("utf8");
 $server = empty($_GET['server']) ? PRIMARY_GUILD : $_GET['server'];
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>FearlessBot Data Storage</title>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-
-        <?php
-        if ($_GET['theme']=="dark") {
-            echo '<link rel="stylesheet" href="sortable-theme-dark.css" />';
-            echo '<link rel="stylesheet" href="dark.css" />';
-            $theme = "sortable-theme-dark";
-        } else {
-            echo '<link rel="stylesheet" href="sortable-theme-bootstrap.css" />';
-            $theme = "sortable-theme-bootstrap";
-        }
-        ?>
-        <style type="text/css">
-        #dataStore {
-            margin-bottom: 10px;
-            float:left;
-        }
-        #channelStats {
-            float:left;
-            margin-left: 10px;
-            margin-bottom: 10px;
-        }
-        </style>
-    </head>
-    <body>
-        <div id="dataStore">
-            <h1>FearlessBot Data Storage</h1>
-            <table class="<?php echo $theme; ?>" data-sortable>
-                <thead>
-                <tr>
-                    <th>Keyword</th>
-                    <th>Value</th>
-                    <th>Added By</th>
-                    <th>Uses</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $stmt = $db->prepare("SELECT keyword, value, uses, username FROM data_store
-                LEFT JOIN members ON data_store.owner=members.id AND data_store.server=members.server WHERE approved=1 AND data_store.server= ? ORDER BY keyword ");
-                $stmt->bind_param("s", $server);
-                $stmt->execute();
-                $stmt->bind_result($keyword, $value, $uses, $username);
-                while ($stmt->fetch())
-                {
-                    echo "<tr><td>".htmlspecialchars($keyword)."</td><td>".nl2br(autolink(htmlspecialchars($value,50)))."</td><td>".htmlspecialchars($username)."</td><td>".$uses."</td></tr>";
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
-        <?php
-        if ($server == PRIMARY_GUILD)
-        {
-        ?>
-            <div id="channelStats">
-                <h1>Channel Stats</h1>
-                <table>
-                    <tr><th>Channel</th><th>Total Messages</th><th>Date Tracking Started</th><th>Avg Msgs/Day</th></tr>
-                    <?php
-                    $query = $db->query("SELECT * FROM channel_stats WHERE web=1");
-                    $total = 0;
-                    while ($row = $query->fetch_array())
-                    {
-                        $days = ceil((time()-$row['startdate'])/86400);
-                        $messagesPerDay = round($row['total_messages'] / $days);
-                        echo "<tr><td>".$row['name']."</td><td>".number_format($row['total_messages'])."</td><td>".date("Y-m-d",$row['startdate'])."</td><td>$messagesPerDay</td></tr>";
-                        $total += $row['total_messages'];
-                    }
-                    echo "<tr><td><b>Total</b></td><td>".number_format($total)."</td></tr>";
-                    ?>
-                </table>
+<head>
+    <title>FearlessBot Saved Items</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="darkly.css"/>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">FearlessBot</a>
             </div>
-        <?php
-        }
-        ?>
-        <script src="sortable.min.js"></script>
-    </body>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="fearlessdata.php">Saved Items</a></li>
+                    <li><a href="members.php">Members</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div id="dataStore">
+        <h1>Saved Items</h1>
+        <table class="table table-striped" id="savedTable">
+            <thead>
+            <tr>
+                <th>Keyword</th>
+                <th>Value</th>
+                <th>Added By</th>
+                <th>Uses</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>Keyword</th>
+                <th>Value</th>
+                <th>Added By</th>
+                <th>Uses</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            <?php
+            $stmt = $db->prepare("SELECT keyword, value, uses, username FROM data_store
+                LEFT JOIN members ON data_store.owner=members.id AND data_store.server=members.server WHERE approved=1 AND data_store.server= ? ORDER BY keyword ");
+            $stmt->bind_param("s", $server);
+            $stmt->execute();
+            $stmt->bind_result($keyword, $value, $uses, $username);
+            while ($stmt->fetch())
+            {
+                echo "<tr><td>".htmlspecialchars($keyword)."</td><td>".nl2br(autolink(htmlspecialchars($value,50)))."</td><td>".htmlspecialchars($username)."</td><td>".$uses."</td></tr>";
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/datatables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#savedTable').DataTable({
+            "iDisplayLength": 50,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]
+        });
+    });
+</script>
+</body>
 </html>

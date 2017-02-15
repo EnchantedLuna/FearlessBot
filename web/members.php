@@ -71,7 +71,7 @@ $db->set_charset("utf8");
         {
             $average = ($row['messages'] > 0) ? round($row['words']/$row['messages'],2) : 0;
             $style =  ($row['active']) ? '' : 'color:red';
-            echo "<tr style='$style'><td>".$row['username']."</td><td>".$row['words']."</td><td>".$row['messages']."</td><td>$average</td><td>".date('Y-m-d',$row['lastseen'])."</td></tr>";
+            echo "<tr style='$style'><td><a href='activityreport.php?server={$row['server']}&amp;user={$row['id']}'>".$row['username']."</td><td>".$row['words']."</td><td>".$row['messages']."</td><td>$average</td><td>".date('Y-m-d',$row['lastseen'])."</td></tr>";
         }
         ?>
         </tbody>
