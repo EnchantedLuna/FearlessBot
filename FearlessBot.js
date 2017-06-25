@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2017.02.01a";
+var version = "2017.05.08a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -105,7 +105,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete","!activity"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete","!activity","!n"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -220,6 +220,31 @@ mybot.on("message", function (message)
                 search = params;
             }
             db.query("SELECT mem.username, mem.discriminator, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM messages msg " +
+                "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
+                "JOIN channel_stats c ON msg.channel=c.channel " +
+                "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != '115332333745340416') " +
+                "ORDER BY msg.id DESC LIMIT 1", [message.channel.server.id, search], function (err, rows)
+            {
+                var response = "";
+                if (rows.length == 0) {
+                    response = "no messages found. Please double check the username. If the last message is dated before September 2016, please use !olast instead.";
+                } else {
+                    response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name + " - #" + rows[0].id + ")\n" +
+                        rows[0].message;
+                }
+                mybot.reply(message, response);
+            });
+            break;
+        case "!olast":
+            if (message.mentions.length > 0)
+            {
+                search = message.mentions[0].username;
+            }
+            else
+            {
+                search = params;
+            }
+            db.query("SELECT mem.username, mem.discriminator, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM old_messages msg " +
                 "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
                 "JOIN channel_stats c ON msg.channel=c.channel " +
                 "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != '115332333745340416') " +
@@ -355,6 +380,11 @@ mybot.on("message", function (message)
             var botsString = (command[1] == 'bots') ? '&includebots=true' : '';
             mybot.reply(message, "https://tay.rocks/activityreport.php?server="+message.channel.server.id+"&user="+search+botsString);
             break;
+        case "!n":
+            params = params.replaceAll('m','n');
+            params = params.replaceAll('M','N');
+            mybot.reply(message, params);
+            break;
         // Mod commands below
         case "!approve":
             if (isMod(message.channel.server, user))
@@ -487,7 +517,7 @@ mybot.on("message", function (message)
             }
             else
             {
-                mybot.reply(message, "no way! :rolling_eyes:");
+                mybot.reply(message, user.username + " has been banned... okay, not really, but why are you using this command? :rolling_eyes:");
             }
             break;
         case "!topic":
@@ -1094,3 +1124,8 @@ function log(message, serverID)
 }
 
 mybot.loginWithToken(config.token);
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
