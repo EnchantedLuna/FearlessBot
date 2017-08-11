@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2017.05.08a";
+var version = "2017.07.06c";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -105,7 +105,7 @@ mybot.on("message", function (message)
         return;
     }
 
-    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete","!activity","!n"];
+    var nontscommands = ["!8ball","!name","!g","!get","!channelstats","!song","!seen","!words","!save","!mentions","!rankwords","!getlist","!convert","!choose","!delete","!activity","!n","!poop"];
     // Limited functionality outside the ts server
     if (message.channel.server.id != config.mainServer && nontscommands.indexOf(command[0]) == -1) {
         return;
@@ -384,6 +384,50 @@ mybot.on("message", function (message)
             params = params.replaceAll('m','n');
             params = params.replaceAll('M','N');
             mybot.reply(message, params);
+            break;
+        case "!poop":
+            if (Math.random() < 0.05)
+            {
+                db.query("UPDATE members SET poops=0 WHERE id=? AND server=?", [user.id,  message.channel.server.id]);
+                mybot.reply(message, "you clogged the toilet!! :toilet:\nYour :poop: streak has been reset to 0.");
+            }
+            else
+            {
+                db.query("SELECT poops FROM members WHERE server = ? AND id = ?", [message.channel.server.id, user.id], function(err, rows)
+                {
+                    if (rows[0] != null) {
+                        var poopStreak = rows[0].poops + 1;
+                        db.query("UPDATE members SET poops=poops+1 WHERE id=? AND server=?", [user.id,  message.channel.server.id]);
+                        mybot.reply(message, "you have pooped. :poop:\nYour :poop: streak is now " + poopStreak);
+                    }
+                });
+            }
+            break;
+        case "!rankpoop":
+            var numberToGet = 5;
+            var overflowNotice = false;
+            var rankString = "Poop Ranking:\n";
+            if (parseInt(command[1]) > 0 && parseInt(command[1]) < 60)
+            {
+                numberToGet = parseInt(command[1]);
+                if (numberToGet > 10 && (message.channel.id == "115332333745340416" || message.channel.id == "119490967253286912"))
+                {
+                    numberToGet = 10;
+                    overflowNotice = true;
+                }
+            }
+            db.query("SELECT username, poops FROM members WHERE server = ? AND poops > 0 AND active=1 ORDER BY poops DESC LIMIT ?", [message.channel.server.id, numberToGet], function (err, rows)
+            {
+                var count = 1;
+                rows.forEach(function (member) {
+                    rankString += count + ": " + member.username + " - " + member.poops + " poops\n";
+                    count++;
+                });
+                if (overflowNotice) {
+                    rankString += "Note: Rankings of more than 10 users can only be used in #bots.";
+                }
+                mybot.sendMessage(message.channel, rankString);
+            });
             break;
         // Mod commands below
         case "!approve":
@@ -1019,6 +1063,7 @@ function updateRegion(message)
         return;
     }
     command[1] = command[1].toLowerCase();
+
     switch (command[1])
     {
         case "northamerica":
