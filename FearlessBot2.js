@@ -15,4 +15,4 @@ bot.on('ready', () => {
   console.log('FearlessBot2 is ready.');
 });
 
-bot.loginWithToken(config.token);
+bot.login(config.token);
