@@ -13,24 +13,30 @@ var db = mysql.createConnection({
 });
 
 bot.on('ready', () => {
-  console.log('FearlessBot2 is ready.');
+    console.log('FearlessBot2 is ready.');
 });
 
 bot.on('message', message => {
-  var text = message.content
-  var command = message.content.split(" ");
-  var params = command.slice(1, command.length).join(" ");
+    var text = message.content
+    var command = message.content.split(" ");
+    var params = command.slice(1, command.length).join(" ");
 
-  switch (command[0].toLowerCase()) {
-    case "!8ball":
-      eightBallCommand(message);
-    break;
-    case "!choose":
-      chooseCommand(message, params);
-    break;
-    case "!version":
-    botVersionCommand(message);
-    break;
+    switch (command[0].toLowerCase()) {
+        case "!8ball":
+            eightBallCommand(message);
+        break;
+        case "!choose":
+          chooseCommand(message, params);
+        break;
+        case "!song":
+          songCommand(message);
+        break;
+        case "!album":
+          albumCommand(message);
+        break;
+        case "!version":
+          botVersionCommand(message);
+        break;
   }
 });
 
@@ -39,13 +45,13 @@ bot.login(config.token);
 
 function eightBallCommand(message)
 {
-  var answer = staticData.eightBallAnswers[Math.floor(Math.random() * staticData.eightBallAnswers.length)];
-  message.reply(answer);
+    var answer = staticData.eightBallAnswers[Math.floor(Math.random() * staticData.eightBallAnswers.length)];
+    message.reply(answer);
 }
 
 function botVersionCommand(message)
 {
-  message.reply("running version: " + staticData.version);
+    message.reply("running version: " + staticData.version);
 }
 
 function chooseCommand(message, params)
@@ -56,4 +62,16 @@ function chooseCommand(message, params)
         var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
         message.reply("I pick: " + selectedChoice.trim());
     }
+}
+
+function songCommand(message)
+{
+    var answer = staticData.taylorSwiftSongs[Math.floor(Math.random() * staticData.taylorSwiftSongs.length)];
+    message.reply('you should listen to ' + answer + '.');
+}
+
+function albumCommand(message)
+{
+    var answer = staticData.taylorSwiftAlbums[Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)];
+    message.reply('you should listen to ' + answer + '.');
 }
