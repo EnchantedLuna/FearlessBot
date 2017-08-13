@@ -22,20 +22,27 @@ bot.on('message', message => {
     var params = command.slice(1, command.length).join(" ");
 
     switch (command[0].toLowerCase()) {
+        // Normal user basic commands (no db)
         case "!8ball":
             eightBallCommand(message);
         break;
         case "!choose":
-          chooseCommand(message, params);
+            chooseCommand(message, params);
         break;
         case "!song":
-          songCommand(message);
+            songCommand(message);
         break;
         case "!album":
-          albumCommand(message);
+            albumCommand(message);
         break;
         case "!version":
-          botVersionCommand(message);
+            botVersionCommand(message);
+        break;
+
+        // Normal user database commands
+        case "!g":
+        case "!get":
+            getCommand(message, command[1]);
         break;
   }
 });
@@ -57,8 +64,7 @@ function botVersionCommand(message)
 function chooseCommand(message, params)
 {
     var choices = params.split(",");
-    if (choices.length > 1)
-    {
+    if (choices.length > 1) {
         var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
         message.reply("I pick: " + selectedChoice.trim());
     }
@@ -74,4 +80,28 @@ function albumCommand(message)
 {
     var answer = staticData.taylorSwiftAlbums[Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)];
     message.reply('you should listen to ' + answer + '.');
+}
+
+
+function getCommand(message, keyword)
+{
+    if (keyword == null)
+        return;
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, keyword], function (err, rows) {
+        if (rows[0] == null) {
+            message.reply("nothing is stored for keyword " + keyword + ".");
+        } else if (!rows[0].approved) {
+            message.reply("this item has not been approved yet.");
+        } else {
+            message.reply(rows[0]['value']);
+            if (channelCountsInStatistics(message.channel.id)) {
+                db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [keyword, message.channel.guild.id]);
+            }
+        }
+    });
+}
+
+function channelCountsInStatistics(channel)
+{
+    return false;
 }
