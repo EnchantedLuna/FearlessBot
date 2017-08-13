@@ -22,7 +22,10 @@ bot.on('message', message => {
 
   switch (command[0].toLowerCase()) {
     case "!8ball":
-      roll8Ball(message);
+      eightBallCommand(message);
+    break;
+    case "!version":
+    botVersionCommand(message);
     break;
   }
 });
@@ -30,8 +33,13 @@ bot.on('message', message => {
 bot.login(config.token);
 
 
-function roll8Ball(message)
+function eightBallCommand(message)
 {
   var answer = staticData.eightBallAnswers[Math.floor(Math.random() * staticData.eightBallAnswers.length)];
   message.reply(answer);
+}
+
+function botVersionCommand(message)
+{
+  message.reply("running version: " + staticData.version);
 }
