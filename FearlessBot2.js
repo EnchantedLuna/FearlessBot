@@ -11,7 +11,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-client.on('ready', () => {
+bot.on('ready', () => {
   console.log('FearlessBot2 is ready.');
 });
 
