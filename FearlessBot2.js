@@ -1,6 +1,7 @@
-var config = require("./auth.json");
-var Discord = require("discord.js");
-var mysql = require("mysql");
+const config = require("./auth.json");
+const Discord = require("discord.js");
+const mysql = require("mysql");
+const staticData = require("./staticData.json");
 var bot = new Discord.Client();
 
 var db = mysql.createConnection({
@@ -15,4 +16,22 @@ bot.on('ready', () => {
   console.log('FearlessBot2 is ready.');
 });
 
+bot.on('message', message => {
+  var text = message.content;
+  var command = message.content.split(" ");
+
+  switch (command[0].toLowerCase()) {
+    case "!8ball":
+      roll8Ball(message);
+    break;
+  }
+});
+
 bot.login(config.token);
+
+
+function roll8Ball(message)
+{
+  var answer = staticData.eightBallAnswers[Math.floor(Math.random() * staticData.eightBallAnswers.length)];
+  message.reply(answer);
+}
