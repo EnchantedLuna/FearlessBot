@@ -17,12 +17,16 @@ bot.on('ready', () => {
 });
 
 bot.on('message', message => {
-  var text = message.content;
+  var text = message.content
   var command = message.content.split(" ");
+  var params = command.slice(1, command.length).join(" ");
 
   switch (command[0].toLowerCase()) {
     case "!8ball":
       eightBallCommand(message);
+    break;
+    case "!choose":
+      chooseCommand(message, params);
     break;
     case "!version":
     botVersionCommand(message);
@@ -42,4 +46,14 @@ function eightBallCommand(message)
 function botVersionCommand(message)
 {
   message.reply("running version: " + staticData.version);
+}
+
+function chooseCommand(message, params)
+{
+    var choices = params.split(",");
+    if (choices.length > 1)
+    {
+        var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
+        message.reply("I pick: " + selectedChoice.trim());
+    }
 }
