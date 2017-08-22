@@ -51,6 +51,8 @@ bot.on('message', message => {
         case "!get":
             getCommand(message, command[1], false);
         break;
+        case "!getlist":
+        break;
         case "!save":
         break;
         case "!seen":
@@ -64,15 +66,35 @@ bot.on('message', message => {
         case "!shitpost":
             shitpostCommand(message, command[1]);
         break;
+        case "!name":
+        break;
+        case "!randmember":
+        break;
+        case "!activity":
+        break;
 
         // Mod commands
         case "!approve":
         break;
         case "!review":
         break;
+        case "!delete":
+        break;
+        case "!getunapproved":
+        break;
+        case "!topic":
+        break;
+        case "!mute":
+        break;
+        case "!unmute":
+        break;
+        case "!addshitpost":
+        break;
 
         // Bot admin commands
         case "!fbotrestart":
+        break;
+        case "!fsay":
         break;
   }
 });
