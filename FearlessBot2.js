@@ -39,7 +39,14 @@ bot.on('message', message => {
             botVersionCommand(message);
         break;
 
+        case "!region":
+        case "!setregion":
+        break;
+
         // Normal user database commands
+        case "!channelstats":
+            channelstatsCommand(message);
+        break;
         case "!g":
         case "!get":
             getCommand(message, command[1], false);
@@ -127,6 +134,16 @@ function getCommand(message, keyword, showUnapproved)
 function saveCommand()
 {
 
+}
+
+function channelstatsCommand(message)
+{
+    db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
+    {
+        var total = rows[0].total_messages;
+        var startdate = new Date(rows[0].startdate*1000);
+        message.reply("there have been " + total + " messages sent since "+ startdate.toDateString() +" in this channel.");
+    });
 }
 
 function shitpostCommand(message, number)
