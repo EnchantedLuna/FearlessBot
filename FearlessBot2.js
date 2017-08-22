@@ -42,7 +42,30 @@ bot.on('message', message => {
         // Normal user database commands
         case "!g":
         case "!get":
-            getCommand(message, command[1]);
+            getCommand(message, command[1], false);
+        break;
+        case "!save":
+        break;
+        case "!seen":
+        break;
+        case "!last":
+        break;
+        case "!words":
+        break;
+        case "!rankwords":
+        break;
+        case "!shitpost":
+            shitpostCommand(message, command[1]);
+        break;
+
+        // Mod commands
+        case "!approve":
+        break;
+        case "!review":
+        break;
+
+        // Bot admin commands
+        case "!fbotrestart":
         break;
   }
 });
@@ -83,25 +106,48 @@ function albumCommand(message)
 }
 
 
-function getCommand(message, keyword)
+function getCommand(message, keyword, showUnapproved)
 {
     if (keyword == null)
         return;
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, keyword], function (err, rows) {
         if (rows[0] == null) {
             message.reply("nothing is stored for keyword " + keyword + ".");
-        } else if (!rows[0].approved) {
+        } else if (!rows[0].approved && !showUnapproved) {
             message.reply("this item has not been approved yet.");
         } else {
             message.reply(rows[0]['value']);
-            if (channelCountsInStatistics(message.channel.id)) {
+            if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
                 db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?", [keyword, message.channel.guild.id]);
             }
         }
     });
 }
 
-function channelCountsInStatistics(channel)
+function saveCommand()
 {
-    return false;
+
+}
+
+function shitpostCommand(message, number)
+{
+    var number = parseInt(number, 10);
+    if (number > 0) {
+        db.query("SELECT id, shitpost FROM shitposts WHERE id=?", [number], function (err, rows) {
+            if (rows != null) {
+                message.reply(rows[0].shitpost + " (#"+rows[0].id+")");
+            }
+        });
+    } else {
+        db.query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
+            if (rows != null) {
+                message.reply(rows[0].shitpost + " (#"+rows[0].id+")");
+            }
+        });
+    }
+}
+
+function channelCountsInStatistics(guild, channel)
+{
+    return (guild != config.mainServer || config.statCountingChannels.includes(channel));
 }
