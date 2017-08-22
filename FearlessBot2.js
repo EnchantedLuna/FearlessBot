@@ -52,6 +52,7 @@ bot.on('message', message => {
             getCommand(message, command[1], false);
         break;
         case "!getlist":
+            getlistCommand(message);
         break;
         case "!save":
         break;
@@ -151,6 +152,11 @@ function getCommand(message, keyword, showUnapproved)
             }
         }
     });
+}
+
+function getlistCommand(message)
+{
+    message.reply("https://tay.rocks/fearlessdata.php?server=" + message.channel.guild.id);
 }
 
 function saveCommand()
