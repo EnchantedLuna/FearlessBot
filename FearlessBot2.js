@@ -94,8 +94,14 @@ bot.on('message', message => {
 
         // Bot admin commands
         case "!fbotrestart":
+        if (message.author.id == config.botAdminUserId) {
+            process.exit(-1);
+        }
         break;
         case "!fsay":
+        if (message.author.id == config.botAdminUserId) {
+            fsayCommand(message, params);
+        }
         break;
   }
 });
@@ -190,6 +196,12 @@ function shitpostCommand(message, number)
             }
         });
     }
+}
+
+function fsayCommand(message, params)
+{
+    message.channel.send(params);
+    message.delete();
 }
 
 function channelCountsInStatistics(guild, channel)
