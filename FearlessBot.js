@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2017.09.05a";
+var version = "2017.09.05b";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -659,35 +659,16 @@ mybot.on("message", function (message)
             }
             break;
         case "!fsay":
-            if (inRole(message.channel.server, user, "luna"))
+            if (user.id == 115329261350420487)
             {
                 mybot.deleteMessage(message);
                 mybot.sendMessage(message.channel, params);
             }
             break;
         case "!setstatus":
-            if (inRole(message.channel.server, user, "luna"))
+            if (user.id == 115329261350420487)
             {
                 mybot.setStatus("online",params);
-            }
-            break;
-        case "!checkactive":
-            if (inRole(message.channel.server, user, "luna"))
-            {
-                db.query("SELECT id, username, discriminator FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
-                {
-                    var resultList = "";
-                    for (var i=0; i < rows.length; i++)
-                    {
-                        var member = message.channel.server.members.get("id",rows[i].id);
-                        if (member == null)
-                        {
-                            db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [message.channel.server.id, rows[i].id]);
-                            resultList += rows[i].username + " (" + rows[i].discriminator + ") - " + rows[i].id + "\n";
-                        }
-                    }
-                    mybot.sendMessage(message.channel, resultList);
-                });
             }
             break;
         case "!counter++":
@@ -711,19 +692,6 @@ mybot.on("message", function (message)
                 }
             });
             break;
-        case "!ncon":
-            if (inRole(message.channel.server, user, "admins")) {
-                nameChangeeNoticesEnabled = true;
-                mybot.reply(message, "name notices are now on.");
-            }
-            break;
-        case "!ncoff":
-            if (inRole(message.channel.server, user, "admins")) {
-                nameChangeeNoticesEnabled = false;
-                mybot.reply(message, "name notices are now off.");
-
-            }
-            break;
         case "!addshitpost":
             if (inRole(message.channel.server, user, "alpha") || isMod(message.channel.server, user)) {
                 db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())", [params, user.id], function (err, result) {
@@ -732,7 +700,7 @@ mybot.on("message", function (message)
             }
             break;
         case "!fbotrestart":
-            if (inRole(message.channel.server, user, "admins")) {
+            if (user.id == 115329261350420487) {
                 process.exit(-1);
             } else {
                 mybot.reply(message, ":poop:");
@@ -1124,7 +1092,7 @@ function inRole(server, user, needle)
 
 function isMod(server, user)
 {
-    return inRole(server, user, "admins") || inRole(server, user, "mods");
+    return inRole(server, user, "mods");
 }
 
 function secondsToTime(seconds, short)
