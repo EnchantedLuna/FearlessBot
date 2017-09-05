@@ -4,13 +4,32 @@ $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8mb4");
 
 $bots = (isset($_GET['includebots'])) ? '' : "AND channel != '132026417725702145'";
-$query = $db->prepare("SELECT MONTH(messages.date) month, YEAR(messages.date) year, COUNT(*)
-FROM messages
+
+$query = $db->prepare("SELECT MONTH(old_messages.date) month, YEAR(old_messages.date) year, COUNT(*)
+FROM old_messages
 WHERE server=? AND author=? $bots
 GROUP BY year, month");
 $query->bind_param('ss', $_GET['server'], $_GET['user']);
 $query->execute();
 $query->bind_result($month, $year, $count);
+
+$counts = array();
+while ($query->fetch()) {
+    $counts[$month."/".$year] += $count;
+}
+
+$query2 = $db->prepare("SELECT MONTH(messages.date) month, YEAR(messages.date) year, COUNT(*)
+FROM messages
+WHERE server=? AND author=? $bots
+GROUP BY year, month");
+$query2->bind_param('ss', $_GET['server'], $_GET['user']);
+$query2->execute();
+$query2->bind_result($month, $year, $count);
+
+while ($query2->fetch()) {
+    $counts[$month."/".$year] += $count;
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -37,8 +56,8 @@ $query->bind_result($month, $year, $count);
             data.addColumn('number', 'Messages');
             data.addRows([
                 <?php
-                while ($query->fetch()) {
-                    echo "['$month/$year', $count],";
+                foreach ($counts as $month => $amount) {
+                    echo "['$month', $amount],";
                 }
                 ?>
             ]);

@@ -43,7 +43,7 @@ $db->set_charset("utf8");
         <tr>
             <th>Username</th>
             <th>Words</th>
-            <th>Messages*</th>
+            <th>Messages</th>
             <th>Words/Msg</th>
             <th>Last Seen</th>
         </tr>
@@ -52,7 +52,7 @@ $db->set_charset("utf8");
         <tr>
             <th>Username</th>
             <th>Words</th>
-            <th>Messages*</th>
+            <th>Messages</th>
             <th>Words/Msg</th>
             <th>Last Seen</th>
         </tr>
