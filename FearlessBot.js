@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2017.07.06c";
+var version = "2017.09.03a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -30,7 +30,7 @@ var taylorSwiftSongs = ["Tim McGraw", "Picture to Burn", "Teardrops on My Guitar
     "Stay Stay Stay", "The Last Time", "Holy Ground", "Sad Beautiful Tragic", "The Lucky One", "Everything Has Changed", "Starlight", "Begin Again",
     "The Moment I Knew", "Come Back... Be Here", "Girl At Home", "Welcome To New York", "Blank Space", "Style", "Out of the Woods",
     "All You Had To Do Was Stay", "Shake it Off", "I Wish You Would", "Bad Blood", "Wildest Dreams", "How You Get the Girl", "This Love",
-    "I Know Places", "Clean", "Wonderland", "You Are In Love", "New Romantics", "Safe and Sound", "Eyes Open", "Today Was a Fairytale", "Sweeter Than Fiction","Ronan"];
+    "I Know Places", "Clean", "Wonderland", "You Are In Love", "New Romantics", "Safe and Sound", "Eyes Open", "Today Was a Fairytale", "Sweeter Than Fiction","Ronan", "Look What You Made Me Do"];
 
 var taylorSwiftAlbums = ["Taylor Swift","Fearless","Speak Now","Red","1989"];
 
@@ -71,7 +71,7 @@ mybot.on("message", function (message)
             "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), active=1",
             [message.channel.server.id, user.id, user.username, user.discriminator, user.username, user.discriminator]);
     }
-    
+
     db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)", [message.id, message.channel.server.id, message.channel.id, message.cleanContent, message.author.id], function (err, result) {
         if (message.mentions.length > 0) {
             var mentioned = [];
@@ -345,7 +345,7 @@ mybot.on("message", function (message)
 
             break;
         case "!getlist":
-                mybot.reply(message, "https://tay.rocks/fearlessdata.php?server=" + message.channel.server.id);
+            mybot.reply(message, "https://tay.rocks/fearlessdata.php?server=" + message.channel.server.id);
             break;
         case "!mentions":
             sendNewMentionLog(message);
@@ -658,20 +658,20 @@ mybot.on("message", function (message)
             }
             break;
         case "!fsay":
-            if (inRole(message.channel.server, user, "admins"))
+            if (inRole(message.channel.server, user, "luna"))
             {
                 mybot.deleteMessage(message);
                 mybot.sendMessage(message.channel, params);
             }
             break;
         case "!setstatus":
-            if (inRole(message.channel.server, user, "admins"))
+            if (inRole(message.channel.server, user, "luna"))
             {
                 mybot.setStatus("online",params);
             }
             break;
         case "!checkactive":
-            if (inRole(message.channel.server, user, "admins"))
+            if (inRole(message.channel.server, user, "luna"))
             {
                 db.query("SELECT id, username, discriminator FROM members WHERE server = ? AND active=1", [message.channel.server.id], function (err, rows)
                 {
@@ -745,22 +745,27 @@ mybot.on("message", function (message)
                 db.query("UPDATE data_store SET value=value+1 WHERE server='1989' AND keyword='lunaeyeroll'", command[1]);
             }
             break;
+        default:
+            if (message.content.toLowerCase().includes('dont @ me') || message.content.toLowerCase().includes("don't @ me")) {
+                mybot.reply(message, ":smirk:");
+            }
+            break;
     }
 });
 
-mybot.on("serverNewMember", function (server, user)
-{
-    var username = user.username;
-    db.query("SELECT * FROM members WHERE server = ? AND id = ?", [server.id, user.id], function (err, rows) {
-        if (rows.length > 0) {
-            mybot.sendMessage(server.defaultChannel, username + " has rejoined the server. Welcome back!");
-            log(username + " (id " + user.id + ") has rejoined the server.",server.id);
-        } else {
-            mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
-            log(username + " (id " + user.id + ") has joined the server.",server.id);
-        }
-    });
-});
+// mybot.on("serverNewMember", function (server, user)
+// {
+//     var username = user.username;
+//     db.query("SELECT * FROM members WHERE server = ? AND id = ?", [server.id, user.id], function (err, rows) {
+//         if (rows.length > 0) {
+//             mybot.sendMessage(server.defaultChannel, username + " has rejoined the server. Welcome back!");
+//             log(username + " (id " + user.id + ") has rejoined the server.",server.id);
+//         } else {
+//             mybot.sendMessage(server.defaultChannel, username + " has joined the server. Welcome!");
+//             log(username + " (id " + user.id + ") has joined the server.",server.id);
+//         }
+//     });
+// });
 
 
 mybot.on("serverMemberRemoved", function (server, user) {
@@ -894,7 +899,7 @@ function handlePM(message)
                     }
                 }
                 mybot.reply(message, res);
-        });
+            });
             break;
         case "!prev":
             db.query("(SELECT messages.id, channel, members.username, UNIX_TIMESTAMP(messages.date) AS timestamp, messages.message " +
@@ -921,7 +926,7 @@ function handlePM(message)
                 }
                 mybot.reply(message, res);
             });
-        break;
+            break;
     }
 }
 
@@ -1107,10 +1112,10 @@ function inRole(server, user, needle)
     var roles = server.rolesOfUser(user);
     for(var i = 0; i < roles.length; ++i)
     {
-      if (roles[i].name === needle)
-      {
-        return true;
-      } 
+        if (roles[i].name === needle)
+        {
+            return true;
+        }
     }
     return false;
 }
