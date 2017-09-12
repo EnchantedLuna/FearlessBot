@@ -78,6 +78,9 @@ bot.on('message', message => {
         case "!approve":
         break;
         case "!review":
+        if (isMod(message.member)) {
+            getCommand(message, command[1], true);
+        }
         break;
         case "!delete":
         break;
@@ -207,4 +210,9 @@ function fsayCommand(message, params)
 function channelCountsInStatistics(guild, channel)
 {
     return (guild != config.mainServer || config.statCountingChannels.includes(channel));
+}
+
+function isMod(member)
+{
+    return member.roles.has(config.modRole);
 }
