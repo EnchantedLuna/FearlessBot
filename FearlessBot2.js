@@ -83,6 +83,9 @@ bot.on('message', message => {
         }
         break;
         case "!delete":
+        if (isMod(message.member)) {
+            deleteCommand(message, command[1]);
+        }
         break;
         case "!getunapproved":
         break;
@@ -173,6 +176,20 @@ function saveCommand()
 
 }
 
+function deleteCommand(message, keyword)
+{
+    if (isMod(message.member)) {
+        db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, keyword], function (err, result) {
+            if (result.affectedRows > 0) {
+                message.reply("deleted.");
+                log(message.channel.guild, "Saved item " + keyword + " has been deleted by " + message.author.username);
+            } else {
+                message.reply("keyword not found.");
+            }
+        });
+    }
+}
+
 function channelstatsCommand(message)
 {
     db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
@@ -215,4 +232,12 @@ function channelCountsInStatistics(guild, channel)
 function isMod(member)
 {
     return member.roles.has(config.modRole);
+}
+
+function log(guild, message)
+{
+    var logChannel = guild.channels.find('name', 'log');
+    if (logChannel) {
+        logChannel.send(message);
+    }
 }
