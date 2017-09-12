@@ -76,6 +76,9 @@ bot.on('message', message => {
 
         // Mod commands
         case "!approve":
+        if (isMod(message.member)) {
+            approveCommand(message, command[1]);
+        }
         break;
         case "!review":
         if (isMod(message.member)) {
@@ -174,6 +177,18 @@ function getlistCommand(message)
 function saveCommand()
 {
 
+}
+
+function approveCommand(message, keyword)
+{
+    db.query("UPDATE data_store SET  approved=1 WHERE keyword = ? AND server = ?", [keyword, message.channel.guild.id], function (err, result) {
+        if (result.changedRows  > 0) {
+            message.reply("approved.");
+            log(message.channel.guild, "Saved item " + keyword + " has been approved by " + message.author.username);
+        } else {
+            message.reply("nothing to approve.");
+        }
+    });
 }
 
 function deleteCommand(message, keyword)
