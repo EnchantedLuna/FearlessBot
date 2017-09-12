@@ -76,32 +76,35 @@ bot.on('message', message => {
 
         // Mod commands
         case "!approve":
-        if (isMod(message.member)) {
-            approveCommand(message, command[1]);
-        }
+            if (isMod(message.member)) {
+                approveCommand(message, command[1]);
+            }
         break;
         case "!review":
-        if (isMod(message.member)) {
-            getCommand(message, command[1], true);
-        }
+            if (isMod(message.member)) {
+                getCommand(message, command[1], true);
+            }
         break;
         case "!delete":
-        if (isMod(message.member)) {
-            deleteCommand(message, command[1]);
-        }
+            if (isMod(message.member)) {
+                deleteCommand(message, command[1]);
+            }
         break;
         case "!getunapproved":
         break;
         case "!topic":
-        if (isMod(message.member)) {
-            topicCommand(message, params);
-        }
+            if (isMod(message.member)) {
+                topicCommand(message, params);
+            }
         break;
         case "!mute":
         break;
         case "!unmute":
         break;
         case "!addshitpost":
+            if (isMod(message.member)) {
+                addshitpostCommand(message, params);
+            }
         break;
 
         // Bot admin commands
@@ -239,6 +242,14 @@ function shitpostCommand(message, number)
             }
         });
     }
+}
+
+function addshitpostCommand(message, shitpost)
+{
+    db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())",
+    [shitpost, message.author.id], function (err, result) {
+        message.reply("added #"+result.insertId+".");
+    });
 }
 
 function topicCommand(message, topic)
