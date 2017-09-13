@@ -21,6 +21,9 @@ bot.on('message', message => {
     var command = message.content.split(" ");
     var params = command.slice(1, command.length).join(" ");
 
+    updateUserStats(message);
+    updateChannelStatsAndLog(message);
+
     switch (command[0].toLowerCase()) {
         // Normal user basic commands (no db)
         case "!8ball":
@@ -76,6 +79,9 @@ bot.on('message', message => {
         break;
         case "!activity":
         break;
+        case "!poop":
+            poopCommand(message);
+        break;
 
         // Mod commands
         case "!approve":
@@ -125,6 +131,34 @@ bot.on('message', message => {
 });
 
 bot.login(config.token);
+
+function updateUserStats(message)
+{
+    var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
+    if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
+        db.query("INSERT INTO members (server, id, username, discriminator, lastseen, words, messages) VALUES (?,?,?,?,UNIX_TIMESTAMP(),?,1)" +
+            "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1, active=1",
+            [message.channel.guild.id, message.author.id, message.author.username, message.author.discriminator,
+                 words, message.author.username, message.author.discriminator, words]);
+    } else {
+        db.query("INSERT INTO members (server, id, username, discriminator, lastseen) VALUES (?,?,?,?,UNIX_TIMESTAMP())" +
+            "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), active=1",
+            [message.channel.guild.id, message.author.id, message.author.username,
+                message.author.discriminator, message.author.username, message.author.discriminator]);
+    }
+}
+
+function updateChannelStatsAndLog(message)
+{
+    db.query(
+        'INSERT INTO channel_stats (channel, server, total_messages, name, web, startdate) VALUES (?,?,1,?,0,UNIX_TIMESTAMP()) ' +
+        'ON DUPLICATE KEY UPDATE total_messages=total_messages+1',
+        [message.channel.id, message.channel.guild.id, message.channel.name]
+    );
+
+    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)",
+     [message.id, message.channel.guild.id, message.channel.id, message.cleanContent, message.author.id]);
+}
 
 
 function eightBallCommand(message)
@@ -273,6 +307,23 @@ function fsayCommand(message, params)
 {
     message.channel.send(params);
     message.delete();
+}
+
+function poopCommand(message)
+{
+    if (Math.random() < 0.05) {
+        db.query("UPDATE members SET poops=0 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
+        message.reply("you clogged the toilet!! :toilet:\nYour :poop: streak has been reset to 0.");
+    } else {
+        db.query("SELECT poops FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, message.author.id], function(err, rows)
+        {
+            if (rows[0] != null) {
+                var poopStreak = rows[0].poops + 1;
+                db.query("UPDATE members SET poops=poops+1 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
+                message.reply("you have pooped. :poop:\nYour :poop: streak is now " + poopStreak);
+            }
+        });
+    }
 }
 
 function channelCountsInStatistics(guild, channel)
