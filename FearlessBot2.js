@@ -76,6 +76,7 @@ bot.on('message', message => {
         case "!name":
         break;
         case "!randmember":
+            randomMemberCommand(message, command[1]);
         break;
         case "!activity":
         break;
@@ -204,6 +205,20 @@ function nCommand(message, params)
     message.reply(nenified);
 }
 
+function randomMemberCommand(message, days)
+{
+    var dayLimit = parseInt(days, 10);
+    if (!dayLimit) {
+        dayLimit = 1;
+    }
+    var time = Math.floor(new Date()/1000) - (86400 * dayLimit);
+    db.query("SELECT username FROM members WHERE server = ? AND lastseen > ? ORDER BY RAND() LIMIT 1",
+    [message.channel.guild.id, time], function (err, rows) {
+        if (rows != null) {
+            message.reply("random member: " + rows[0].username);
+        }
+    });
+}
 
 function getCommand(message, keyword, showUnapproved)
 {
