@@ -38,6 +38,9 @@ bot.on('message', message => {
         case "!version":
             botVersionCommand(message);
         break;
+        case "!n":
+            nCommand(message, params);
+        break;
 
         case "!region":
         case "!setregion":
@@ -98,7 +101,7 @@ bot.on('message', message => {
             }
         break;
         case "!mute":
-        break;
+        break;command
         case "!unmute":
         break;
         case "!addshitpost":
@@ -109,14 +112,14 @@ bot.on('message', message => {
 
         // Bot admin commands
         case "!fbotrestart":
-        if (message.author.id == config.botAdminUserId) {
-            process.exit(-1);
-        }
+            if (message.author.id == config.botAdminUserId) {
+                process.exit(-1);
+            }
         break;
         case "!fsay":
-        if (message.author.id == config.botAdminUserId) {
-            fsayCommand(message, params);
-        }
+            if (message.author.id == config.botAdminUserId) {
+                fsayCommand(message, params);
+            }
         break;
   }
 });
@@ -154,6 +157,12 @@ function albumCommand(message)
 {
     var answer = staticData.taylorSwiftAlbums[Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)];
     message.reply('you should listen to ' + answer + '.');
+}
+
+function nCommand(message, params)
+{
+    var nenified = params.replaceAll('m','n').replaceAll('M','N');
+    message.reply(nenified);
 }
 
 
@@ -283,3 +292,8 @@ function log(guild, message)
         logChannel.send(message);
     }
 }
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
