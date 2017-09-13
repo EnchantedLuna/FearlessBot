@@ -61,6 +61,7 @@ bot.on('message', message => {
             getlistCommand(message);
         break;
         case "!save":
+            saveCommand(message);
         break;
         case "!seen":
         break;
@@ -245,9 +246,40 @@ function getlistCommand(message)
     message.reply("https://tay.rocks/fearlessdata.php?server=" + message.channel.guild.id);
 }
 
-function saveCommand()
+function saveCommand(message)
 {
+    var command = message.content.split(" ");
+    if (command[1] == null)
+        return;
+    if (command[1].startsWith("http")) {
+        message.reply("you probably dun goof'd your command. The keyword comes first!");
+        return;
+    }
+    if (command[2] == null) {
+        message.reply("you need to specify a value (the thing you want saved) for that keyword.");
+        return;
+    }
 
+    var key = command[1];
+    var value = command.slice(2, command.length).join(" ");
+    // check for existing
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, key], function (err, rows) {
+        if ((isMod(message.member) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
+            db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.guild.id, key, value, message.author.id]);
+            message.reply("updated and ready to use.");
+            log(message.channel.guild, message.author.username + " created item " + key + " - auto approved\nValue: "+value);
+        } else if (rows[0] == null) {
+            db.query("INSERT INTO data_store (server, keyword, value, owner) VALUES (?,?,?,?)", [message.channel.guild.id, key, value, message.author.id]);
+            message.reply("created. This will need to be approved before it can be used.");
+            log(message.channel.guild, message.author.username + " created item " + key + " - pending approval\nValue: "+value);
+        } else if (rows[0]['owner'] == message.author.id) {
+            db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ? AND server = ?", [value, key, message.channel.guild.id]);
+            message.reply("updated. This will need to be approved before it can be used.");
+            log(message.channel.guild, message.author.username + " updated item " + key + " - pending approval\nValue: "+value);
+        } else {
+            message.reply("this keyword already exists.");
+        }
+    });
 }
 
 function approveCommand(message, keyword)
