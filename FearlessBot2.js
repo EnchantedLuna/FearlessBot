@@ -51,7 +51,7 @@ bot.on('message', message => {
 
         // Normal user database commands
         case "!channelstats":
-            channelstatsCommand(message);
+            channelStatsCommand(message);
         break;
         case "!g":
         case "!get":
@@ -82,6 +82,8 @@ bot.on('message', message => {
         case "!poop":
             poopCommand(message);
         break;
+        case "!rankpoop":
+        break;
 
         // Mod commands
         case "!approve":
@@ -100,6 +102,9 @@ bot.on('message', message => {
             }
         break;
         case "!getunapproved":
+        if (isMod(message.member)) {
+            getUnapprovedCommand(message);
+        }
         break;
         case "!topic":
             if (isMod(message.member)) {
@@ -107,12 +112,12 @@ bot.on('message', message => {
             }
         break;
         case "!mute":
-        break;command
+        break;
         case "!unmute":
         break;
         case "!addshitpost":
             if (isMod(message.member)) {
-                addshitpostCommand(message, params);
+                addShitpostCommand(message, params);
             }
         break;
 
@@ -259,7 +264,23 @@ function deleteCommand(message, keyword)
     }
 }
 
-function channelstatsCommand(message)
+function getUnapprovedCommand(message)
+{
+    db.query("SELECT * FROM data_store WHERE approved = 0 AND server = ?", [message.channel.guild.id], function (err, rows) {
+        if (rows.length == 0) {
+            message.reply("no unapproved items.");
+            return;
+        }
+
+        var list = "";
+        for (var i = 0; i < rows.length; i++) {
+            list = list + rows[i].keyword + " ";
+        }
+        message.reply("unapproved: ``" + list + "``");
+    });
+}
+
+function channelStatsCommand(message)
 {
     db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
     {
@@ -287,7 +308,7 @@ function shitpostCommand(message, number)
     }
 }
 
-function addshitpostCommand(message, shitpost)
+function addShitpostCommand(message, shitpost)
 {
     db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())",
     [shitpost, message.author.id], function (err, result) {
