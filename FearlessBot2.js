@@ -3,13 +3,6 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 const staticData = require("./staticData.json");
 
-// Command scripts
-require("./commands/basic.js");
-require("./commands/saveditems.js");
-require("./commands/guildproperties.js");
-require("./commands/database.js");
-require("./commands/botadmin.js");
-
 var bot = new Discord.Client();
 
 var db = mysql.createConnection({
@@ -72,6 +65,7 @@ bot.on('message', message => {
             saveCommand(message);
         break;
         case "!seen":
+            seenCommand(message);
         break;
         case "!last":
         break;
@@ -112,9 +106,9 @@ bot.on('message', message => {
             }
         break;
         case "!getunapproved":
-        if (isMod(message.member)) {
-            getUnapprovedCommand(message);
-        }
+            if (isMod(message.member)) {
+                getUnapprovedCommand(message);
+            }
         break;
         case "!topic":
             if (isMod(message.member)) {
@@ -175,6 +169,24 @@ function updateChannelStatsAndLog(message)
      [message.id, message.channel.guild.id, message.channel.id, message.cleanContent, message.author.id]);
 }
 
+function getMemberMentionedFromText(message)
+{
+    var command = message.content.split(" ");
+    var params = command.slice(1, command.length).join(" ");
+
+    var mentionsCount = message.mentions.members.size;
+    if (mentionsCount > 0) {
+        return message.mentions.members.first().id;
+    } else {
+        db.query("SELECT id FROM members WHERE server=? AND username=?", [message.channel.guild.id, params], function(err, rows) {
+            if (rows[0] != null) {
+                return rows[0].id;
+            }
+            return null;
+        });
+    }
+}
+
 function channelCountsInStatistics(guild, channel)
 {
     return (guild != config.mainServer || config.statCountingChannels.includes(channel));
@@ -197,3 +209,268 @@ String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
+
+
+
+
+
+// Basic commands (no db involvement, usable by all users)
+
+
+function eightBallCommand(message)
+{
+    var answer = staticData.eightBallAnswers[Math.floor(Math.random() * staticData.eightBallAnswers.length)];
+    message.reply(answer);
+}
+
+function botVersionCommand(message)
+{
+    message.reply("running version: " + staticData.version);
+}
+
+function chooseCommand(message, params)
+{
+    var choices = params.split(",");
+    if (choices.length > 1) {
+        var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
+        message.reply("I pick: " + selectedChoice.trim());
+    }
+}
+
+function songCommand(message)
+{
+    var answer = staticData.taylorSwiftSongs[Math.floor(Math.random() * staticData.taylorSwiftSongs.length)];
+    message.reply('you should listen to ' + answer + '.');
+}
+
+function albumCommand(message)
+{
+    var answer = staticData.taylorSwiftAlbums[Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)];
+    message.reply('you should listen to ' + answer + '.');
+}
+
+function nCommand(message, params)
+{
+    var nenified = params.replaceAll('m','n').replaceAll('M','N');
+    message.reply(nenified);
+}
+
+// Database-oriented commands
+
+function randomMemberCommand(message, days)
+{
+    var dayLimit = parseInt(days, 10);
+    if (!dayLimit) {
+        dayLimit = 1;
+    }
+    var time = Math.floor(new Date()/1000) - (86400 * dayLimit);
+    db.query("SELECT username FROM members WHERE server = ? AND lastseen > ? ORDER BY RAND() LIMIT 1",
+    [message.channel.guild.id, time], function (err, rows) {
+        if (rows != null) {
+            message.reply("random member: " + rows[0].username);
+        }
+    });
+}
+
+function channelStatsCommand(message)
+{
+    db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
+    {
+        var total = rows[0].total_messages;
+        var startdate = new Date(rows[0].startdate*1000);
+        message.reply("there have been " + total + " messages sent since " + startdate.toDateString() + " in this channel.");
+    });
+}
+
+function poopCommand(message)
+{
+    if (Math.random() < 0.05) {
+        db.query("UPDATE members SET poops=0 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
+        message.reply("you clogged the toilet!! :toilet:\nYour :poop: streak has been reset to 0.");
+    } else {
+        db.query("SELECT poops FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, message.author.id], function(err, rows)
+        {
+            if (rows[0] != null) {
+                var poopStreak = rows[0].poops + 1;
+                db.query("UPDATE members SET poops=poops+1 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
+                message.reply("you have pooped. :poop:\nYour :poop: streak is now " + poopStreak);
+            }
+        });
+    }
+}
+
+function shitpostCommand(message, number)
+{
+    var number = parseInt(number, 10);
+    if (number > 0) {
+        db.query("SELECT id, shitpost FROM shitposts WHERE id=?", [number], function (err, rows) {
+            if (rows != null) {
+                message.reply(rows[0].shitpost + " (#"+rows[0].id+")");
+            }
+        });
+    } else {
+        db.query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
+            if (rows != null) {
+                message.reply(rows[0].shitpost + " (#"+rows[0].id+")");
+            }
+        });
+    }
+}
+
+function addShitpostCommand(message, shitpost)
+{
+    db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())",
+    [shitpost, message.author.id], function (err, result) {
+        message.reply("added #"+result.insertId+".");
+    });
+}
+
+function getCommand(message, keyword, showUnapproved)
+{
+    if (keyword == null)
+        return;
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?",
+     [message.channel.guild.id, keyword], function (err, rows) {
+        if (rows[0] == null) {
+            message.reply("nothing is stored for keyword " + keyword + ".");
+        } else if (!rows[0].approved && !showUnapproved) {
+            message.reply("this item has not been approved yet.");
+        } else {
+            message.reply(rows[0]['value']);
+            if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
+                db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
+                 [keyword, message.channel.guild.id]);
+            }
+        }
+    });
+}
+
+function getlistCommand(message)
+{
+    message.reply("https://tay.rocks/fearlessdata.php?server=" + message.channel.guild.id);
+}
+
+function saveCommand(message)
+{
+    var command = message.content.split(" ");
+    if (command[1] == null)
+        return;
+    if (command[1].startsWith("http")) {
+        message.reply("you probably dun goof'd your command. The keyword comes first!");
+        return;
+    }
+    if (command[2] == null) {
+        message.reply("you need to specify a value (the thing you want saved) for that keyword.");
+        return;
+    }
+
+    var key = command[1];
+    var value = command.slice(2, command.length).join(" ");
+    // check for existing
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, key], function (err, rows) {
+        if ((isMod(message.member) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
+            db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.guild.id, key, value, message.author.id]);
+            message.reply("updated and ready to use.");
+            log(message.channel.guild, message.author.username + " created item " + key + " - auto approved\nValue: "+value);
+        } else if (rows[0] == null) {
+            db.query("INSERT INTO data_store (server, keyword, value, owner) VALUES (?,?,?,?)", [message.channel.guild.id, key, value, message.author.id]);
+            message.reply("created. This will need to be approved before it can be used.");
+            log(message.channel.guild, message.author.username + " created item " + key + " - pending approval\nValue: "+value);
+        } else if (rows[0]['owner'] == message.author.id) {
+            db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ? AND server = ?", [value, key, message.channel.guild.id]);
+            message.reply("updated. This will need to be approved before it can be used.");
+            log(message.channel.guild, message.author.username + " updated item " + key + " - pending approval\nValue: "+value);
+        } else {
+            message.reply("this keyword already exists.");
+        }
+    });
+}
+
+function approveCommand(message, keyword)
+{
+    db.query("UPDATE data_store SET  approved=1 WHERE keyword = ? AND server = ?",
+    [keyword, message.channel.guild.id], function (err, result) {
+        if (result.changedRows  > 0) {
+            message.reply("approved.");
+            log(message.channel.guild, "Saved item " + keyword + " has been approved by "
+            + message.author.username);
+        } else {
+            message.reply("nothing to approve.");
+        }
+    });
+}
+
+function deleteCommand(message, keyword)
+{
+    if (isMod(message.member)) {
+        db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?",
+        [message.channel.guild.id, keyword], function (err, result) {
+            if (result.affectedRows > 0) {
+                message.reply("deleted.");
+                log(message.channel.guild, "Saved item " + keyword + " has been deleted by " + message.author.username);
+            } else {
+                message.reply("keyword not found.");
+            }
+        });
+    }
+}
+
+function getUnapprovedCommand(message)
+{
+    db.query("SELECT * FROM data_store WHERE approved = 0 AND server = ?", [message.channel.guild.id], function (err, rows) {
+        if (rows.length == 0) {
+            message.reply("no unapproved items.");
+            return;
+        }
+
+        var list = "";
+        for (var i = 0; i < rows.length; i++) {
+            list = list + rows[i].keyword + " ";
+        }
+        message.reply("unapproved: ``" + list + "``");
+    });
+}
+
+// Guild property commands (roles, permissions, etc)
+
+function topicCommand(message, topic)
+{
+    message.channel.setTopic(topic, "Set by " + message.author.username);
+    log(message.channel.guild, "Topic in " + message.channel.name + " has been changed by "
+    + message.author.username + " to " + topic );
+    message.reply("topic updaed.");
+}
+
+// Bot admin commands
+
+function fsayCommand(message, params)
+{
+    message.channel.send(params);
+    message.delete();
+}
+
+// Commands that mainly operate based on passing a user
+
+function seenCommand(message)
+{
+    var user = getMemberMentionedFromText(message);
+    if (user !== null) {
+        db.query("SELECT lastseen, active FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, user], function(err, rows) {
+            if (rows[0] !== null) {
+                var seconds = Math.floor(new Date() / 1000) - rows[i].lastseen;
+                response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(seconds, false) + "ago.";
+                if (seconds > 60*60*24*7) {
+                    var dateActive = new Date(rows[i].lastseen*1000);
+                    response += " ("+dateActive.toDateString()+")";
+                }
+                if (rows[i].active == 0) {
+                    response += "\nThis person does not appear to be on the member list. This may mean that he or she may have left the server or have been pruned or kicked.\n\n";
+                }
+
+                message.reply(response);
+            }
+        });
+    } else {
+        message.reply("user not found. Please double check the username. For best results, @mention the user.");
+    }
+}
