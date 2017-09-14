@@ -251,7 +251,7 @@ function albumCommand(message)
 
 function nCommand(message, params)
 {
-    var nenified = params.replaceAll('m','n').replaceAll('M','N');
+    var nenified = params.replaceAll('m','n').replaceAll('M','N').replaceAll('\uD83C\uDDF2','\uD83C\uDDF3');
     message.reply(nenified);
 }
 
