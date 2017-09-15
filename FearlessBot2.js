@@ -65,7 +65,6 @@ bot.on('message', message => {
             saveCommand(message);
         break;
         case "!seen":
-            //seenCommand(message);
         break;
         case "!last":
         break;
@@ -83,6 +82,7 @@ bot.on('message', message => {
             randomMemberCommand(message, command[1]);
         break;
         case "!activity":
+            activityCommand(message);
         break;
         case "!poop":
             poopCommand(message);
@@ -254,6 +254,13 @@ function nCommand(message, params)
 {
     var nenified = params.replaceAll('m','n').replaceAll('M','N').replaceAll('\uD83C\uDDF2','\uD83C\uDDF3');
     message.reply(nenified);
+}
+
+function activityCommand(message)
+{
+    search  = (message.mentions.members.size > 0) ? message.mentions.members.first().id : message.author.id;
+    var botsString = (message.content.includes('bots')) ? '&includebots=true' : '';
+    message.reply("https://tay.rocks/activityreport.php?server="+message.channel.guild.id+"&user="+search+botsString);
 }
 
 // Database-oriented commands
@@ -471,27 +478,3 @@ function fsayCommand(message, params)
 }
 
 // Commands that mainly operate based on passing a user
-
-function seenCommand(message)
-{
-    var user = getMemberMentionedFromText(message);
-    if (user !== null) {
-        db.query("SELECT * FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, user], function(err, rows) {
-            if (rows[0] !== null) {
-                var seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
-                response += search + " ("+rows[0].discriminator+") was last seen " + secondsToTime(seconds, false) + "ago.";
-                if (seconds > 60*60*24*7) {
-                    var dateActive = new Date(rows[i].lastseen*1000);
-                    response += " ("+dateActive.toDateString()+")";
-                }
-                if (rows[i].active == 0) {
-                    response += "\nThis person does not appear to be on the member list. This may mean that he or she may have left the server or have been pruned or kicked.\n\n";
-                }
-
-                message.reply(response);
-            }
-        });
-    } else {
-        message.reply("user not found. Please double check the username. For best results, @mention the user.");
-    }
-}
