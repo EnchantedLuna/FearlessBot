@@ -65,7 +65,7 @@ bot.on('message', message => {
             saveCommand(message);
         break;
         case "!seen":
-            seenCommand(message);
+            //seenCommand(message);
         break;
         case "!last":
         break;
@@ -77,6 +77,7 @@ bot.on('message', message => {
             shitpostCommand(message, command[1]);
         break;
         case "!name":
+            nameCommand(message, command);
         break;
         case "!randmember":
             randomMemberCommand(message, command[1]);
@@ -325,6 +326,26 @@ function addShitpostCommand(message, shitpost)
     });
 }
 
+function nameCommand(message, command)
+{
+    var genders = ['m', 'f'];
+    var gender = command[1] == null || (command[1].toLowerCase() != 'm' && command[1].toLowerCase() != 'f')
+     ? genders[Math.floor(Math.random() * genders.length)] : command[1];
+    var year = 2000;
+    if (parseInt(command[2]) >= 1970 && parseInt(command[2]) <= 2014)
+        year = command[2];
+    var limit = 300;
+    if (parseInt(command[3]))
+        limit = command[3];
+    db.query("SELECT * FROM names WHERE gender = ? AND rank <= ? AND year = ? ORDER BY RAND() LIMIT 1",
+     [gender, limit, year], function (err, rows) {
+        if (rows[0] != null)
+        {
+            message.reply("your new name is " + rows[0].name + ".");
+        }
+    });
+}
+
 function getCommand(message, keyword, showUnapproved)
 {
     if (keyword == null)
@@ -455,10 +476,10 @@ function seenCommand(message)
 {
     var user = getMemberMentionedFromText(message);
     if (user !== null) {
-        db.query("SELECT lastseen, active FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, user], function(err, rows) {
+        db.query("SELECT * FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, user], function(err, rows) {
             if (rows[0] !== null) {
-                var seconds = Math.floor(new Date() / 1000) - rows[i].lastseen;
-                response += search + " ("+rows[i].discriminator+") was last seen " + secondsToTime(seconds, false) + "ago.";
+                var seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
+                response += search + " ("+rows[0].discriminator+") was last seen " + secondsToTime(seconds, false) + "ago.";
                 if (seconds > 60*60*24*7) {
                     var dateActive = new Date(rows[i].lastseen*1000);
                     response += " ("+dateActive.toDateString()+")";
