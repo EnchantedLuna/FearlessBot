@@ -18,6 +18,10 @@ bot.on('ready', () => {
 });
 
 bot.on('message', message => {
+    if (message.channel.type != 'text') {
+        return;
+    }
+    
     var text = message.content
     var command = message.content.split(" ");
     var params = command.slice(1, command.length).join(" ");
