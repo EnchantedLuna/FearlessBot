@@ -48,6 +48,7 @@ bot.on('message', message => {
 
         case "!region":
         case "!setregion":
+            regionCommand(message, command[1]);
         break;
 
         // Normal user database commands
@@ -466,7 +467,54 @@ function topicCommand(message, topic)
     message.channel.setTopic(topic, "Set by " + message.author.username);
     log(message.channel.guild, "Topic in " + message.channel.name + " has been changed by "
     + message.author.username + " to " + topic );
-    message.reply("topic updaed.");
+    message.reply("topic updated.");
+}
+
+function regionCommand(message, region)
+{
+    var america = message.channel.guild.roles.find('name','america');
+    var southamerica = message.channel.guild.roles.find('name', 'southamerica');
+    var europe = message.channel.guild.roles.find('name','europe');
+    var asia = message.channel.guild.roles.find('name','asia');
+    var africa = message.channel.guild.roles.find('name','africa');
+    var oceania = message.channel.guild.roles.find('name','oceania');
+    var allRegions = [america, southamerica, europe, asia, africa, oceania];
+
+    switch (region)
+    {
+        case "clear":
+            message.member.removeRoles(allRegions);
+            message.reply("your region has been cleared.");
+        break;
+        case "america":
+        case "northamerica":
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(america));
+            message.reply("your region has been set to North America.");
+        break;
+        case "southamerica":
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(southamerica));
+            message.reply("your region has been set to South America.");
+        break;
+        case "europe":
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(europe));
+            message.reply("your region has been set to Europe.");
+        break;
+        case "asia":
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(asia));
+            message.reply("your region has been set to Asia.");
+        break;
+        case "africa":
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(africa));
+            message.reply("your region has been set to Africa.");
+        break;
+        case "oceania":
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(oceania));
+            message.reply("your region has been set to Oceania.");
+        break;
+        default:
+            message.reply("region not recognized. Acceptable values: northamerica, southamerica, europe, asia, africa, oceania, clear.");
+        break;
+    }
 }
 
 // Bot admin commands
