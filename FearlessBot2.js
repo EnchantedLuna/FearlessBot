@@ -21,7 +21,7 @@ bot.on('message', message => {
     if (message.channel.type != 'text') {
         return;
     }
-    
+
     var text = message.content
     var command = message.content.split(" ");
     var params = command.slice(1, command.length).join(" ");
@@ -33,115 +33,117 @@ bot.on('message', message => {
         // Normal user basic commands (no db)
         case "!8ball":
             eightBallCommand(message);
-        break;
+            break;
         case "!choose":
             chooseCommand(message, params);
-        break;
+            break;
         case "!song":
             songCommand(message);
-        break;
+            break;
         case "!album":
             albumCommand(message);
-        break;
+            break;
         case "!version":
             botVersionCommand(message);
-        break;
+            break;
         case "!n":
             nCommand(message, params);
-        break;
+            break;
 
         case "!region":
         case "!setregion":
             regionCommand(message, command[1]);
-        break;
+            break;
 
         // Normal user database commands
         case "!channelstats":
             channelStatsCommand(message);
-        break;
+            break;
         case "!g":
         case "!get":
             getCommand(message, command[1], false);
-        break;
+            break;
         case "!getlist":
             getlistCommand(message);
-        break;
+            break;
         case "!save":
             saveCommand(message);
-        break;
+            break;
         case "!seen":
-        break;
+            break;
         case "!last":
-        break;
+            break;
         case "!words":
-        break;
+            break;
         case "!rankwords":
-        break;
+            rankThingCommand(message, "words", parseInt(command[1]));
+            break;
         case "!shitpost":
             shitpostCommand(message, command[1]);
-        break;
+            break;
         case "!name":
             nameCommand(message, command);
-        break;
+            break;
         case "!randmember":
             randomMemberCommand(message, command[1]);
-        break;
+            break;
         case "!activity":
             activityCommand(message);
-        break;
+            break;
         case "!poop":
             poopCommand(message);
-        break;
+            break;
         case "!rankpoop":
-        break;
+            rankThingCommand(message, "poops", parseInt(command[1]));
+            break;
 
         // Mod commands
         case "!approve":
             if (isMod(message.member)) {
                 approveCommand(message, command[1]);
             }
-        break;
+            break;
         case "!review":
             if (isMod(message.member)) {
                 getCommand(message, command[1], true);
             }
-        break;
+            break;
         case "!delete":
             if (isMod(message.member)) {
                 deleteCommand(message, command[1]);
             }
-        break;
+            break;
         case "!getunapproved":
             if (isMod(message.member)) {
                 getUnapprovedCommand(message);
             }
-        break;
+            break;
         case "!topic":
             if (isMod(message.member)) {
                 topicCommand(message, params);
             }
-        break;
+            break;
         case "!mute":
-        break;
+            break;
         case "!unmute":
-        break;
+            break;
         case "!addshitpost":
             if (isMod(message.member)) {
                 addShitpostCommand(message, params);
             }
-        break;
+            break;
 
         // Bot admin commands
         case "!fbotrestart":
             if (message.author.id == config.botAdminUserId) {
                 process.exit(-1);
             }
-        break;
+            break;
         case "!fsay":
             if (message.author.id == config.botAdminUserId) {
                 fsayCommand(message, params);
             }
-        break;
+            break;
   }
 });
 
@@ -358,6 +360,24 @@ function nameCommand(message, command)
     });
 }
 
+function rankThingCommand(message, thing, number)
+{
+    var rankString = "Users with most " + thing + ":\n";
+    if (isNaN(number) || number < 1 || number > 50) {
+        number = 10;
+    }
+    db.query("SELECT username, " + thing + " AS thing FROM members WHERE server = ? AND poops > 0 AND active=1 ORDER BY " + thing + " DESC LIMIT ?",
+     [message.channel.guild.id, number], function (err, rows)
+    {
+        var count = 1;
+        rows.forEach(function (member) {
+            rankString += count + ": " + member.username + " - " + member.thing + " " + thing + "\n";
+            count++;
+        });
+        message.reply(rankString);
+    });
+}
+
 function getCommand(message, keyword, showUnapproved)
 {
     if (keyword == null)
@@ -484,8 +504,7 @@ function regionCommand(message, region)
     var oceania = message.channel.guild.roles.find('name','oceania');
     var allRegions = [america, southamerica, europe, asia, africa, oceania];
 
-    switch (region)
-    {
+    switch (region) {
         case "clear":
             message.member.removeRoles(allRegions);
             message.reply("your region has been cleared.");
