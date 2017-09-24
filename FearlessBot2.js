@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 const staticData = require("./staticData.json");
 
-var bot = new Discord.Client();
+var bot = new Discord.Client({ "disableEveryone" : true, "fetchAllMembers" : true});
 
 var db = mysql.createConnection({
     host: config.mysqlHost,
