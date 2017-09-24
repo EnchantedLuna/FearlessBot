@@ -124,8 +124,34 @@ bot.on('message', message => {
             }
             break;
         case "!mute":
+            if (isMod(message.member)) {
+                muteCommand(message);
+            }
             break;
         case "!unmute":
+            if (isMod(message.member)) {
+                unmuteCommand(message);
+            }
+            break;
+        case "!supermute":
+            if (isMod(message.member)) {
+                supermuteCommand(message);
+            }
+            break;
+        case "!unsupermute":
+            if (isMod(message.member)) {
+                unsupermuteCommand(message);
+            }
+            break;
+        case "!kick":
+            if (isMod(message.member)) {
+                kickCommand(message);
+            }
+            break;
+        case "!ban":
+            if (isMod(message.member)) {
+                banCommand(message);
+            }
             break;
         case "!addshitpost":
             if (isMod(message.member)) {
@@ -538,6 +564,82 @@ function regionCommand(message, region)
             message.reply("region not recognized. Acceptable values: northamerica, southamerica, europe, asia, africa, oceania, clear.");
         break;
     }
+}
+
+function muteCommand(message)
+{
+    message.mentions.members.forEach(function (member, key, map) {
+        if (isMod(member)) {
+            message.reply(":smirk:");
+        } else {
+            message.channel.overwritePermissions(member, { 'SEND_MESSAGES' : false });
+            message.reply(member.user.username + " has been muted.");
+        }
+    });
+}
+
+function unmuteCommand(message)
+{
+    message.mentions.members.forEach(function (member, key, map) {
+        if (isMod(member)) {
+            message.reply(":smirk:");
+        } else {
+            message.channel.overwritePermissions(member, { 'SEND_MESSAGES' : null });
+            message.reply(member.user.username + " has been unmuted.");
+        }
+    });
+}
+
+function supermuteCommand(message)
+{
+    var supermute = message.channel.guild.roles.find('name','supermute');
+    message.mentions.members.forEach(function (member, key, map) {
+        if (isMod(member)) {
+            message.reply(":smirk:");
+        } else {
+            member.addRole(supermute);
+            message.reply(member.user.username + " has been supermuted.");
+        }
+    });
+}
+
+function unsupermuteCommand(message)
+{
+    var supermute = message.channel.guild.roles.find('name','supermute');
+    message.mentions.members.forEach(function (member, key, map) {
+        if (isMod(member)) {
+            message.reply(":smirk:");
+        } else {
+            member.removeRole(supermute);
+            message.reply(member.user.username + " has been un-supermuted.");
+        }
+    });
+}
+
+function kickCommand(message)
+{
+    message.mentions.members.forEach(function (member, key, map) {
+        if (isMod(member)) {
+            message.reply(":smirk:");
+        } else {
+            var reason = message.cleanContent.replace('!kick ', '');
+            member.kick(reason);
+            message.reply(member.user.username + " has been kicked.");
+        }
+    });
+}
+
+function banCommand(message)
+{
+    message.mentions.members.forEach(function (member, key, map) {
+        if (isMod(member)) {
+            message.reply(":smirk:");
+        } else {
+            var reason = message.cleanContent.replace('!ban ', '');
+            member.ban(reason);
+            message.reply(member.user.username + " has been banned.");
+        }
+    });
 }
 
 // Bot admin commands
