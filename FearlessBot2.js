@@ -77,6 +77,10 @@ bot.on('message', message => {
             seenCommand(message, params);
             break;
         case "!last":
+            lastCommand(message, params, false);
+            break;
+        case "!olast":
+            lastComand(message, params, true);
             break;
         case "!words":
             break;
@@ -242,8 +246,8 @@ function updateChannelStatsAndLog(message)
 {
     db.query(
         'INSERT INTO channel_stats (channel, server, total_messages, name, web, startdate) VALUES (?,?,1,?,0,UNIX_TIMESTAMP()) ' +
-        'ON DUPLICATE KEY UPDATE total_messages=total_messages+1',
-        [message.channel.id, message.channel.guild.id, message.channel.name]
+        'ON DUPLICATE KEY UPDATE total_messages=total_messages+1, name=?',
+        [message.channel.id, message.channel.guild.id, message.channel.name, message.channel.name]
     );
 
     db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)",
@@ -511,6 +515,31 @@ function seenCommand(message, params)
             }
         });
     }
+}
+
+function lastCommand(message, params, old)
+{
+    var member;
+    if (message.mentions.members.size > 0) {
+        member = message.mentions.members.first().user.username;
+    } else {
+        member = params;
+    }
+    var table = (old) ? "old_messages" : "messages";
+    db.query("SELECT mem.username, mem.discriminator, mem.lastseen, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM "+table+" msg " +
+        "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
+        "JOIN channel_stats c ON msg.channel=c.channel " +
+        "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != ?) " +
+        "ORDER BY msg.id DESC LIMIT 1", [message.channel.guild.id, member, config.mainServer], function (err, rows) {
+        var response = "";
+        if (rows.length == 0) {
+            response = "no messages found. Please double check the username.";
+        } else {
+            response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name + " - #" + rows[0].id + ")\n" +
+                rows[0].message;
+        }
+        message.reply(response);
+    });
 }
 
 function getCommand(message, keyword, showUnapproved)
