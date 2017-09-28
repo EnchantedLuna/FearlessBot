@@ -201,10 +201,17 @@ bot.on('messageDelete', message => {
         db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
          [removedWords, message.author.id, message.channel.guild.id]);
     }
+    var attachmentUrls = "";
+    if (message.attachments.size > 0) {
+        message.attachments.forEach(function (attachment, key, map) {
+            attachmentUrls = "\nAttachment: " + attachment.url;
+        });
+    }
+
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
     db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
     log(message.channel.guild, "Deleted message by " + message.author.username + " in "+message.channel.name+":\n```"
-    +  message.cleanContent.replace('`','\\`') + "```");
+    +  message.cleanContent.replace('`','\\`') + attachmentUrls + "```");
 });
 
 bot.login(config.token);
