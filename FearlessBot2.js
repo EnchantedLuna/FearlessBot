@@ -173,6 +173,26 @@ bot.on('message', message => {
   }
 });
 
+bot.on('messageDelete', message => {
+    if (message.channel.type != 'text') {
+        return;
+    }
+
+    var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
+
+    if (channelCountsInStatistics(message.channel.guild.id, message.channel.id))
+    {
+        // To help discourage spamming for wordcount
+        var removedWords = (words > 20) ? Math.round(words * 1.25) : words;
+        db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
+         [removedWords, message.author.id, message.channel.guild.id]);
+    }
+    db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
+    db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
+    log(message.channel.guild, "Deleted message by " + message.author.username + " in "+message.channel.name+":\n```"
+    +  message.cleanContent.replace('`','\\`') + "```");
+});
+
 bot.login(config.token);
 
 function updateUserStats(message)
