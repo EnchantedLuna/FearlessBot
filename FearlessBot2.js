@@ -74,6 +74,7 @@ bot.on('message', message => {
             saveCommand(message);
             break;
         case "!seen":
+            seenCommand(message, params);
             break;
         case "!last":
             break;
@@ -188,7 +189,8 @@ bot.on('guildMemberAdd', member => {
 });
 
 bot.on('guildMemberRemove', member => {
-    log(member.guild, member.user.id + "#" + member.user.discriminator + " has left the server.");
+    db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [member.guild.id, member.id]);
+    log(member.guild, member.user.username + "#" + member.user.discriminator + " has left the server.");
 });
 
 bot.on('messageDelete', message => {
@@ -257,7 +259,8 @@ function getMemberMentionedFromText(message)
     if (mentionsCount > 0) {
         return message.mentions.members.first().id;
     } else {
-        db.query("SELECT id FROM members WHERE server=? AND username=?", [message.channel.guild.id, params], function(err, rows) {
+        db.query("SELECT id FROM members WHERE server=? AND username=? ORDER BY messages DESC LIMIT 1",
+         [message.channel.guild.id, params], function(err, rows) {
             if (rows[0] != null) {
                 return rows[0].id;
             }
@@ -289,7 +292,40 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
+function secondsToTime(seconds, short)
+{
+    var sec = seconds % 60;
+    var minutes = Math.floor(seconds / 60) % 60;
+    var hours = Math.floor(seconds / 3600) % 24;
+    var days = Math.floor(seconds / 86400);
 
+    var result = "";
+    if (days > 0) {
+        result += days + (short ? "d" : " day");
+        if (!short) {
+            result += days != 1 ? "s " : " ";
+        }
+    }
+    if (hours > 0) {
+        result += hours + (short ? "h" : " hour");
+        if (!short) {
+            result += hours != 1 ? "s " : " ";
+        }
+    }
+    if (minutes > 0) {
+        result += minutes + (short ? "m" : " minute");
+        if (!short) {
+            result += minutes > 1 ? "s " : " ";
+        }
+    }
+    if(sec > 0) {
+        result += sec + (short ? "s" : " second");
+        if (!short) {
+            result += sec != 1 ? "s " : " ";
+        }
+    }
+    return result;
+}
 
 
 
@@ -447,6 +483,34 @@ function rankThingCommand(message, thing, number)
         });
         message.reply(rankString);
     });
+}
+
+function seenCommand(message, params)
+{
+    if (message.mentions.members.size > 0) {
+        member = message.mentions.members.first().user.username;
+    } else {
+        member = params;
+    }
+
+    if (member == bot.user.id) {
+        message.reply("I'm right here!");
+    } else if (member == message.author.id) {
+        message.reply("look in a mirror!");
+    } else {
+        db.query("SELECT username, discriminator, lastseen, active FROM members WHERE server = ? AND username = ? ORDER BY messages DESC LIMIT 1",
+         [message.channel.guild.id, member], function(err, rows) {
+            if (rows[0] == null) {
+                message.reply('user not found. Pleaes double check the username.');
+            } else {
+                var seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
+                var date = new Date(rows[0].lastseen * 1000);
+                var leftServerText = (rows[0].active) ? '' : '\nThis user has left the server.';
+                message.reply(rows[0].username + '#' + rows[0].discriminator + ' was last seen '
+                + secondsToTime(seconds, false) + 'ago. ('+date.toDateString()+')' + leftServerText);
+            }
+        });
+    }
 }
 
 function getCommand(message, keyword, showUnapproved)
