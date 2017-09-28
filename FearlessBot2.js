@@ -170,7 +170,21 @@ bot.on('message', message => {
                 fsayCommand(message, params);
             }
             break;
+        default:
+            dontAtMe(message);
+            break;
   }
+});
+
+bot.on('guildMemberAdd', member => {
+    db.query("SELECT * FROM members WHERE server = ? AND id = ?", [member.guild.id, member.id], function (err, rows) {
+        var joinType = (rows.length > 0) ? "rejoined" : "joined";
+        log(member.guild, member.user.username + "#" + member.user.discriminator + " has " + joinType + " the server.");
+    });
+});
+
+bot.on('guildMemberRemove', member => {
+    log(member.guild, member.user.id + "#" + member.user.discriminator + " has left the server.");
 });
 
 bot.on('messageDelete', message => {
@@ -354,7 +368,7 @@ function poopCommand(message)
             if (rows[0] != null) {
                 var poopStreak = rows[0].poops + 1;
                 db.query("UPDATE members SET poops=poops+1 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
-                message.reply("you have pooped. :poop:\nYour :poop: streak is now " + poopStreak);
+                message.reply("you have pooped. :poop:\nYour :poop: streak is now " + poopStreak + ".");
             }
         });
     }
@@ -670,4 +684,12 @@ function fsayCommand(message, params)
     message.delete();
 }
 
-// Commands that mainly operate based on passing a user
+// lol
+
+function dontAtMe(message)
+{
+    var lowerMessage = message.content.toLowerCase();
+    if (lowerMessage.includes('dont @ me') || lowerMessage.includes("don't @ me")) {
+        message.reply(":smirk:");
+    }
+}
