@@ -29,6 +29,10 @@ bot.on('message', message => {
     updateUserStats(message);
     updateChannelStatsAndLog(message);
 
+    if (config.noCommandChannels.includes(message.channel.id)) {
+        return;
+    }
+
     switch (command[0].toLowerCase()) {
         // Normal user basic commands (no db)
         case "!8ball":
