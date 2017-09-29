@@ -180,6 +180,11 @@ bot.on('message', message => {
                 fsayCommand(message, params);
             }
             break;
+            case "!setstatus":
+                if (message.author.id == config.botAdminUserId) {
+                    setStatusCommand(message, params);
+                }
+                break;
         default:
             dontAtMe(message);
             break;
@@ -815,6 +820,12 @@ function fsayCommand(message, params)
 {
     message.channel.send(params);
     message.delete();
+}
+
+function setStatusCommand(message, params)
+{
+    bot.user.setGame(params);
+    message.reply("status set.");
 }
 
 // lol
