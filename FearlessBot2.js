@@ -431,13 +431,15 @@ function shitpostCommand(message, number)
     var number = parseInt(number, 10);
     if (number > 0) {
         db.query("SELECT id, shitpost FROM shitposts WHERE id=?", [number], function (err, rows) {
-            if (rows != null) {
+            if (rows[0] != null) {
                 message.reply(rows[0].shitpost + " (#"+rows[0].id+")");
+            } else {
+                message.reply("that shitpost doesn't exist!");
             }
         });
     } else {
         db.query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", [], function (err, rows) {
-            if (rows != null) {
+            if (rows[0] != null) {
                 message.reply(rows[0].shitpost + " (#"+rows[0].id+")");
             }
         });
@@ -449,6 +451,8 @@ function addShitpostCommand(message, shitpost)
     db.query("INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())",
     [shitpost, message.author.id], function (err, result) {
         message.reply("added #"+result.insertId+".");
+        log(message.channel.guild, 'New Shitpost #' + result.insertId + ' added by '
+         + message.author.username + ": " + shitpost)
     });
 }
 

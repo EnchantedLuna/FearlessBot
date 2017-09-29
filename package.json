@@ -3,7 +3,7 @@
   "version": "2017.09.28a-fbot2",
   "dependencies": {
     "discord.js": "*",
-    "mysql": "*",
+    "mysql": "*"
   },
   "repository": {
     "type": "git",
