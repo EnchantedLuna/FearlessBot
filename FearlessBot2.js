@@ -723,7 +723,7 @@ function regionCommand(message, region)
     var oceania = message.channel.guild.roles.find('name','oceania');
     var allRegions = [america, southamerica, europe, asia, africa, oceania];
 
-    switch (region) {
+    switch (region.toLowerCase()) {
         case "clear":
             message.member.removeRoles(allRegions);
             message.reply("your region has been cleared.");
