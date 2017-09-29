@@ -1,0 +1,13 @@
+{
+  "token": "",
+  "mysqlHost" : "",
+  "mysqlUser" : "",
+  "mysqlPass" : "",
+  "mysqlDB" : "",
+
+  "mainServer" : "",
+  "statCountingChannels" : ["",""],
+  "noCommandChannels" : [""],
+  "botAdminUserId" : "",
+  "modRole" : ""
+}
