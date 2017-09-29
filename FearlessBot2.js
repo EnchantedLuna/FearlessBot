@@ -59,7 +59,9 @@ bot.on('message', message => {
         case "!b2":
             bCommand(message, params, 2);
             break;
-
+        case "!b3":
+            bCommand(message, params, 3);
+            break;
         case "!region":
         case "!setregion":
             regionCommand(message, command[1]);
@@ -379,7 +381,16 @@ function bCommand(message, params, level)
 {
     var changed = params.replaceAll('b',':b:').replaceAll('B',':b:');
     if (level >= 2) {
-        changed = changed.replaceAll('c',':b:');
+        changed = changed.replaceAll('C',':b:').replaceAll('c',':b:');
+    }
+    if (level == 3) {
+        var characters = changed.split('');
+        for (var i = 0; i < characters.length; i++) {
+            if (characters[i].match('[A-Za-z]') && Math.random() < 0.10) {
+                characters[i] = ':b:';
+            }
+        }
+        changed = characters.join('');
     }
     message.reply(changed);
 }
