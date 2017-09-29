@@ -714,11 +714,6 @@ mybot.on("message", function (message)
                 db.query("UPDATE data_store SET value=value+1 WHERE server='1989' AND keyword='lunaeyeroll'", command[1]);
             }
             break;
-        default:
-            if (message.content.toLowerCase().includes('dont @ me') || message.content.toLowerCase().includes("don't @ me")) {
-                mybot.reply(message, ":smirk:");
-            }
-            break;
     }
 });
 
