@@ -53,6 +53,12 @@ bot.on('message', message => {
         case "!n":
             nCommand(message, params);
             break;
+        case "!b":
+            bCommand(message, params, 1);
+            break;
+        case "!b2":
+            bCommand(message, params, 2);
+            break;
 
         case "!region":
         case "!setregion":
@@ -367,6 +373,15 @@ function albumCommand(message)
 {
     var answer = staticData.taylorSwiftAlbums[Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)];
     message.reply('you should listen to ' + answer + '.');
+}
+
+function bCommand(message, params, level)
+{
+    var changed = params.replaceAll('b',':b:').replaceAll('B',':b:');
+    if (level >= 2) {
+        changed = changed.replaceAll('c',':b:');
+    }
+    message.reply(changed);
 }
 
 function nCommand(message, params)
