@@ -379,14 +379,15 @@ function albumCommand(message)
 
 function bCommand(message, params, level)
 {
-    var changed = params.replaceAll('b',':b:').replaceAll('B',':b:');
+    var changed = params;
+    changed = changed.replaceAll('b',':b:').replaceAll('B',':b:');
     if (level >= 2) {
         changed = changed.replaceAll('C',':b:').replaceAll('c',':b:');
     }
     if (level == 3) {
         var characters = changed.split('');
         for (var i = 0; i < characters.length; i++) {
-            if (characters[i].match('[A-Za-z]') && Math.random() < 0.10) {
+            if (characters[i].match('[AD-Zad-z]') && Math.random() < 0.10) {
                 characters[i] = ':b:';
             }
         }
