@@ -83,6 +83,7 @@ bot.on('message', message => {
             lastComand(message, params, true);
             break;
         case "!words":
+            wordsCommand(message, params);
             break;
         case "!rankwords":
             rankThingCommand(message, "words", parseInt(command[1]));
@@ -540,6 +541,34 @@ function lastCommand(message, params, old)
         }
         message.reply(response);
     });
+}
+
+function wordsCommand(message, params)
+{
+    var member;
+    if (message.mentions.members.size > 0) {
+        member = message.mentions.members.first().user.username;
+    } else if (params != '') {
+        member = params;
+    } else {
+        member = message.author.username;
+    }
+
+    db.query("SELECT words, messages, username FROM members WHERE server = ? AND username = ?",
+    [message.channel.guild.id, member], function (err, rows) {
+        if (err != null) {
+            console.log(err);
+            return;
+        }
+        if (rows[0] != null) {
+            var average = (rows[0].messages > 0) ? Math.round(rows[0].words / rows[0].messages * 100) / 100 : 0;
+            message.reply(rows[0].username + " has used " + rows[0].words + " words in " +  rows[0].messages
+             + " messages, an average of " + average + " words per message.");
+        } else {
+            message.reply("user not found. Please double check the username.");
+        }
+    });
+
 }
 
 function getCommand(message, keyword, showUnapproved)
