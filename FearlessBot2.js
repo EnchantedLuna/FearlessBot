@@ -63,6 +63,9 @@ bot.on('message', message => {
         case "!channelstats":
             channelStatsCommand(message);
             break;
+        case "!totals":
+            totalsCommand(message);
+            break;
         case "!g":
         case "!get":
             getCommand(message, command[1], false);
@@ -345,7 +348,7 @@ function eightBallCommand(message)
 
 function botVersionCommand(message)
 {
-    message.reply("running version: " + staticData.version);
+    message.reply("FearlessBot2 version: " + staticData.version);
 }
 
 function chooseCommand(message, params)
@@ -406,6 +409,22 @@ function channelStatsCommand(message)
         var total = rows[0].total_messages;
         var startdate = new Date(rows[0].startdate*1000);
         message.reply("there have been " + total + " messages sent since " + startdate.toDateString() + " in this channel.");
+    });
+}
+
+function totalsCommand(message)
+{
+    db.query("SELECT * FROM channel_stats WHERE server = ? AND web = 1", [message.channel.guild.id], function (err, rows)
+    {
+        var totalsMessage = "\nMessages by channel:";
+        var total = 0;
+        for (var i = 0; i < rows.length; i++) {
+            totalsMessage += "\n#" + rows[i].name + ": " + rows[i].total_messages.toLocaleString();
+            total += rows[i].total_messages;
+        }
+        totalsMessage += "\nTotal messages: " + total.toLocaleString();
+        var startdate = new Date(rows[0].startdate*1000);
+        message.reply(totalsMessage);
     });
 }
 
