@@ -60,11 +60,8 @@ bot.on('message', message => {
             break;
 
         // Normal user database commands
-        case "!channelstats":
-            channelStatsCommand(message);
-            break;
         case "!totals":
-            totalsCommand(message);
+            totalsCommand(message, params);
             break;
         case "!g":
         case "!get":
@@ -402,19 +399,10 @@ function randomMemberCommand(message, days)
     });
 }
 
-function channelStatsCommand(message)
+function totalsCommand(message, options)
 {
-    db.query("SELECT * FROM channel_stats WHERE channel = ?", [message.channel.id], function (err, rows)
-    {
-        var total = rows[0].total_messages;
-        var startdate = new Date(rows[0].startdate*1000);
-        message.reply("there have been " + total + " messages sent since " + startdate.toDateString() + " in this channel.");
-    });
-}
-
-function totalsCommand(message)
-{
-    db.query("SELECT * FROM channel_stats WHERE server = ? AND web = 1", [message.channel.guild.id], function (err, rows)
+    var web = (isMod(message.member) && options == 'hidden') ? "" : " AND web=1";
+    db.query("SELECT * FROM channel_stats WHERE server = ?" + web, [message.channel.guild.id], function (err, rows)
     {
         var totalsMessage = "\nMessages by channel:";
         var total = 0;
