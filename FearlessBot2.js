@@ -406,7 +406,7 @@ function randomMemberCommand(message, days)
         dayLimit = 1;
     }
     var time = Math.floor(new Date()/1000) - (86400 * dayLimit);
-    db.query("SELECT username FROM members WHERE server = ? AND lastseen > ? ORDER BY RAND() LIMIT 1",
+    db.query("SELECT username FROM members WHERE server = ? AND lastseen > ? AND active=1 ORDER BY RAND() LIMIT 1",
     [message.channel.guild.id, time], function (err, rows) {
         if (rows != null) {
             message.reply("random member: " + rows[0].username);
