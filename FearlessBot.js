@@ -9,7 +9,7 @@ var db = mysql.createConnection({
     charset: "utf8mb4"
 });
 
-var version = "2017.09.05b";
+var version = "2017.09.22a";
 var mybot = new Discord.Client( { forceFetchUsers : true, autoReconnect : true, disableEveryone: true });
 var search;
 var nameChangeeNoticesEnabled = true;
@@ -712,6 +712,11 @@ mybot.on("message", function (message)
         case "\uD83D\uDE44":
             if (user.id == 115329261350420487) {
                 db.query("UPDATE data_store SET value=value+1 WHERE server='1989' AND keyword='lunaeyeroll'", command[1]);
+            }
+            break;
+        default:
+            if (message.content.toLowerCase().includes('dont @ me') || message.content.toLowerCase().includes("don't @ me")) {
+                mybot.reply(message, ":smirk:");
             }
             break;
     }
