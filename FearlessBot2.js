@@ -46,7 +46,12 @@ function runScheduledActions()
                     member.removeRole(supermute);
                     log(guild, member.user.username + "'s supermute has expired.");
                     db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
-                 break;
+                    break;
+                case "unban":
+                    guild.unban(rows[i].user);
+                    log(guild, rows[i].username + "'s ban has expired.");
+                    db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
+                    break;
              }
          }
      });
@@ -203,7 +208,7 @@ bot.on('message', message => {
             break;
         case "!ban":
             if (isMod(message.member)) {
-                banCommand(message);
+                banCommand(message, parseInt(command[1]));
             }
             break;
         case "!addshitpost":
@@ -676,7 +681,7 @@ function saveCommand(message)
         return;
     if (command[1].startsWith("http")) {
         message.reply("you probably dun goof'd your command. The keyword comes first!");
-        return;
+        return;parseInt(command[1])
     }
     if (command[2] == null) {
         message.reply("you need to specify a value (the thing you want saved) for that keyword.");
@@ -881,7 +886,7 @@ function kickCommand(message)
     });
 }
 
-function banCommand(message)
+function banCommand(message, days)
 {
     message.mentions.members.forEach(function (member, key, map) {
         if (isMod(member)) {
@@ -890,6 +895,15 @@ function banCommand(message)
             var reason = message.cleanContent.replace('!ban ', '');
             member.ban(reason);
             message.reply(member.user.username + " has been banned.");
+            var timeMessage = 'indefinitely';
+            if (days > 0) {
+                db.query("INSERT INTO scheduled_actions (action, guild, user, effectivetime) \
+                VALUES ('unban', ?, ?, NOW() + INTERVAL ? DAY)",
+                [message.channel.guild.id, member.user.id, days]);
+                timeMessage = 'for ' + days + ' days';
+            }
+            log(message.channel.guild, member.user.username + ' has been banned '
+            + timeMessage + ' by ' + message.author.username);
         }
     });
 }
