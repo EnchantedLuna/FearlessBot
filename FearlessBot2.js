@@ -106,6 +106,9 @@ bot.on('message', message => {
         case "!setregion":
             regionCommand(message, command[1]);
             break;
+        case "!namemix":
+            namemixCommand(message);
+            break;
 
         // Normal user database commands
         case "!totals":
@@ -449,6 +452,14 @@ function activityCommand(message)
     message.reply("https://tay.rocks/activityreport.php?server="+message.channel.guild.id+"&user="+search+botsString);
 }
 
+function namemixCommand(message)
+{
+    var part1 = staticData.nameMixPart1[Math.floor(Math.random() * staticData.nameMixPart1.length)];
+    var part2 = staticData.nameMixPart2[Math.floor(Math.random() * staticData.nameMixPart2.length)];
+
+    message.reply(part1 + part2);
+}
+
 // Database-oriented commands
 
 function randomMemberCommand(message, days)
@@ -776,8 +787,8 @@ function regionCommand(message, region)
     var allRegions = [america, southamerica, europe, asia, africa, oceania];
 
     if (typeof region == 'undefined') {
-        message.reply("please specify a region. Available regions are northamerica, \
-        southamerica, europe, asia, africa, and oceania. Example: ``!setregion europe``");
+        message.reply("please specify a region. Available regions are northamerica, " +
+        "southamerica, europe, asia, africa, and oceania. Example: ``!setregion europe``");
         return;
     }
 
