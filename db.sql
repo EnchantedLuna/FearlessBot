@@ -71,3 +71,13 @@ CREATE TABLE shitposts
   addedby BIGINT(20),
   addedon DATETIME
 );
+
+CREATE TABLE scheduled_actions
+(
+    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    action VARCHAR(20),
+    guild VARCHAR(20),
+    user VARCHAR(20),
+    effectivetime DATETIME,
+    completed TINYINT(1) NOT NULL DEFAULT 0
+);

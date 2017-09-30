@@ -15,7 +15,42 @@ var db = mysql.createConnection({
 
 bot.on('ready', () => {
     console.log('FearlessBot2 is ready.');
+    setInterval(runScheduledActions, 60000);
 });
+
+function runScheduledActions()
+{
+    db.query("SELECT scheduled_actions.*, members.username FROM scheduled_actions \
+    JOIN members ON members.server=scheduled_actions.guild AND scheduled_actions.user=members.id \
+    WHERE completed=0 AND effectivetime < NOW() ORDER BY id",
+     [], function(err,rows) {
+         for (var i = 0; i < rows.length; i++) {
+             var guild = bot.guilds.get(rows[i].guild);
+             if (typeof guild == 'undefined') {
+                 console.log("Scheduled actions: Guild " + rows[i].guild + " not found.");
+                 continue;
+             }
+             switch (rows[i].action) {
+                 case "unmute":
+                    var supermute = guild.roles.find('name','supermute');
+                    if (typeof supermute == 'undefined') {
+                        console.log("Scheduled actions: Supermute role not found in guild " + rows[i].guild);
+                        continue;
+                    }
+                    var member = guild.members.get(rows[i].user);
+                    if (typeof member == 'undefined') {
+                        log(guild, 'Warning: ' + rows[i].username + ' was scheduled to be unmuted, but this member was not found. Have they left?');
+                        db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
+                        continue;
+                    }
+                    member.removeRole(supermute);
+                    log(guild, member.user.username + "'s supermute has expired.");
+                    db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
+                 break;
+             }
+         }
+     });
+}
 
 bot.on('message', message => {
     if (message.channel.type != 'text') {
@@ -153,7 +188,7 @@ bot.on('message', message => {
             break;
         case "!supermute":
             if (isMod(message.member)) {
-                supermuteCommand(message);
+                supermuteCommand(message, parseInt(command[1]));
             }
             break;
         case "!unsupermute":
@@ -795,7 +830,7 @@ function unmuteCommand(message)
     });
 }
 
-function supermuteCommand(message)
+function supermuteCommand(message, hours)
 {
     var supermute = message.channel.guild.roles.find('name','supermute');
     message.mentions.members.forEach(function (member, key, map) {
@@ -803,7 +838,13 @@ function supermuteCommand(message)
             message.reply(":smirk:");
         } else {
             member.addRole(supermute);
-            message.reply(member.user.username + " has been supermuted.");
+            var timeMessage = '';
+            if (hours > 0) {
+                db.query("INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unmute', ?, ?, NOW() + INTERVAL ? HOUR)",
+                [message.channel.guild.id, member.user.id, hours]);
+                timeMessage = ' for ' + hours + ' hours';
+            }
+            message.reply(member.user.username + " has been supermuted" + timeMessage + ".");
         }
     });
 }
