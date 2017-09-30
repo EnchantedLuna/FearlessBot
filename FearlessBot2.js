@@ -770,6 +770,12 @@ function regionCommand(message, region)
     var oceania = message.channel.guild.roles.find('name','oceania');
     var allRegions = [america, southamerica, europe, asia, africa, oceania];
 
+    if (typeof region == 'undefined') {
+        message.reply("please specify a region. Available regions are northamerica, \
+        southamerica, europe, asia, africa, and oceania. Example: ``!setregion europe``");
+        return;
+    }
+
     switch (region.toLowerCase()) {
         case "clear":
             message.member.removeRoles(allRegions);
