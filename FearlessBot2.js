@@ -496,7 +496,9 @@ function totalsCommand(message, options)
 
 function poopCommand(message)
 {
-    if (Math.random() < 0.05) {
+    if (config.statCountingChannels.includes(message.channel.id)) {
+        message.reply("eww! You really want to poop in this channel and stink up this place? :nauseated_face:");
+    } else if (Math.random() < 0.05) {
         db.query("UPDATE members SET poops=0 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
         message.reply("you clogged the toilet!! :toilet:\nYour :poop: streak has been reset to 0.");
     } else {
@@ -824,7 +826,7 @@ function regionCommand(message, region)
             message.reply("your region has been set to Africa.");
         break;
         case "oceania":
-            arrayRemove(allRegions, oceania); 
+            arrayRemove(allRegions, oceania);
             message.member.removeRoles(allRegions).then(updated => updated.addRole(oceania));
             message.reply("your region has been set to Oceania.");
         break;
