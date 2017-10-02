@@ -799,32 +799,46 @@ function regionCommand(message, region)
         break;
         case "america":
         case "northamerica":
+            arrayRemove(allRegions, america);
             message.member.removeRoles(allRegions).then(updated => updated.addRole(america));
             message.reply("your region has been set to North America.");
         break;
         case "southamerica":
+            arrayRemove(allRegions, southamerica);
             message.member.removeRoles(allRegions).then(updated => updated.addRole(southamerica));
             message.reply("your region has been set to South America.");
         break;
         case "europe":
+            arrayRemove(allRegions, europe);
             message.member.removeRoles(allRegions).then(updated => updated.addRole(europe));
             message.reply("your region has been set to Europe.");
         break;
         case "asia":
+            arrayRemove(allRegions, asia);
             message.member.removeRoles(allRegions).then(updated => updated.addRole(asia));
             message.reply("your region has been set to Asia.");
         break;
         case "africa":
+            arrayRemove(allRegions, africa);
             message.member.removeRoles(allRegions).then(updated => updated.addRole(africa));
             message.reply("your region has been set to Africa.");
         break;
         case "oceania":
+            arrayRemove(allRegions, oceania); 
             message.member.removeRoles(allRegions).then(updated => updated.addRole(oceania));
             message.reply("your region has been set to Oceania.");
         break;
         default:
             message.reply("region not recognized. Acceptable values: northamerica, southamerica, europe, asia, africa, oceania, clear.");
         break;
+    }
+}
+
+function arrayRemove(array, element) {
+    const index = array.indexOf(element);
+
+    if (index !== -1) {
+        array.splice(index, 1);
     }
 }
 
