@@ -249,6 +249,20 @@ bot.on('guildMemberRemove', member => {
     log(member.guild, member.user.username + "#" + member.user.discriminator + " has left the server.");
 });
 
+bot.on('userUpdate', (oldUser, newUser) => {
+    if (oldUser.username != newUser.username) {
+        bot.guilds.forEach(function (guild, key, map) {
+            var member = guild.members.get(newUser.id);
+            if (typeof member != 'undefined') {
+                log(guild, oldUser.username + " has changed username to "
+                 + newUser.username + ".");
+                guild.defaultChannel.send(oldUser.username + " has changed username to "
+                 + newUser.username + ".");
+            }
+        });
+    }
+});
+
 bot.on('messageDelete', message => {
     if (message.channel.type != 'text') {
         return;
