@@ -62,7 +62,6 @@ bot.on('message', message => {
         return;
     }
 
-    var text = message.content
     var command = message.content.split(" ");
     var params = command.slice(1, command.length).join(" ");
 
