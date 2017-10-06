@@ -117,6 +117,9 @@ bot.on('message', message => {
         case "!get":
             getCommand(message, command[1], false);
             break;
+        case "!rg":
+            rgCommand(message);
+            break;
         case "!getlist":
             getlistCommand(message);
             break;
@@ -695,6 +698,14 @@ function getCommand(message, keyword, showUnapproved)
     });
 }
 
+function rgCommand(message)
+{
+    db.query("SELECT * FROM data_store WHERE server = ? AND approved = 1 ORDER BY RAND() LIMIT 1",
+     [message.channel.guild.id], function (err, rows) {
+        message.reply(rows[0]['keyword'] + ': ' + rows[0]['value']);
+    });
+}
+
 function getlistCommand(message)
 {
     message.reply("https://tay.rocks/fearlessdata.php?server=" + message.channel.guild.id);
@@ -707,7 +718,7 @@ function saveCommand(message)
         return;
     if (command[1].startsWith("http")) {
         message.reply("you probably dun goof'd your command. The keyword comes first!");
-        return;parseInt(command[1])
+        return;
     }
     if (command[2] == null) {
         message.reply("you need to specify a value (the thing you want saved) for that keyword.");
