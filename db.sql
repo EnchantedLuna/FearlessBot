@@ -30,7 +30,7 @@ CREATE TABLE members
   server VARCHAR(30) DEFAULT '' NOT NULL,
   active TINYINT(1) DEFAULT '1',
   discriminator INT(4),
-  poops int(11) DEFAULT '0'
+  poops int(11) DEFAULT '0',
   CONSTRAINT `PRIMARY` PRIMARY KEY (server, id)
 );
 CREATE INDEX idx_username ON members (server, username);
