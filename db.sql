@@ -30,20 +30,10 @@ CREATE TABLE members
   server VARCHAR(30) DEFAULT '' NOT NULL,
   active TINYINT(1) DEFAULT '1',
   discriminator INT(4),
+  poops int(11) DEFAULT '0'
   CONSTRAINT `PRIMARY` PRIMARY KEY (server, id)
 );
 CREATE INDEX idx_username ON members (server, username);
-CREATE TABLE mention_log
-(
-  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  user VARCHAR(30),
-  timestamp INT(11),
-  channel VARCHAR(20),
-  author VARCHAR(30),
-  message VARCHAR(1800),
-  server VARCHAR(30) DEFAULT '0',
-  discord_id BIGINT(20)
-);
 CREATE TABLE names
 (
   rank INT(4),
@@ -81,3 +71,5 @@ CREATE TABLE scheduled_actions
     effectivetime DATETIME,
     completed TINYINT(1) NOT NULL DEFAULT 0
 );
+
+CREATE VIEW `message_view` AS select `msg`.`id` AS `id`,`mem`.`username` AS `username`,`msg`.`date` AS `date`,`c`.`name` AS `channelname`,`msg`.`message` AS `message` from ((`messages` `msg` join `members` `mem` on(((`msg`.`server` = `mem`.`server`) and (`msg`.`author` = `mem`.`id`)))) join `channel_stats` `c` on(((`msg`.`server` = `c`.`server`) and (`msg`.`channel` = `c`.`channel`))));
