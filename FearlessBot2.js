@@ -499,6 +499,7 @@ function xdCommand(message)
         if(xdd.toLowerCase().indexOf("d") !== -1)
             reee = false;
     }
+    message.reply(xdd);
 }
 // Database-oriented commands
 
