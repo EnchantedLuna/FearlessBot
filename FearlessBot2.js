@@ -465,7 +465,7 @@ function activityCommand(message)
 {
     search  = (message.mentions.members.size > 0) ? message.mentions.members.first().id : message.author.id;
     var botsString = (message.content.includes('bots')) ? '&includebots=true' : '';
-    message.reply("https://tay.rocks/activityreport.php?server="+message.channel.guild.id+"&user="+search+botsString);
+    message.reply(config.baseUrl + "activityreport.php?server="+message.channel.guild.id+"&user="+search+botsString);
 }
 
 function namemixCommand(message)
@@ -708,7 +708,7 @@ function rgCommand(message)
 
 function getlistCommand(message)
 {
-    message.reply("https://tay.rocks/fearlessdata.php?server=" + message.channel.guild.id);
+    message.reply(config.baseUrl + "fearlessdata.php?server=" + message.channel.guild.id);
 }
 
 function saveCommand(message)
