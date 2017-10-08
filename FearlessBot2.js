@@ -176,9 +176,7 @@ bot.on('message', message => {
             }
             break;
         case "!delete":
-            if (isMod(message.member, message.channel.guild)) {
-                deleteCommand(message, command[1]);
-            }
+            deleteCommand(message, command[1]);
             break;
         case "!getunapproved":
             if (isMod(message.member, message.channel.guild)) {
@@ -799,17 +797,18 @@ function approveCommand(message, keyword)
 
 function deleteCommand(message, keyword)
 {
-    if (isMod(message.member, message.channel.guild)) {
-        db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?",
-        [message.channel.guild.id, keyword], function (err, result) {
-            if (result.affectedRows > 0) {
-                message.reply("deleted.");
-                log(message.channel.guild, "Saved item " + keyword + " has been deleted by " + message.author.username);
-            } else {
-                message.reply("keyword not found.");
-            }
-        });
-    }
+    db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?",
+    [message.channel.guild.id, keyword], function (err, rows) {
+        if (typeof rows[0] !== 'undefined' && (isMod(message.member, message.channel.guild) || rows[0].owner === message.author.id)) {
+            message.reply("deleted.");
+            db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, keyword]);
+            log(message.channel.guild, "Saved item " + keyword + " has been deleted by " + message.author.username);
+        } else if (typeof rows[0] !== 'undefined') {
+            message.reply("you can only delete items that you have saved.");
+        } else {
+            message.reply("keyword not found.");
+        }
+    });
 }
 
 function getUnapprovedCommand(message)
