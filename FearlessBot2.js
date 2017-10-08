@@ -485,7 +485,7 @@ function namemixCommand(message)
 
     message.reply(part1 + part2);
 }
-function adamisXD(message)
+function xdCommand(message)
 {
     let xd = ['x','d'];
     rand = function(min, max) {
