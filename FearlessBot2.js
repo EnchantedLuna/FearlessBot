@@ -108,6 +108,9 @@ bot.on('message', message => {
         case "!namemix":
             namemixCommand(message);
             break;
+        case '!xd':
+            xdCommand(message);
+            break;
 
         // Normal user database commands
         case "!totals":
@@ -482,7 +485,17 @@ function namemixCommand(message)
 
     message.reply(part1 + part2);
 }
-
+function adamisXD(message)
+{
+    let xd = ['x','d'];
+    rand = function(min, max) {
+        return Math.floor(Math.random()*(max-min+1))+min;
+    }
+    let xdd = rand(0,1) == 1 ? "X" : "x";
+    for(let i = 0;i<rand(2,10);i++)
+        xdd += rand(0,1) == 1 ? xd[rand(0,1)] : xd[rand(0,1)].toUpperCase();
+    message.reply(xdd);
+}
 // Database-oriented commands
 
 function randomMemberCommand(message, days)
