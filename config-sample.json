@@ -9,7 +9,6 @@
   "statCountingChannels" : ["",""],
   "noCommandChannels" : [""],
   "botAdminUserId" : "",
-  "modRole" : "",
 
   "baseUrl" : ""
 }
