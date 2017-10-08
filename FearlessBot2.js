@@ -409,6 +409,11 @@ function secondsToTime(seconds, short)
     return result;
 }
 
+function rand(min, max)
+{
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
 
 
 // Basic commands (no db involvement, usable by all users)
@@ -485,22 +490,21 @@ function namemixCommand(message)
 
     message.reply(part1 + part2);
 }
+
 function xdCommand(message)
 {
     let xd = ['x','d'];
-    rand = function(min, max) {
-        return Math.floor(Math.random()*(max-min+1))+min;
-    }
     let xdd = rand(0,1) == 1 ? "X" : "x";
-    let reee = true;
-    while(reee) {
+    let incomplete = true;
+    while(incomplete) {
         for(let i = 0;i<rand(2,10);i++) 
             xdd += rand(0,1) == 1 ? xd[rand(0,1)] : xd[rand(0,1)].toUpperCase();
         if(xdd.toLowerCase().indexOf("d") !== -1)
-            reee = false;
+            incomplete = false;
     }
     message.reply(xdd);
 }
+
 // Database-oriented commands
 
 function randomMemberCommand(message, days)
