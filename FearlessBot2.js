@@ -117,6 +117,10 @@ bot.on('message', message => {
         case "!get":
             getCommand(message, command[1], false);
             break;
+        case "!gmeta":
+        case "!getmeta":
+            getMetaCommand(message, command[1]);
+            break;
         case "!rg":
             rgCommand(message);
             break;
@@ -694,6 +698,26 @@ function getCommand(message, keyword, showUnapproved)
                 db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
                  [keyword, message.channel.guild.id]);
             }
+        }
+    });
+}
+
+function getMetaCommand(message, keyword)
+{
+    if (keyword == null)
+        return;
+    db.query("SELECT keyword, value, uses, username, lastused, approved FROM data_store \
+            LEFT JOIN members ON data_store.owner=members.id AND data_store.server=members.server\
+            WHERE data_store.server = ? AND keyword = ?",
+     [message.channel.guild.id, keyword], function (err, rows) {
+        if (rows[0] == null) {
+            message.reply("nothing is stored for keyword " + keyword + ".");
+        } else if (!rows[0].approved) {
+            message.reply("this item has not been approved yet.");
+        } else {
+            var lastused = (rows[0].lastused !== null) ? rows[0].lastused : 'never';
+            message.reply(rows[0].value + '\nUses: ' + rows[0].uses + '\nLast used: '
+             +  lastused + '\nSaved by: ' + rows[0].username);
         }
     });
 }
