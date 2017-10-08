@@ -492,9 +492,13 @@ function xdCommand(message)
         return Math.floor(Math.random()*(max-min+1))+min;
     }
     let xdd = rand(0,1) == 1 ? "X" : "x";
-    for(let i = 0;i<rand(2,10);i++)
-        xdd += rand(0,1) == 1 ? xd[rand(0,1)] : xd[rand(0,1)].toUpperCase();
-    message.reply(xdd);
+    let reee = true;
+    while(reee) {
+        for(let i = 0;i<rand(2,10);i++) 
+            xdd += rand(0,1) == 1 ? xd[rand(0,1)] : xd[rand(0,1)].toUpperCase();
+        if(xdd.toLowerCase().indexOf("d") !== -1)
+            reee = false;
+    }
 }
 // Database-oriented commands
 
