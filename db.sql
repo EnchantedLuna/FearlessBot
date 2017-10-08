@@ -18,6 +18,8 @@ CREATE TABLE data_store
   uses INT(11) DEFAULT '0',
   server VARCHAR(30) DEFAULT '' NOT NULL,
   lastused DATETIME,
+  timeadded DATETIME,
+  approvedby VARCHAR(20),
   CONSTRAINT `PRIMARY` PRIMARY KEY (server, keyword)
 );
 CREATE TABLE members

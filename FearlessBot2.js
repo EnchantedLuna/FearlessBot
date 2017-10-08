@@ -706,8 +706,10 @@ function getMetaCommand(message, keyword)
 {
     if (keyword == null)
         return;
-    db.query("SELECT keyword, value, uses, username, lastused, approved FROM data_store \
-            LEFT JOIN members ON data_store.owner=members.id AND data_store.server=members.server\
+    db.query("SELECT keyword, value, uses, saver.username AS username, approver.username AS approver, lastused, approved, timeadded \
+            FROM data_store \
+            LEFT JOIN members saver ON data_store.owner=saver.id AND data_store.server=saver.server \
+            LEFT JOIN members approver ON data_store.approvedby=approver.id AND data_store.server=approver.server \
             WHERE data_store.server = ? AND keyword = ?",
      [message.channel.guild.id, keyword], function (err, rows) {
         if (rows[0] == null) {
@@ -716,8 +718,10 @@ function getMetaCommand(message, keyword)
             message.reply("this item has not been approved yet.");
         } else {
             var lastused = (rows[0].lastused !== null) ? rows[0].lastused : 'never';
+            var timeadded = (rows[0].timeadded !== null) ? '\nTime added: ' + rows[0].timeadded : '';
+            var approver = (rows[0].approver !== null) ? '\nApproved by: ' + rows[0].approver : '';
             message.reply(rows[0].value + '\nUses: ' + rows[0].uses + '\nLast used: '
-             +  lastused + '\nSaved by: ' + rows[0].username);
+             +  lastused + '\nSaved by: ' + rows[0].username + timeadded + approver);
         }
     });
 }
@@ -754,15 +758,18 @@ function saveCommand(message)
     // check for existing
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, key], function (err, rows) {
         if ((isMod(message.member) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
-            db.query("REPLACE INTO data_store (server, keyword, value, owner, approved) VALUES (?,?,?,?,1)", [message.channel.guild.id, key, value, message.author.id]);
+            db.query("REPLACE INTO data_store (server, keyword, value, owner, approved, timeadded, approvedby) VALUES (?,?,?,?,1,now(),?)",
+            [message.channel.guild.id, key, value, message.author.id, message.author.id]);
             message.reply("updated and ready to use.");
             log(message.channel.guild, message.author.username + " created item " + key + " - auto approved\nValue: "+value);
         } else if (rows[0] == null) {
-            db.query("INSERT INTO data_store (server, keyword, value, owner) VALUES (?,?,?,?)", [message.channel.guild.id, key, value, message.author.id]);
+            db.query("INSERT INTO data_store (server, keyword, value, owner, timeadded) VALUES (?,?,?,?,now())",
+            [message.channel.guild.id, key, value, message.author.id]);
             message.reply("created. This will need to be approved before it can be used.");
             log(message.channel.guild, message.author.username + " created item " + key + " - pending approval\nValue: "+value);
         } else if (rows[0]['owner'] == message.author.id) {
-            db.query("UPDATE data_store SET value = ?, approved=0 WHERE keyword = ? AND server = ?", [value, key, message.channel.guild.id]);
+            db.query("UPDATE data_store SET value = ?, approved=0, timeadded=now(), approvedby=null WHERE keyword = ? AND server = ?",
+            [value, key, message.channel.guild.id]);
             message.reply("updated. This will need to be approved before it can be used.");
             log(message.channel.guild, message.author.username + " updated item " + key + " - pending approval\nValue: "+value);
         } else {
@@ -773,8 +780,8 @@ function saveCommand(message)
 
 function approveCommand(message, keyword)
 {
-    db.query("UPDATE data_store SET  approved=1 WHERE keyword = ? AND server = ?",
-    [keyword, message.channel.guild.id], function (err, result) {
+    db.query("UPDATE data_store SET approved=1, approvedby=? WHERE keyword = ? AND server = ? AND approvedby is null",
+    [message.author.id, keyword, message.channel.guild.id], function (err, result) {
         if (result.changedRows  > 0) {
             message.reply("approved.");
             log(message.channel.guild, "Saved item " + keyword + " has been approved by "
