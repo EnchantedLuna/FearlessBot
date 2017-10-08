@@ -108,6 +108,9 @@ bot.on('message', message => {
         case "!namemix":
             namemixCommand(message);
             break;
+        case '!xd':
+            xdCommand(message);
+            break;
 
         // Normal user database commands
         case "!totals":
@@ -406,6 +409,11 @@ function secondsToTime(seconds, short)
     return result;
 }
 
+function rand(min, max)
+{
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
 
 
 // Basic commands (no db involvement, usable by all users)
@@ -481,6 +489,20 @@ function namemixCommand(message)
     var part2 = staticData.nameMixPart2[Math.floor(Math.random() * staticData.nameMixPart2.length)];
 
     message.reply(part1 + part2);
+}
+
+function xdCommand(message)
+{
+    let xd = ['x','d'];
+    let xdd = rand(0,1) == 1 ? "X" : "x";
+    let incomplete = true;
+    while(incomplete) {
+        for(let i = 0;i<rand(2,10);i++) 
+            xdd += rand(0,1) == 1 ? xd[rand(0,1)] : xd[rand(0,1)].toUpperCase();
+        if(xdd.toLowerCase().indexOf("d") !== -1)
+            incomplete = false;
+    }
+    message.reply(xdd);
 }
 
 // Database-oriented commands
