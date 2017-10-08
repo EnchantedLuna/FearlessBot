@@ -166,62 +166,62 @@ bot.on('message', message => {
 
         // Mod commands
         case "!approve":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 approveCommand(message, command[1]);
             }
             break;
         case "!review":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 getCommand(message, command[1], true);
             }
             break;
         case "!delete":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 deleteCommand(message, command[1]);
             }
             break;
         case "!getunapproved":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 getUnapprovedCommand(message);
             }
             break;
         case "!topic":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 topicCommand(message, params);
             }
             break;
         case "!mute":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 muteCommand(message);
             }
             break;
         case "!unmute":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 unmuteCommand(message);
             }
             break;
         case "!supermute":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 supermuteCommand(message, parseInt(command[1]));
             }
             break;
         case "!unsupermute":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 unsupermuteCommand(message);
             }
             break;
         case "!kick":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 kickCommand(message);
             }
             break;
         case "!ban":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 banCommand(message, parseInt(command[1]));
             }
             break;
         case "!addshitpost":
-            if (isMod(message.member)) {
+            if (isMod(message.member, message.channel.guild)) {
                 addShitpostCommand(message, params);
             }
             break;
@@ -350,9 +350,14 @@ function channelCountsInStatistics(guild, channel)
     return (guild != config.mainServer || config.statCountingChannels.includes(channel));
 }
 
-function isMod(member)
+function isMod(member, guild)
 {
-    return member.roles.has(config.modRole);
+    var mods = guild.roles.find('name','mods');
+    if (mods === null) {
+        return false;
+    }
+
+    return member.roles.has(mods.id);
 }
 
 function log(guild, message)
@@ -499,7 +504,7 @@ function randomMemberCommand(message, days)
 
 function totalsCommand(message, options)
 {
-    var web = (isMod(message.member) && options == 'hidden') ? "" : " AND web=1";
+    var web = ((message.member) && options == 'hidden') ? "" : " AND web=1";
     db.query("SELECT * FROM channel_stats WHERE server = ?" + web, [message.channel.guild.id], function (err, rows)
     {
         var totalsMessage = "\nMessages by channel:";
@@ -757,7 +762,7 @@ function saveCommand(message)
     var value = command.slice(2, command.length).join(" ");
     // check for existing
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, key], function (err, rows) {
-        if ((isMod(message.member) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
+        if (((message.member) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
             db.query("REPLACE INTO data_store (server, keyword, value, owner, approved, timeadded, approvedby) VALUES (?,?,?,?,1,now(),?)",
             [message.channel.guild.id, key, value, message.author.id, message.author.id]);
             message.reply("updated and ready to use.");
@@ -794,7 +799,7 @@ function approveCommand(message, keyword)
 
 function deleteCommand(message, keyword)
 {
-    if (isMod(message.member)) {
+    if (isMod(message.member, message.channel.guild)) {
         db.query("DELETE FROM data_store WHERE server = ? AND keyword = ?",
         [message.channel.guild.id, keyword], function (err, result) {
             if (result.affectedRows > 0) {
@@ -902,7 +907,7 @@ function arrayRemove(array, element) {
 function muteCommand(message)
 {
     message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member)) {
+        if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             message.channel.overwritePermissions(member, { 'SEND_MESSAGES' : false });
@@ -914,7 +919,7 @@ function muteCommand(message)
 function unmuteCommand(message)
 {
     message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member)) {
+        if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             message.channel.overwritePermissions(member, { 'SEND_MESSAGES' : null });
@@ -927,7 +932,7 @@ function supermuteCommand(message, hours)
 {
     var supermute = message.channel.guild.roles.find('name','supermute');
     message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member)) {
+        if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             member.addRole(supermute);
@@ -946,7 +951,7 @@ function unsupermuteCommand(message)
 {
     var supermute = message.channel.guild.roles.find('name','supermute');
     message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member)) {
+        if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             member.removeRole(supermute);
@@ -958,7 +963,7 @@ function unsupermuteCommand(message)
 function kickCommand(message)
 {
     message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member)) {
+        if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             var reason = message.cleanContent.replace('!kick ', '');
@@ -971,7 +976,7 @@ function kickCommand(message)
 function banCommand(message, days)
 {
     message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member)) {
+        if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             var reason = message.cleanContent.replace('!ban ', '');
