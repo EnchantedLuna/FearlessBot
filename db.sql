@@ -75,3 +75,13 @@ CREATE TABLE scheduled_actions
 );
 
 CREATE VIEW `message_view` AS select `msg`.`id` AS `id`,`mem`.`username` AS `username`,`msg`.`date` AS `date`,`c`.`name` AS `channelname`,`msg`.`message` AS `message` from ((`messages` `msg` join `members` `mem` on(((`msg`.`server` = `mem`.`server`) and (`msg`.`author` = `mem`.`id`)))) join `channel_stats` `c` on(((`msg`.`server` = `c`.`server`) and (`msg`.`channel` = `c`.`channel`))));
+
+CREATE TABLE mod_stats
+(
+    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    time DATETIME,
+    online INT(11),
+    idle INT(11),
+    dnd INT(11),
+    offline INT(11)
+)
