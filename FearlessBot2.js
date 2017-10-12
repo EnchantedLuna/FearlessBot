@@ -362,24 +362,6 @@ function updateChannelStatsAndLog(message)
      [message.id, message.channel.guild.id, message.channel.id, message.cleanContent, message.author.id]);
 }
 
-function getMemberMentionedFromText(message)
-{
-    var command = message.content.split(" ");
-    var params = command.slice(1, command.length).join(" ");
-
-    var mentionsCount = message.mentions.members.size;
-    if (mentionsCount > 0) {
-        return message.mentions.members.first().id;
-    } else {
-        db.query("SELECT id FROM members WHERE server=? AND username=? ORDER BY messages DESC LIMIT 1",
-         [message.channel.guild.id, params], function(err, rows) {
-            if (rows[0] != null) {
-                return rows[0].id;
-            }
-            return null;
-        });
-    }
-}
 
 function channelCountsInStatistics(guild, channel)
 {
