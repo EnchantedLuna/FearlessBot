@@ -799,7 +799,7 @@ function saveCommand(message)
     var value = command.slice(2, command.length).join(" ");
     // check for existing
     db.query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [message.channel.guild.id, key], function (err, rows) {
-        if (((message.member) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
+        if ((isMod(message.member, message.channel.guild) || message.channel.guild.id != config.mainServer) && (rows[0] == null || rows[0]['owner'] == message.author.id)) {
             db.query("REPLACE INTO data_store (server, keyword, value, owner, approved, timeadded, approvedby) VALUES (?,?,?,?,1,now(),?)",
             [message.channel.guild.id, key, value, message.author.id, message.author.id]);
             message.reply("updated and ready to use.");
