@@ -124,6 +124,9 @@ bot.on('message', message => {
         case "!version":
             botVersionCommand(message);
             break;
+	case "!h":
+	    hCommand(message, params);
+	    break;
         case "!n":
             nCommand(message, params);
             break;
@@ -488,6 +491,12 @@ function bCommand(message, params, level)
         changed = characters.join('');
     }
     message.reply(changed);
+}
+
+function hCommand(message, params)
+{
+	var h = params.replaceAll("h", "H");
+	message.reply(h);
 }
 
 function nCommand(message, params)
