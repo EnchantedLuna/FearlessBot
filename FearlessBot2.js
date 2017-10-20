@@ -204,6 +204,9 @@ bot.on('message', message => {
         case "!rankpoop":
             rankThingCommand(message, "poops", parseInt(command[1]));
             break;
+        case "!gorgeous":
+            gorgeousCommand(message);
+            break;
 
         // Mod commands
         case "!approve":
@@ -945,6 +948,13 @@ function regionCommand(message, region)
             message.reply("region not recognized. Acceptable values: northamerica, southamerica, europe, asia, africa, oceania, clear.");
         break;
     }
+}
+
+function gorgeousCommand(message)
+{
+    var gorgeous = message.channel.guild.roles.find('name','gorgeous');
+    message.member.addRole(gorgeous);
+    message.reply("You have been added to the notification list!");
 }
 
 function arrayRemove(array, element) {
