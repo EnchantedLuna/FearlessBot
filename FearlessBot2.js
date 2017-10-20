@@ -204,9 +204,6 @@ bot.on('message', message => {
         case "!rankpoop":
             rankThingCommand(message, "poops", parseInt(command[1]));
             break;
-        case "!gorgeous":
-            gorgeousCommand(message);
-            break;
 
         // Mod commands
         case "!approve":
@@ -950,12 +947,6 @@ function regionCommand(message, region)
     }
 }
 
-function gorgeousCommand(message)
-{
-    var gorgeous = message.channel.guild.roles.find('name','gorgeous');
-    message.member.addRole(gorgeous);
-    message.reply("You have been added to the notification list!");
-}
 
 function arrayRemove(array, element) {
     const index = array.indexOf(element);
