@@ -897,13 +897,13 @@ function topicCommand(message, topic)
 
 function regionCommand(message, region)
 {
-    var america = message.channel.guild.roles.find('name','america');
+    var northamerica = message.channel.guild.roles.find('name','northamerica');
     var southamerica = message.channel.guild.roles.find('name', 'southamerica');
     var europe = message.channel.guild.roles.find('name','europe');
     var asia = message.channel.guild.roles.find('name','asia');
     var africa = message.channel.guild.roles.find('name','africa');
     var oceania = message.channel.guild.roles.find('name','oceania');
-    var allRegions = [america, southamerica, europe, asia, africa, oceania];
+    var allRegions = [northamerica, southamerica, europe, asia, africa, oceania];
 
     if (typeof region == 'undefined') {
         message.reply("please specify a region. Available regions are northamerica, " +
@@ -918,8 +918,8 @@ function regionCommand(message, region)
         break;
         case "america":
         case "northamerica":
-            arrayRemove(allRegions, america);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(america));
+            arrayRemove(allRegions, northamerica);
+            message.member.removeRoles(allRegions).then(updated => updated.addRole(northamerica));
             message.reply("your region has been set to North America.");
         break;
         case "southamerica":
