@@ -292,6 +292,12 @@ bot.on('guildMemberAdd', member => {
 bot.on('guildMemberRemove', member => {
     db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [member.guild.id, member.id]);
     log(member.guild, member.user.username + "#" + member.user.discriminator + " has left the server.");
+    let joinDate = member.joinedAt;
+    let now = new Date();
+    let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
+    if (joinTime < 300) {
+        member.guild.defaultChannel.send(member.user.username + ' has already left us. :disappointed:');
+    }
 });
 
 bot.on('userUpdate', (oldUser, newUser) => {
