@@ -341,6 +341,15 @@ bot.on('messageDelete', message => {
     +  message.cleanContent.replace('`','\\`') + attachmentUrls + "```");
 });
 
+bot.on('guildBanAdd', (guild, user) => {
+    log(guild, user.username + "#" + user.discriminator + " has been banned.");
+});
+
+
+bot.on('guildBanRemove', (guild, user) => {
+    log(guild, user.username + "#" + user.discriminator + " has been unbanned.");
+});
+
 bot.login(config.token);
 
 function updateUserStats(message)
