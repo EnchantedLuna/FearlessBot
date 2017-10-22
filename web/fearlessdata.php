@@ -3,7 +3,7 @@ require_once "config.php";
 require_once "lib_autolink.php";
 
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
-$db->set_charset("utf8");
+$db->set_charset("utf8mb4");
 $server = empty($_GET['server']) ? PRIMARY_GUILD : $_GET['server'];
 ?>
 <!DOCTYPE html>

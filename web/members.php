@@ -2,7 +2,7 @@
 require_once "config.php";
 
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
-$db->set_charset("utf8");
+$db->set_charset("utf8mb4");
 ?>
 <!DOCTYPE html>
 <html>
