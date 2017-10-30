@@ -107,6 +107,7 @@ bot.on('message', message => {
         return;
     }
 
+    let today = new Date();
     switch (command[0].toLowerCase()) {
         // Normal user basic commands (no db)
         case "!8ball":
@@ -141,7 +142,12 @@ bot.on('message', message => {
             regionCommand(message, command[1]);
             break;
         case "!namemix":
-            namemixCommand(message);
+            namemixCommand(message, false);
+            break;
+        case "!supernamemix":
+            if (today.getDate() == 31) {
+                namemixCommand(message, true);
+            }
             break;
         case '!xd':
             xdCommand(message);
@@ -190,7 +196,12 @@ bot.on('message', message => {
             shitpostCommand(message, command[1]);
             break;
         case "!name":
-            nameCommand(message, command);
+            nameCommand(message, command, false);
+            break;
+        case "!supername":
+            if (today.getDate() == 31) {
+                nameCommand(message, command, true);
+            }
             break;
         case "!randmember":
             randomMemberCommand(message, command[1]);
@@ -203,6 +214,15 @@ bot.on('message', message => {
             break;
         case "!rankpoop":
             rankThingCommand(message, "poops", parseInt(command[1]));
+            break;
+        case "!lorpoints":
+            lorpointsCommand(message);
+            break;
+        case "!ranklorpoints":
+            rankThingCommand(message, "lorpoints", parseInt(command[1]));
+            break;
+        case "!nick":
+            nickCommand(message, params);
             break;
 
         // Mod commands
@@ -274,6 +294,11 @@ bot.on('message', message => {
         case "!fsay":
             if (message.author.id == config.botAdminUserId) {
                 fsayCommand(message, params);
+            }
+            break;
+        case "!award":
+            if (isMod(message.member, message.channel.guild)) {
+                awardCommand(message, parseInt(command[1]));
             }
             break;
         default:
@@ -518,12 +543,30 @@ function activityCommand(message)
     message.reply(config.baseUrl + "activityreport.php?server="+message.channel.guild.id+"&user="+search+botsString);
 }
 
-function namemixCommand(message)
+function namemixCommand(message, superMode)
 {
+    let supernamemix = message.channel.guild.roles.find('name','supernamemix');
     var part1 = staticData.nameMixPart1[Math.floor(Math.random() * staticData.nameMixPart1.length)];
     var part2 = staticData.nameMixPart2[Math.floor(Math.random() * staticData.nameMixPart2.length)];
 
     message.reply(part1 + part2);
+
+    if (superMode) {
+        message.member.setNickname(part1 + part2);
+        message.member.addRole(supernamemix);
+    }
+}
+
+// To allow non-participants to change nick on halloween
+function nickCommand(message, params)
+{
+    let supernamemix = message.channel.guild.roles.find('name','supernamemix');
+    if (message.member.roles.has(supernamemix.id)) {
+        message.reply("no changing for you!");
+    } else {
+        message.member.setNickname(params);
+        message.reply("nick updated.");
+    }
 }
 
 function xdCommand(message)
@@ -633,7 +676,7 @@ function addShitpostCommand(message, shitpost)
     });
 }
 
-function nameCommand(message, command)
+function nameCommand(message, command, superMode)
 {
     var genders = ['m', 'f'];
     var gender = command[1] == null || (command[1].toLowerCase() != 'm' && command[1].toLowerCase() != 'f')
@@ -642,6 +685,7 @@ function nameCommand(message, command)
     if (parseInt(command[2]) >= 1970 && parseInt(command[2]) <= 2014)
         year = command[2];
     var limit = 300;
+    let supernamemix = message.channel.guild.roles.find('name','supernamemix');
     if (parseInt(command[3]))
         limit = command[3];
     db.query("SELECT * FROM names WHERE gender = ? AND rank <= ? AND year = ? ORDER BY RAND() LIMIT 1",
@@ -649,6 +693,10 @@ function nameCommand(message, command)
         if (rows[0] != null)
         {
             message.reply("your new name is " + rows[0].name + ".");
+        }
+        if (superMode) {
+            message.member.setNickname(rows[0].name);
+            message.member.addRole(supernamemix);
         }
     });
 }
@@ -659,7 +707,7 @@ function rankThingCommand(message, thing, number)
     if (isNaN(number) || number < 1 || number > 50) {
         number = 10;
     }
-    db.query("SELECT username, " + thing + " AS thing FROM members WHERE server = ? AND poops > 0 AND active=1 ORDER BY " + thing + " DESC LIMIT ?",
+    db.query("SELECT username, " + thing + " AS thing FROM members WHERE server = ? AND " + thing + " > 0 AND active=1 ORDER BY " + thing + " DESC LIMIT ?",
      [message.channel.guild.id, number], function (err, rows)
     {
         var count = 1;
@@ -751,6 +799,16 @@ function wordsCommand(message, params)
     });
 
 }
+
+function lorpointsCommand(message)
+{
+    db.query("SELECT lorpoints FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, message.author.id], function (err,rows) {
+        if (rows[0] !== null) {
+            message.reply("you have " + rows[0].lorpoints + ' lorpoints.');
+        }
+    });
+}
+
 
 function getCommand(message, keyword, showUnapproved)
 {
@@ -1060,6 +1118,19 @@ function banCommand(message, days)
             + timeMessage + ' by ' + message.author.username);
         }
     });
+}
+
+function awardCommand(message, number)
+{
+    let list = [];
+    message.mentions.members.forEach(function (member, key, map) {
+        db.query("UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?", [number, message.channel.guild.id, member.id]);
+        list.push(member.user.username);
+    });
+    let finalList = list.join(", ");
+    let lorpointWord = (number !== 1) ? "lorpoints" : "lorpoint";
+    message.reply(number + " " + lorpointWord + " have been awarded to: " + finalList);
+    log(message.channel.guild, number + " " + lorpointWord + " have been awarded to: " + finalList + " by " + message.author.username);
 }
 
 // Bot admin commands
