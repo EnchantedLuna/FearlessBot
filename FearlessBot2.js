@@ -344,6 +344,10 @@ bot.on('messageDelete', message => {
         return;
     }
 
+    if (message.author.id === config.botAdminUserId && message.content.startsWith('!fsay')) {
+        return;
+    }
+
     var words = message.content.replace(/\s\s+|\r?\n|\r/g, ' ').split(" ").length;
 
     if (channelCountsInStatistics(message.channel.guild.id, message.channel.id))
