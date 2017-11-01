@@ -142,12 +142,7 @@ bot.on('message', message => {
             regionCommand(message, command[1]);
             break;
         case "!namemix":
-            namemixCommand(message, false);
-            break;
-        case "!supernamemix":
-            if (today.getDate() == 31) {
-                namemixCommand(message, true);
-            }
+            namemixCommand(message);
             break;
         case '!xd':
             xdCommand(message);
@@ -196,12 +191,7 @@ bot.on('message', message => {
             shitpostCommand(message, command[1]);
             break;
         case "!name":
-            nameCommand(message, command, false);
-            break;
-        case "!supername":
-            if (today.getDate() == 31) {
-                nameCommand(message, command, true);
-            }
+            nameCommand(message, command);
             break;
         case "!randmember":
             randomMemberCommand(message, command[1]);
@@ -220,9 +210,6 @@ bot.on('message', message => {
             break;
         case "!ranklorpoints":
             rankThingCommand(message, "lorpoints", parseInt(command[1]));
-            break;
-        case "!nick":
-            nickCommand(message, params);
             break;
 
         // Mod commands
@@ -536,41 +523,23 @@ function bCommand(message, params, level)
 
 function nCommand(message, params)
 {
-    var nenified = params.replaceAll('m','n').replaceAll('M','N').replaceAll('\uD83C\uDDF2','\uD83C\uDDF3');
+    let nenified = params.replaceAll('m','n').replaceAll('M','N').replaceAll('\uD83C\uDDF2','\uD83C\uDDF3');
     message.reply(nenified);
 }
 
 function activityCommand(message)
 {
     search  = (message.mentions.members.size > 0) ? message.mentions.members.first().id : message.author.id;
-    var botsString = (message.content.includes('bots')) ? '&includebots=true' : '';
+    let botsString = (message.content.includes('bots')) ? '&includebots=true' : '';
     message.reply(config.baseUrl + "activityreport.php?server="+message.channel.guild.id+"&user="+search+botsString);
 }
 
-function namemixCommand(message, superMode)
+function namemixCommand(message)
 {
-    let supernamemix = message.channel.guild.roles.find('name','supernamemix');
-    var part1 = staticData.nameMixPart1[Math.floor(Math.random() * staticData.nameMixPart1.length)];
-    var part2 = staticData.nameMixPart2[Math.floor(Math.random() * staticData.nameMixPart2.length)];
+    let part1 = staticData.nameMixPart1[Math.floor(Math.random() * staticData.nameMixPart1.length)];
+    let part2 = staticData.nameMixPart2[Math.floor(Math.random() * staticData.nameMixPart2.length)];
 
     message.reply(part1 + part2);
-
-    if (superMode) {
-        message.member.setNickname(part1 + part2);
-        message.member.addRole(supernamemix);
-    }
-}
-
-// To allow non-participants to change nick on halloween
-function nickCommand(message, params)
-{
-    let supernamemix = message.channel.guild.roles.find('name','supernamemix');
-    if (message.member.roles.has(supernamemix.id)) {
-        message.reply("no changing for you!");
-    } else {
-        message.member.setNickname(params);
-        message.reply("nick updated.");
-    }
 }
 
 function xdCommand(message)
@@ -680,7 +649,7 @@ function addShitpostCommand(message, shitpost)
     });
 }
 
-function nameCommand(message, command, superMode)
+function nameCommand(message, command)
 {
     var genders = ['m', 'f'];
     var gender = command[1] == null || (command[1].toLowerCase() != 'm' && command[1].toLowerCase() != 'f')
@@ -689,18 +658,13 @@ function nameCommand(message, command, superMode)
     if (parseInt(command[2]) >= 1970 && parseInt(command[2]) <= 2014)
         year = command[2];
     var limit = 300;
-    let supernamemix = message.channel.guild.roles.find('name','supernamemix');
     if (parseInt(command[3]))
         limit = command[3];
     db.query("SELECT * FROM names WHERE gender = ? AND rank <= ? AND year = ? ORDER BY RAND() LIMIT 1",
      [gender, limit, year], function (err, rows) {
         if (rows[0] != null)
         {
-            message.reply("your new name is " + rows[0].name + ".");
-        }
-        if (superMode) {
-            message.member.setNickname(rows[0].name);
-            message.member.addRole(supernamemix);
+            message.reply(rows[0].name);
         }
     });
 }
