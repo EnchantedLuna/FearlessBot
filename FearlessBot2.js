@@ -206,7 +206,7 @@ bot.on('message', message => {
             rankThingCommand(message, "poops", parseInt(command[1]));
             break;
         case "!lorpoints":
-            lorpointsCommand(message);
+            lorpointsCommand(message, params);
             break;
         case "!ranklorpoints":
             rankThingCommand(message, "lorpoints", parseInt(command[1]));
@@ -768,11 +768,20 @@ function wordsCommand(message, params)
 
 }
 
-function lorpointsCommand(message)
+function lorpointsCommand(message, params)
 {
-    db.query("SELECT lorpoints FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, message.author.id], function (err,rows) {
+    let member;
+    if (message.mentions.members.size > 0) {
+        member = message.mentions.members.first().user.username;
+    } else if (params != '') {
+        member = params;
+    } else {
+        member = message.author.username;
+    }
+
+    db.query("SELECT username, lorpoints FROM members WHERE server = ? AND username = ?", [message.channel.guild.id, member], function (err,rows) {
         if (rows[0] !== null) {
-            message.reply("you have " + rows[0].lorpoints + ' lorpoints.');
+            message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints.');
         }
     });
 }
