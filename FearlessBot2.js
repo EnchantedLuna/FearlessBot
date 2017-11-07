@@ -109,6 +109,18 @@ bot.on('message', message => {
 
     let today = new Date();
     switch (command[0].toLowerCase()) {
+        // event commands
+        case "!leak":
+            gammaCommand(message);
+            break;
+        case "!lorpoints":
+            lorpointsCommand(message, params);
+            break;
+        case "!ranklorpoints":
+            rankThingCommand(message, "lorpoints", parseInt(command[1]));
+            break;
+
+
         // Normal user basic commands (no db)
         case "!8ball":
             eightBallCommand(message);
@@ -204,12 +216,6 @@ bot.on('message', message => {
             break;
         case "!rankpoop":
             rankThingCommand(message, "poops", parseInt(command[1]));
-            break;
-        case "!lorpoints":
-            lorpointsCommand(message, params);
-            break;
-        case "!ranklorpoints":
-            rankThingCommand(message, "lorpoints", parseInt(command[1]));
             break;
 
         // Mod commands
@@ -1126,4 +1132,13 @@ function dontAtMe(message)
     if (lowerMessage.includes('dont @ me') || lowerMessage.includes("don't @ me")) {
         message.reply(":smirk:");
     }
+}
+
+// event commands
+
+function gammaCommand(message)
+{
+    let gamma = message.channel.guild.roles.find('name', 'gamma');
+    message.member.addRole(gamma);
+    message.reply("you have been added.");
 }
