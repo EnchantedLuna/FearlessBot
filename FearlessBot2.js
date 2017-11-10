@@ -110,9 +110,6 @@ bot.on('message', message => {
     let today = new Date();
     switch (command[0].toLowerCase()) {
         // event commands
-        case "!leak":
-            gammaCommand(message);
-            break;
         case "!lorpoints":
             lorpointsCommand(message, params);
             break;
@@ -1135,10 +1132,3 @@ function dontAtMe(message)
 }
 
 // event commands
-
-function gammaCommand(message)
-{
-    let gamma = message.channel.guild.roles.find('name', 'gamma');
-    message.member.addRole(gamma);
-    message.reply("you have been added.");
-}
