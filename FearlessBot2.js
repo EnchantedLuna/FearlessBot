@@ -188,7 +188,7 @@ bot.on('message', message => {
             lastCommand(message, params, false);
             break;
         case "!olast":
-            lastComand(message, params, true);
+            lastCommand(message, params, true);
             break;
         case "!words":
             wordsCommand(message, params);
