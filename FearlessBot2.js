@@ -784,7 +784,10 @@ function lorpointsCommand(message, params)
 
     db.query("SELECT username, lorpoints FROM members WHERE server = ? AND username = ?", [message.channel.guild.id, member], function (err,rows) {
         if (rows[0] !== null) {
-            message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints.');
+            db.query("SELECT SUM(lorpoints) AS total FROM members WHERE server = ?", [message.channel.guild.id], function(err, totals) {
+                let percent = Math.round((rows[0].lorpoints / totals[0].total) * 10000) / 100;
+                message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints (' + percent + '% of total lorpoints).');
+            });
         }
     });
 }
