@@ -286,11 +286,6 @@ bot.on('message', message => {
                 fsayCommand(message, params);
             }
             break;
-        case "!award":
-            if (isMod(message.member, message.channel.guild)) {
-                awardCommand(message, parseInt(command[1]));
-            }
-            break;
         default:
             dontAtMe(message);
             break;
@@ -1101,19 +1096,6 @@ function banCommand(message, days)
             + timeMessage + ' by ' + message.author.username);
         }
     });
-}
-
-function awardCommand(message, number)
-{
-    let list = [];
-    message.mentions.members.forEach(function (member, key, map) {
-        db.query("UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?", [number, message.channel.guild.id, member.id]);
-        list.push(member.user.username);
-    });
-    let finalList = list.join(", ");
-    let lorpointWord = (number !== 1) ? "lorpoints" : "lorpoint";
-    message.reply(number + " " + lorpointWord + " have been awarded to: " + finalList);
-    log(message.channel.guild, number + " " + lorpointWord + " have been awarded to: " + finalList + " by " + message.author.username);
 }
 
 // Bot admin commands
