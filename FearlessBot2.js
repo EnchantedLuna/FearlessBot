@@ -109,15 +109,6 @@ bot.on('message', message => {
 
     let today = new Date();
     switch (command[0].toLowerCase()) {
-        // event commands
-        case "!lorpoints":
-            lorpointsCommand(message, params);
-            break;
-        case "!ranklorpoints":
-            rankThingCommand(message, "lorpoints", parseInt(command[1]));
-            break;
-
-
         // Normal user basic commands (no db)
         case "!8ball":
             eightBallCommand(message);
@@ -767,27 +758,6 @@ function wordsCommand(message, params)
         }
     });
 
-}
-
-function lorpointsCommand(message, params)
-{
-    let member;
-    if (message.mentions.members.size > 0) {
-        member = message.mentions.members.first().user.username;
-    } else if (params != '') {
-        member = params;
-    } else {
-        member = message.author.username;
-    }
-
-    db.query("SELECT username, lorpoints FROM members WHERE server = ? AND username = ?", [message.channel.guild.id, member], function (err,rows) {
-        if (rows[0] !== null) {
-            db.query("SELECT SUM(lorpoints) AS total FROM members WHERE server = ?", [message.channel.guild.id], function(err, totals) {
-                let percent = Math.round((rows[0].lorpoints / totals[0].total) * 10000) / 100;
-                message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints (' + percent + '% of total lorpoints).');
-            });
-        }
-    });
 }
 
 function awardsCommand(message)
