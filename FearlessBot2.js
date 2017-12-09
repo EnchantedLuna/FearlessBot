@@ -314,8 +314,6 @@ bot.on('userUpdate', (oldUser, newUser) => {
             if (typeof member != 'undefined') {
                 log(guild, oldUser.username + " has changed username to "
                  + newUser.username + ".");
-                guild.defaultChannel.send(oldUser.username + " has changed username to "
-                 + newUser.username + ".");
             }
         });
     }
