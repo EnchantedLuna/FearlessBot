@@ -1137,7 +1137,7 @@ function fsayCommand(message, params)
 function dontAtMe(message)
 {
     var lowerMessage = message.content.toLowerCase();
-    if (lowerMessage.includes('dont @ me') || lowerMessage.includes("don't @ me")) {
+    if (lowerMessage.includes('dont @ me') || lowerMessage.includes("don't @ me") || lowerMessage.includes("do not @ me")) {
         message.reply(":smirk:");
     }
 }
