@@ -267,7 +267,7 @@ bot.on('message', message => {
             }
             break;
         case "!addshitpost":
-            if (isMod(message.member, message.channel.guild)) {
+            if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
                 addShitpostCommand(message, params);
             }
             break;
