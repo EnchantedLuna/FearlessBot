@@ -696,7 +696,7 @@ function seenCommand(message, params)
         db.query("SELECT username, discriminator, lastseen, active FROM members WHERE server = ? AND username = ? ORDER BY messages DESC LIMIT 1",
          [message.channel.guild.id, member], function(err, rows) {
             if (rows[0] == null) {
-                message.reply('user not found. Pleaes double check the username.');
+                message.reply('user not found. Please double check the username.');
             } else {
                 var seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
                 var date = new Date(rows[0].lastseen * 1000);
