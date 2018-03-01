@@ -150,6 +150,9 @@ bot.on('message', message => {
         case "!ha":
             haCommand(message);
             break;
+        case "!hm":
+            hmCommand(message);
+            break;
 
         // Normal user database commands
         case "!totals":
@@ -557,6 +560,16 @@ function haCommand(message)
         ha += 'ha';
     }
     message.reply(ha);
+}
+
+function hmCommand(message)
+{
+    let mCount = rand(2,20);
+    let hm = 'h';
+    for (let i=1; i <= mCount; i++) {
+        hm += 'm';
+    }
+    message.reply(hm);
 }
 
 // Database-oriented commands
