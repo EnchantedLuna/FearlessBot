@@ -147,6 +147,9 @@ bot.on('message', message => {
         case '!xd':
             xdCommand(message);
             break;
+        case '!clap':
+            clapCommand(message);
+            break;
         case "!ha":
             haCommand(message);
             break;
@@ -550,6 +553,11 @@ function xdCommand(message)
             incomplete = false;
     }
     message.reply(xdd);
+}
+
+function clapCommand(message)
+{
+    message.reply(":clap: "+message.content.replace(/!clap /i,"").replace(/ /g, " :clap: ")+"  :clap:");
 }
 
 function haCommand(message)
