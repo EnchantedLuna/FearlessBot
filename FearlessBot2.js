@@ -557,7 +557,7 @@ function xdCommand(message)
 
 function clapCommand(message)
 {
-    message.reply(message.content.replace(/!clap /i,"").replace(/ /g, " :clap: ")+"  :clap:");
+    message.reply(message.content.replace(/!clap /i,"").replace(/ /g, " :clap: ")+" :clap:");
 }
 
 function haCommand(message)
