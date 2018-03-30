@@ -205,12 +205,6 @@ bot.on('message', message => {
         case "!activity":
             activityCommand(message);
             break;
-        case "!poop":
-            poopCommand(message);
-            break;
-        case "!rankpoop":
-            rankThingCommand(message, "poops", parseInt(command[1]));
-            break;
         case "!awards":
             awardsCommand(message);
             break;
@@ -612,25 +606,6 @@ function totalsCommand(message, options)
         var startdate = new Date(rows[0].startdate*1000);
         message.reply(totalsMessage);
     });
-}
-
-function poopCommand(message)
-{
-    if (config.statCountingChannels.includes(message.channel.id)) {
-        message.reply("eww! You really want to poop in this channel and stink up this place? :nauseated_face:");
-    } else if (Math.random() < 0.05) {
-        db.query("UPDATE members SET poops=0 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
-        message.reply("you clogged the toilet!! :toilet:\nYour :poop: streak has been reset to 0.");
-    } else {
-        db.query("SELECT poops FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, message.author.id], function(err, rows)
-        {
-            if (rows[0] != null) {
-                var poopStreak = rows[0].poops + 1;
-                db.query("UPDATE members SET poops=poops+1 WHERE id=? AND server=?", [message.author.id,  message.channel.guild.id]);
-                message.reply("you have pooped. :poop:\nYour :poop: streak is now " + poopStreak + ".");
-            }
-        });
-    }
 }
 
 function shitpostCommand(message, number)
