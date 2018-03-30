@@ -107,7 +107,6 @@ bot.on('message', message => {
         return;
     }
 
-    let today = new Date();
     switch (command[0].toLowerCase()) {
         // Normal user basic commands (no db)
         case "!8ball":
