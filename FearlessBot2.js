@@ -155,6 +155,9 @@ bot.on('message', message => {
         case "!hm":
             hmCommand(message);
             break;
+        case "!tour":
+            toggleRoleCommand(message, 'tour');
+            break;
 
         // Normal user database commands
         case "!totals":
@@ -992,6 +995,19 @@ function regionCommand(message, region)
         default:
             message.reply("region not recognized. Acceptable values: northamerica, southamerica, europe, asia, africa, oceania, clear.");
         break;
+    }
+}
+
+function toggleRoleCommand(message, roleName)
+{
+    let role = message.channel.guild.roles.find('name',roleName);
+    let member = message.member;
+    if (member.roles.has(role.id)) {
+        message.member.removeRole(role);
+        message.reply(roleName + " role removed!");
+    } else {
+        message.member.addRole(role);
+        message.reply(roleName + " role added!");
     }
 }
 
