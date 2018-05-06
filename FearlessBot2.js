@@ -16,7 +16,6 @@ var db = mysql.createConnection({
 bot.on('ready', () => {
     console.log('FearlessBot2 is ready.');
     setInterval(runScheduledActions, 60000);
-    setInterval(logModStats, 900000);
 });
 
 function runScheduledActions()
@@ -56,40 +55,6 @@ function runScheduledActions()
              }
          }
      });
-}
-
-function logModStats()
-{
-    let guild = bot.guilds.get(config.mainServer);
-    let mods = guild.roles.find('name','mods');
-
-    if (mods === null) {
-        return;
-    }
-
-    let online = 0;
-    let idle = 0;
-    let dnd = 0;
-    let offline = 0;
-    mods.members.forEach(function (member, id, map) {
-        switch (member.presence.status) {
-            case "online":
-                online++;
-                break;
-            case "idle":
-                idle++;
-                break;
-            case "dnd":
-                dnd++;
-                break;
-            case "offline":
-                offline++;
-                break;
-        }
-    });
-
-    db.query("INSERT INTO mod_stats (time, online, idle, dnd, offline) VALUES (now(), ?, ?, ?, ?)",
-        [online, idle, dnd, offline]);
 }
 
 bot.on('message', message => {
