@@ -123,6 +123,9 @@ bot.on('message', message => {
         case "!tour":
             toggleRoleCommand(message, 'tour');
             break;
+        case "!yesno":
+            yesnoCommand(message);
+            break;
 
         // Normal user database commands
         case "!totals":
@@ -528,6 +531,15 @@ function hmCommand(message)
         hm += 'm';
     }
     message.reply(hm);
+}
+
+function yesnoCommand(message)
+{
+    message.react('👍').then(function() {
+        message.react('👎').then(function() {
+            message.react('🤷');
+        });
+    });
 }
 
 // Database-oriented commands
