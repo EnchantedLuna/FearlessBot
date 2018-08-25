@@ -242,6 +242,13 @@ bot.on('message', message => {
             }
             break;
 
+        // Mod + Extra Commands
+        case "!karaoke":
+            if (isMod(message.member, message.channel.guild) || hasRole(message.member, message.channel.guild, 'red')) {
+                karaokeCommand(message, command[1]);
+            }
+            break;
+
         // Bot admin commands
         case "!fbotrestart":
             if (message.author.id == config.botAdminUserId) {
@@ -356,24 +363,29 @@ function channelCountsInStatistics(guild, channel)
 
 function isMod(member, guild)
 {
-    var mods = guild.roles.find('name','mods');
-    if (mods === null) {
+    return hasRole(member, guild, 'mods');
+}
+
+function hasRole(member, guild, roleName)
+{
+    let role = guild.roles.find('name', roleName);
+    if (role === null) {
         return false;
     }
 
-    return member.roles.has(mods.id);
+    return member.roles.has(role.id);
 }
 
 function log(guild, message)
 {
-    var logChannel = guild.channels.find('name', 'log');
+    let logChannel = guild.channels.find('name', 'log');
     if (logChannel) {
         logChannel.send(message);
     }
 }
 
 String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
+    let target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
@@ -1099,6 +1111,32 @@ function banCommand(message, days)
             + timeMessage + ' by ' + message.author.username);
         }
     });
+}
+
+function karaokeCommand(message, toggle)
+{
+    let guild = message.channel.guild;
+    let channel = guild.channels.find('name', 'Red');
+    if (!channel) {
+        return;
+    }
+    switch (toggle) {
+        case 'on':
+            channel.overwritePermissions(guild.defaultRole, {
+                'SPEAK' : true,
+            });
+            message.reply('karaoke mode turned on.');
+            break;
+        case 'off':
+            channel.overwritePermissions(guild.defaultRole, {
+                'SPEAK' : false,
+            });
+            message.reply('karaoke mode turned off.');
+            break;
+        default:
+            message.reply('use ``!karaoke on`` or ``!karaoke off``');
+            break;
+    }
 }
 
 // Bot admin commands
