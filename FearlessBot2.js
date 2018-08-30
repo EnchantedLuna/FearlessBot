@@ -266,16 +266,9 @@ bot.on('message', message => {
   }
 });
 
-bot.on('guildMemberAdd', member => {
-    db.query("SELECT * FROM members WHERE server = ? AND id = ?", [member.guild.id, member.id], function (err, rows) {
-        var joinType = (rows.length > 0) ? "rejoined" : "joined";
-        log(member.guild, member.user.username + "#" + member.user.discriminator + " has " + joinType + " the server.");
-    });
-});
 
 bot.on('guildMemberRemove', member => {
     db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [member.guild.id, member.id]);
-    log(member.guild, member.user.username + "#" + member.user.discriminator + " has left the server.");
     let joinDate = member.joinedAt;
     let now = new Date();
     let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
