@@ -155,9 +155,6 @@ bot.on('message', message => {
         case "!hm":
             hmCommand(message);
             break;
-        case "!tour":
-            toggleRoleCommand(message, 'tour');
-            break;
         case "!yesno":
             yesnoCommand(message);
             break;
