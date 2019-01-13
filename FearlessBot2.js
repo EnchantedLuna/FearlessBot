@@ -1083,7 +1083,9 @@ function supermuteCommand(message, hours)
             if (hours > 0) {
                 db.query("INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unmute', ?, ?, NOW() + INTERVAL ? HOUR)",
                 [message.channel.guild.id, member.user.id, hours]);
-                timeMessage = ' for ' + hours + ' hours';
+                timeMessage = ' for ' + hours + ' hour';
+                timeMessage += hours != 1 ? "s" : "";
+
             }
             message.reply(member.user.username + " has been supermuted" + timeMessage + ".");
         }
@@ -1130,7 +1132,8 @@ function banCommand(message, days)
                 db.query("INSERT INTO scheduled_actions (action, guild, user, effectivetime) \
                 VALUES ('unban', ?, ?, NOW() + INTERVAL ? DAY)",
                 [message.channel.guild.id, member.user.id, days]);
-                timeMessage = 'for ' + days + ' days';
+                timeMessage = 'for ' + days + ' day';
+                timeMessage += days != 1 ? "s" : "";
             }
             log(message.channel.guild, member.user.username + ' has been banned '
             + timeMessage + ' by ' + message.author.username);
