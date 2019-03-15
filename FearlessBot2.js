@@ -692,7 +692,7 @@ function seenCommand(message, params)
     if (member == bot.user.username) {
         message.reply("I'm right here!");
     } else if (member == message.author.username) {
-        message.reply("You don't know if you're here or not? :smirk:");
+        message.reply("You don't know if you're here or not? 😏");
     } else {
         db.query("SELECT username, discriminator, lastseen, active FROM members WHERE server = ? AND username = ? ORDER BY messages DESC LIMIT 1",
          [message.channel.guild.id, member], function(err, rows) {
@@ -718,7 +718,7 @@ function lastCommand(message, params, old)
         member = params;
     }
     if(member == message.author.username) {
-        message.reply("You don't know if you're here or not? :smirk:");
+        message.reply("You don't know if you're here or not? 😏");
         return;
     }
     var table = (old) ? "old_messages" : "messages";
