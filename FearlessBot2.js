@@ -333,7 +333,7 @@ bot.on('messageDelete', message => {
     }
 
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
-    db.query("UPDATE messages SET edited=now(), message='(deleted)' WHERE discord_id = ?", [message.id]);
+    db.query("UPDATE messages SET edited=now() WHERE discord_id = ?", [message.id]);
     log(message.channel.guild, "Deleted message by " + message.author.username + " in "+message.channel.name+":\n```"
     +  message.cleanContent.replace('`','\\`') + attachmentUrls + "```");
 });
@@ -373,8 +373,9 @@ function updateChannelStatsAndLog(message)
         [message.channel.id, message.channel.guild.id, message.channel.name, message.channel.name]
     );
 
-    db.query("INSERT INTO messages (discord_id, date, server, channel, message, author) VALUES (?,now(),?,?,?,?)",
-     [message.id, message.channel.guild.id, message.channel.id, message.cleanContent, message.author.id]);
+    // TODO switch to more efficient way of storing message counts for stats
+    db.query("INSERT INTO messages (discord_id, date, server, channel, author) VALUES (?,now(),?,?,?,?)",
+     [message.id, message.channel.guild.id, message.channel.id, message.author.id]);
 }
 
 
