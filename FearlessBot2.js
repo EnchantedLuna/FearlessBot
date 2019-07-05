@@ -184,10 +184,7 @@ bot.on('message', message => {
             seenCommand(message, params);
             break;
         case "!last":
-            lastCommand(message, params, false);
-            break;
-        case "!olast":
-            lastCommand(message, params, true);
+            lastCommand(message, params);
             break;
         case "!words":
             wordsCommand(message, params);
@@ -709,7 +706,7 @@ function seenCommand(message, params)
     }
 }
 
-function lastCommand(message, params, old)
+function lastCommand(message, params)
 {
     var member;
     if (message.mentions.members.size > 0) {
@@ -717,8 +714,7 @@ function lastCommand(message, params, old)
     } else {
         member = params;
     }
-    var table = (old) ? "old_messages" : "messages";
-    db.query("SELECT mem.username, mem.discriminator, mem.lastseen, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM "+table+" msg " +
+    db.query("SELECT mem.username, mem.discriminator, mem.lastseen, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM messages msg " +
         "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
         "JOIN channel_stats c ON msg.channel=c.channel " +
         "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != ?) " +
