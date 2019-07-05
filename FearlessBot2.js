@@ -374,7 +374,7 @@ function updateChannelStatsAndLog(message)
     );
 
     // TODO switch to more efficient way of storing message counts for stats
-    db.query("INSERT INTO messages (discord_id, date, server, channel, author) VALUES (?,now(),?,?,?,?)",
+    db.query("INSERT INTO messages (discord_id, date, server, channel, author) VALUES (?,now(),?,?,?)",
      [message.id, message.channel.guild.id, message.channel.id, message.author.id]);
 }
 
