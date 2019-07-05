@@ -50,7 +50,6 @@ CREATE TABLE messages
   date DATETIME,
   server BIGINT(20),
   channel BIGINT(20),
-  message VARCHAR(2000),
   edited DATETIME,
   author BIGINT(20)
 );

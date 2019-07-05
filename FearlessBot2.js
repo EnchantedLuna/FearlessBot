@@ -715,7 +715,7 @@ function lastCommand(message, params)
     } else {
         member = params;
     }
-    db.query("SELECT mem.username, mem.discriminator, mem.lastseen, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.message, msg.id, c.name FROM messages msg " +
+    db.query("SELECT mem.username, mem.discriminator, mem.lastseen, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.id, c.name FROM messages msg " +
         "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
         "JOIN channel_stats c ON msg.channel=c.channel " +
         "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != ?) " +
@@ -724,8 +724,7 @@ function lastCommand(message, params)
         if (rows.length == 0) {
             response = "no messages found. Please double check the username.";
         } else {
-            response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " (" + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name + " - #" + rows[0].id + ")\n" +
-                rows[0].message;
+            response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " was " + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name +  ".";
         }
         message.reply(response);
     });
