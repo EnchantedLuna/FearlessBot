@@ -158,6 +158,9 @@ bot.on('message', message => {
         case "!yesno":
             yesnoCommand(message);
             break;
+        case "!leak":
+            toggleRoleCommand(message, 'leak');
+            break;
 
         // Normal user database commands
         case "!totals":
