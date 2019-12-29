@@ -83,4 +83,15 @@ CREATE TABLE mod_stats
     idle INT(11),
     dnd INT(11),
     offline INT(11)
-)
+);
+
+CREATE TABLE user_message_stats
+(
+  user BIGINT(20) NOT NULL,
+  guild BIGINT(20) NOT NULL,
+  channel BIGINT(20) NOT NULL,
+  year INT(4),
+  month INT(2),
+  message_count INT(11),
+  PRIMARY KEY (user, guild, channel)
+);

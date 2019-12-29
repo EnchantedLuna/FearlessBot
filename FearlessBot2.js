@@ -181,10 +181,8 @@ bot.on('message', message => {
             saveCommand(message);
             break;
         case "!seen":
-            seenCommand(message, params);
-            break;
         case "!last":
-            lastCommand(message, params);
+            seenCommand(message, params);
             break;
         case "!words":
             wordsCommand(message, params);
@@ -324,7 +322,6 @@ bot.on('messageDelete', message => {
     }
 
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
-    db.query("UPDATE messages SET edited=now() WHERE discord_id = ?", [message.id]);
     if (message.cleanContent == '' && attachmentText == '') {
         return;
     }
@@ -367,9 +364,9 @@ function updateChannelStatsAndLog(message)
         [message.channel.id, message.channel.guild.id, message.channel.name, message.channel.name]
     );
 
-    // TODO switch to more efficient way of storing message counts for stats
-    db.query("INSERT INTO messages (discord_id, date, server, channel, author) VALUES (?,now(),?,?,?)",
-     [message.id, message.channel.guild.id, message.channel.id, message.author.id]);
+    db.query("INSERT INTO user_message_stats (user, guild, channel, year, month, message_count) VALUES (?,?,?,YEAR(CURDATE()),MONTH(CURDATE()), 1) " +
+            "ON DUPLICATE KEY UPDATE message_count=message_count+1",
+     [message.author.id, message.channel.guild.id, message.channel.id]);
 }
 
 
@@ -699,29 +696,6 @@ function seenCommand(message, params)
             }
         });
     }
-}
-
-function lastCommand(message, params)
-{
-    var member;
-    if (message.mentions.members.size > 0) {
-        member = message.mentions.members.first().user.username;
-    } else {
-        member = params;
-    }
-    db.query("SELECT mem.username, mem.discriminator, mem.lastseen, TIMESTAMPDIFF(SECOND,msg.date,now()) AS messageage, msg.id, c.name FROM messages msg " +
-        "JOIN members mem ON msg.server=mem.server AND msg.author=mem.id " +
-        "JOIN channel_stats c ON msg.channel=c.channel " +
-        "WHERE mem.server = ? AND mem.username = ? AND (c.web=1 OR c.server != ?) " +
-        "ORDER BY msg.id DESC LIMIT 1", [message.channel.guild.id, member, config.mainServer], function (err, rows) {
-        var response = "";
-        if (rows.length == 0) {
-            response = "no messages found. Please double check the username.";
-        } else {
-            response = "Last message by " + rows[0].username + "#" + rows[0].discriminator + " was " + secondsToTime(rows[0].messageage, true) + " ago in " + rows[0].name +  ".";
-        }
-        message.reply(response);
-    });
 }
 
 function wordsCommand(message, params)
