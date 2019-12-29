@@ -325,17 +325,18 @@ bot.on('messageDelete', message => {
         db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
          [removedWords, message.author.id, message.channel.guild.id]);
     }
-    var attachmentUrls = "";
+    var attachmentText = "";
     if (message.attachments.size > 0) {
-        message.attachments.forEach(function (attachment, key, map) {
-            attachmentUrls = "\nAttachment: " + attachment.url;
-        });
+        attachmentText = "\n(contained " + message.attachment.size + " attachments)";
     }
 
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
     db.query("UPDATE messages SET edited=now() WHERE discord_id = ?", [message.id]);
+    if (message.cleanContent == '' && attachmentText == '') {
+        return;
+    }
     log(message.channel.guild, "Deleted message by " + message.author.username + " in "+message.channel.name+":\n```"
-    +  message.cleanContent.replace('`','\\`') + attachmentUrls + "```");
+    +  message.cleanContent.replace('`','\\`') + attachmentText + "```");
 });
 
 bot.on('guildBanAdd', (guild, user) => {
