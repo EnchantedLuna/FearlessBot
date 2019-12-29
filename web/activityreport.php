@@ -7,7 +7,7 @@ $bots = (isset($_GET['includebots'])) ? '' : "AND channel != '132026417725702145
 
 $query = $db->prepare("SELECT year, month, message_count
 FROM user_message_stats
-WHERE guild=? AND author=? $bots");
+WHERE guild=? AND user=? $bots");
 $query->bind_param('ss', $_GET['server'], $_GET['user']);
 $query->execute();
 $query->bind_result($month, $year, $count);
