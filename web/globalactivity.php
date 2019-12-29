@@ -3,9 +3,9 @@ require_once "config.php";
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8mb4");
 
-$query = $db->prepare("SELECT MONTH(messages.date) month, YEAR(messages.date) year, channel_stats.name cname, COUNT(id) total FROM messages
-  JOIN channel_stats ON messages.channel=channel_stats.channel
-  WHERE messages.server = ? AND web = 1
+$query = $db->prepare("SELECT year, month, channel_stats.channel AS cname, COUNT(*) total FROM user_message_stats
+  JOIN channel_stats ON user_message_stats.channel=channel_stats.channel
+  WHERE user_message_stats.guild = ? AND web = 1
   GROUP BY year, month, cname
   ORDER BY year, month, cname");
 $query->bind_param('s', $_GET['server']);
