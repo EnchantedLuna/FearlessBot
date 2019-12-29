@@ -61,6 +61,6 @@ while ($query->fetch()) {
 
 <body>
 <!--Div that will hold the pie chart-->
-<div id="chart_div" style="width: 100%;height:500px"></div>
+<div id="chart_div" style="width: 1000px;height:500px"></div>
 </body>
 </html>
