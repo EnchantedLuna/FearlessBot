@@ -271,13 +271,6 @@ bot.on('message', message => {
             }
             break;
 
-        // Mod + Extra Commands
-        case "!karaoke":
-            if (isMod(message.member, message.channel.guild) || hasRole(message.member, message.channel.guild, 'red')) {
-                karaokeCommand(message, command[1]);
-            }
-            break;
-
         // Bot admin commands
         case "!fbotrestart":
             if (message.author.id == config.botAdminUserId) {
@@ -1136,32 +1129,6 @@ function banCommand(message, days)
             + timeMessage + ' by ' + message.author.username);
         }
     });
-}
-
-function karaokeCommand(message, toggle)
-{
-    let guild = message.channel.guild;
-    let channel = guild.channels.find('name', 'Red');
-    if (!channel) {
-        return;
-    }
-    switch (toggle) {
-        case 'on':
-            channel.overwritePermissions(guild.defaultRole, {
-                'SPEAK' : true,
-            });
-            message.reply('karaoke mode turned on.');
-            break;
-        case 'off':
-            channel.overwritePermissions(guild.defaultRole, {
-                'SPEAK' : false,
-            });
-            message.reply('karaoke mode turned off.');
-            break;
-        default:
-            message.reply('use ``!karaoke on`` or ``!karaoke off``');
-            break;
-    }
 }
 
 // Bot admin commands
