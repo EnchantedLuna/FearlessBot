@@ -5,28 +5,15 @@ $db->set_charset("utf8mb4");
 
 $bots = (isset($_GET['includebots'])) ? '' : "AND channel != '132026417725702145'";
 
-$query = $db->prepare("SELECT MONTH(old_messages.date) month, YEAR(old_messages.date) year, COUNT(*)
-FROM old_messages
-WHERE server=? AND author=? $bots
-GROUP BY year, month");
+$query = $db->prepare("SELECT year, month, message_count
+FROM user_message_stats
+WHERE guild=? AND author=? $bots");
 $query->bind_param('ss', $_GET['server'], $_GET['user']);
 $query->execute();
 $query->bind_result($month, $year, $count);
 
 $counts = array();
 while ($query->fetch()) {
-    $counts[$month."/".$year] += $count;
-}
-
-$query2 = $db->prepare("SELECT MONTH(messages.date) month, YEAR(messages.date) year, COUNT(*)
-FROM messages
-WHERE server=? AND author=? $bots
-GROUP BY year, month");
-$query2->bind_param('ss', $_GET['server'], $_GET['user']);
-$query2->execute();
-$query2->bind_result($month, $year, $count);
-
-while ($query2->fetch()) {
     $counts[$month."/".$year] += $count;
 }
 
