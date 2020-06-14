@@ -316,17 +316,8 @@ bot.on('messageDelete', message => {
         db.query("UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
          [removedWords, message.author.id, message.channel.guild.id]);
     }
-    var attachmentText = "";
-    if (message.attachments.size > 0) {
-        attachmentText = "\n(contained " + message.attachment.size + " attachments)";
-    }
 
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
-    if (message.cleanContent == '' && attachmentText == '') {
-        return;
-    }
-    log(message.channel.guild, "Deleted message by " + message.author.username + " in "+message.channel.name+":\n```"
-    +  message.cleanContent.replace('`','\\`') + attachmentText + "```");
 });
 
 bot.on('guildBanAdd', (guild, user) => {
