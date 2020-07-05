@@ -94,6 +94,7 @@ function logModStats()
 
 bot.on('message', message => {
     if (message.channel.type != 'text') {
+        handleDirectMessage(message);
         return;
     }
 
@@ -104,7 +105,6 @@ bot.on('message', message => {
     updateChannelStatsAndLog(message);
 
     if (config.noCommandChannels.includes(message.channel.id)) {
-        handleDirectMessage(message);
         return;
     }
 
