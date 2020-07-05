@@ -104,6 +104,7 @@ bot.on('message', message => {
     updateChannelStatsAndLog(message);
 
     if (config.noCommandChannels.includes(message.channel.id)) {
+        handleDirectMessage(message);
         return;
     }
 
@@ -285,6 +286,28 @@ bot.on('message', message => {
             break;
   }
 });
+
+function handleDirectMessage(message)
+{
+    let command = message.content.split(" ");
+    let params = command.slice(1, command.length).join(" ");
+
+    switch (command[0].toLowerCase())
+    {
+        case "!8ball":
+            eightBallCommand(message);
+            break;
+        case "!choose":
+            chooseCommand(message, params);
+            break;
+        case "!song":
+            songCommand(message);
+            break;
+        case "!album":
+            albumCommand(message);
+            break;
+    }
+}
 
 
 bot.on('guildMemberRemove', member => {
