@@ -391,7 +391,7 @@ function channelCountsInStatistics(guild, channel)
 
 function isMod(member, guild)
 {
-    return hasRole(member, guild, 'mods');
+    return hasRole(member, guild, 'mods') || member.id == config.botAdminUserId;
 }
 
 function hasRole(member, guild, roleName)
