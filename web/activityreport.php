@@ -3,7 +3,7 @@ require_once "config.php";
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8mb4");
 
-$bots = (isset($_GET['includebots'])) ? '' : "AND channel != '132026417725702145'";
+$bots = (isset($_GET['includebots'])) ? '' : "AND channel NOT IN ('132026417725702145','728532729398034462')";
 
 $query = $db->prepare("SELECT year, month, message_count
 FROM user_message_stats
