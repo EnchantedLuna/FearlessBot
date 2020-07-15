@@ -268,7 +268,7 @@ bot.on('message', message => {
             break;
         case "!addnamemix":
            if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
-               addNameMixCommand(message, command[1], command[2]);
+               addNameMixCommand(message, parseInt(command[1]), command[2]);
             }
             break;
 
@@ -652,8 +652,9 @@ function addShitpostCommand(message, shitpost)
 
 function addNameMixCommand(message, part, namePiece)
 {
-    if (part !== '1' || part !== '2' || typeof(namePiece) === 'undefined') {
+    if (part !== 1 || part !== 2 || namePiece === null) {
         message.reply('invalid part. usage: ``!namemix [1,2] [name piece]``');
+        return;
     }
 
     db.query("INSERT INTO namemix (name_piece, part, addedby, addedon) VALUES (?,?,?,now())",
