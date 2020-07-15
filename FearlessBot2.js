@@ -652,7 +652,7 @@ function addShitpostCommand(message, shitpost)
 
 function addNameMixCommand(message, part, namePiece)
 {
-    if (part !== 1 || part !== 2 || namePiece === null) {
+    if ((part !== 1 && part !== 2) || namePiece === null) {
         message.reply('invalid part. usage: ``!namemix [1,2] [name piece]``');
         return;
     }
