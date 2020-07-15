@@ -194,9 +194,6 @@ bot.on('message', message => {
         case "!shitpost":
             shitpostCommand(message, command[1]);
             break;
-        case "!name":
-            nameCommand(message, command);
-            break;
         case "!randmember":
             randomMemberCommand(message, command[1]);
             break;
@@ -267,6 +264,11 @@ bot.on('message', message => {
         case "!addshitpost":
             if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
                 addShitpostCommand(message, params);
+            }
+            break;
+        case "!addnamemix":
+           if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
+               addNamemixCommand(message, command[1], command[2]);
             }
             break;
 
@@ -528,10 +530,12 @@ function activityCommand(message)
 
 function namemixCommand(message)
 {
-    let part1 = staticData.nameMixPart1[Math.floor(Math.random() * staticData.nameMixPart1.length)];
-    let part2 = staticData.nameMixPart2[Math.floor(Math.random() * staticData.nameMixPart2.length)];
+    db.query(
+        'SELECT CONCAT((SELECT name_piece FROM namemix WHERE part=1 ORDER BY RAND() LIMIT 1), ' + 
+        '(SELECT name_piece FROM namemix WHERE part=2 ORDER BY RAND() LIMIT 1)) AS name', [], function(err, rows) {
+            message.reply(rows[0].name);
+    });
 
-    message.reply(part1 + part2);
 }
 
 function xdCommand(message)
@@ -646,24 +650,15 @@ function addShitpostCommand(message, shitpost)
     });
 }
 
-function nameCommand(message, command)
+function addNameMixCommand(message, part, namePiece)
 {
-    var genders = ['m', 'f'];
-    var gender = command[1] == null || (command[1].toLowerCase() != 'm' && command[1].toLowerCase() != 'f')
-     ? genders[Math.floor(Math.random() * genders.length)] : command[1];
-    var year = 2000;
-    if (parseInt(command[2]) >= 1970 && parseInt(command[2]) <= 2014)
-        year = command[2];
-    var limit = 300;
-    if (parseInt(command[3]))
-        limit = command[3];
-    db.query("SELECT * FROM names WHERE gender = ? AND rank <= ? AND year = ? ORDER BY RAND() LIMIT 1",
-     [gender, limit, year], function (err, rows) {
-        if (rows[0] != null)
-        {
-            message.reply(rows[0].name);
-        }
-    });
+    if (part !== '1' || part !== '2' || typeof(namePiece) === 'undefined') {
+        message.reply('invalid part. usage: ``!namemix [1,2] [name piece]``');
+    }
+
+    db.query("INSERT INTO namemix (name_piece, part, addedby, addedon) VALUES (?,?,?,now())",
+    [namePiece, part, message.author.id]);
+    message.reply("added!");
 }
 
 function rankThingCommand(message, thing, number)

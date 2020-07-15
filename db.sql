@@ -82,3 +82,12 @@ CREATE TABLE user_message_stats
   message_count INT(11),
   PRIMARY KEY (user, guild, channel)
 );
+
+CREATE TABLE namemix
+(
+  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  name_piece VARCHAR(20) NOT NULL,
+  part TINYINT(1) NOT NULL,
+  addedon DATETIME,
+  addedby BIGINT(20)
+);
