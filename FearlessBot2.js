@@ -268,7 +268,7 @@ bot.on('message', message => {
             break;
         case "!addnamemix":
            if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
-               addNamemixCommand(message, command[1], command[2]);
+               addNameMixCommand(message, command[1], command[2]);
             }
             break;
 
