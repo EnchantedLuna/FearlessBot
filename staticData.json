@@ -1,5 +1,5 @@
 {
-  "version" : "2020.07.14b",
+  "version" : "2020.07.14c",
   "eightBallAnswers" : ["it is certain", "it is decidedly so", "without a doubt", "yes, definitely", "you may rely on it",
       "as I see it, yes", "most likely", "outlook good", "yes", "signs point to yes", "reply hazy try again", "ask again later",
       "better not tell you now", "cannot predict now", "concentrate and try again", "don't count on it", "my reply is no", "my sources say no",
@@ -21,17 +21,5 @@
       "I Forgot That You Existed", "Cruel Summer", "Lover", "The Man", "The Archer", "I Think He Knows", "Miss Americana & The Heartbreak Prince", "Paper Rings",
       "Cornelia Street", "Death By A Thousand Cuts", "London Boy", "Soon You'll Get Better", "False God", "You Need to Calm Down", "Afterglow", "ME!",
       "It's Nice to Have A Friend", "Daylight", "Only the Young", "Christmas Tree Farm"],
-  "taylorSwiftAlbums" : ["Taylor Swift","Fearless","Speak Now","Red","1989","reputation", "Lover"],
-  "nameMixPart1" : ["Tay","mym","jelly","wide","And","Red","Fearless","Neonz","coscorro",
-      "Wet","Tele","Serp","Don","My","Histo","Lor","Enchanted","picc","Han","Mur","spongenge",
-      "Em","An","Kar","Lind","lay","Jay","Mad","Mor","Sar","Qui","Porzin","Er","Les","haley",
-      "hay","Alien","danc","Gee","Ti","Compress","Savoy","so","Groat","Sm","moo","Meredith",
-      "mar","teiu","E","no","aj","Dy","Bi","Pal","boki","Ed","Beat","Mur","Smir","skye","fur","push","Ross","snake","Al",
-      "Sele","Rep"],
-  "nameMixPart2" : ["lor","lizz","bean","eyes","ri","bot","HD","drift","patootie","qraph",
-      "ent","ran","rew","sae","ricc","de","princess","13","nah","ray","bob","ma","na",
-      "lie","sey","la","den","ison","gan","ah","che","god","ic","say","ley","lizz™","ris",
-      "erald","waras","Octz","tay","mo","irk","road","da","olfs","acy","goo","patrol","vin",
-      "77", "walk","el","marie1225","lan","anca","em","ville","tin","luna","les","mure","ky","fox12","ial",
-      "cour","een","baby","smirk","ice","utation"]
+  "taylorSwiftAlbums" : ["Taylor Swift","Fearless","Speak Now","Red","1989","reputation", "Lover"]
 }
