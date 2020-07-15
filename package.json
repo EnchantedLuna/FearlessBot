@@ -1,6 +1,6 @@
 {
   "name": "fearlessbot",
-  "version": "2019.08.25a",
+  "version": "2020.07.14",
   "dependencies": {
     "discord.js": "*",
     "mysql": "*"
