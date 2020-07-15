@@ -122,7 +122,7 @@ bot.on('message', message => {
         case "!album":
             albumCommand(message);
             break;
-        case "!version":
+        case "!fversion":
             botVersionCommand(message);
             break;
         case "!n":
