@@ -109,7 +109,7 @@ bot.on('message', message => {
     }
 
     if (message.channel.guild.id == config.mainServer && !hasRole(message.member, message.channel.guild, 'active')) {
-        let joinDate = member.joinedAt;
+        let joinDate = message.member.joinedAt;
         let now = new Date();
         let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
         if (joinTime > 86400) {
