@@ -108,6 +108,16 @@ bot.on('message', message => {
         return;
     }
 
+    if (message.channel.guild == config.mainServer && !hasRole(message.member, guild, 'active')) {
+        let joinDate = member.joinedAt;
+        let now = new Date();
+        let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
+        if (joinTime > 86400) {
+            let role = message.channel.guild.roles.find('name','active');
+            message.member.addRole(role);
+        }
+    }
+
     switch (command[0].toLowerCase()) {
         // Normal user basic commands (no db)
         case "!8ball":
