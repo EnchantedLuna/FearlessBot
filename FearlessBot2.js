@@ -104,7 +104,7 @@ bot.on('message', message => {
     updateUserStats(message);
     updateChannelStatsAndLog(message);
 
-    if (config.noCommandChannels.includes(message.channel.id)) {
+    if (config.noCommandChannels.includes(message.channel.id) && !isMod(message.member, message.channel.guild)) {
         return;
     }
 
