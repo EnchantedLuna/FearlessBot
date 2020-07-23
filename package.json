@@ -1,8 +1,8 @@
 {
   "name": "fearlessbot",
-  "version": "2020.07.14",
+  "version": "2020.07.23",
   "dependencies": {
-    "discord.js": "*",
+    "discord.js": "11.*",
     "mysql": "*"
   },
   "repository": {

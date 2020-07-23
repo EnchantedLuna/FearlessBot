@@ -1,5 +1,5 @@
 {
-  "version" : "2020.07.22a",
+  "version" : "2020.07.23a",
   "eightBallAnswers" : ["it is certain", "it is decidedly so", "without a doubt", "yes, definitely", "you may rely on it",
       "as I see it, yes", "most likely", "outlook good", "yes", "signs point to yes", "reply hazy try again", "ask again later",
       "better not tell you now", "cannot predict now", "concentrate and try again", "don't count on it", "my reply is no", "my sources say no",
@@ -20,6 +20,7 @@
       "Getaway Car", "King of My Heart", "Dancing With Our Hands Tied", "Dress", "This Is Why We Can't Have Nice Things", "Call It What You Want", "New Year's Day",
       "I Forgot That You Existed", "Cruel Summer", "Lover", "The Man", "The Archer", "I Think He Knows", "Miss Americana & The Heartbreak Prince", "Paper Rings",
       "Cornelia Street", "Death By A Thousand Cuts", "London Boy", "Soon You'll Get Better", "False God", "You Need to Calm Down", "Afterglow", "ME!",
-      "It's Nice to Have A Friend", "Daylight", "Only the Young", "Christmas Tree Farm"],
-  "taylorSwiftAlbums" : ["Taylor Swift","Fearless","Speak Now","Red","1989","reputation", "Lover"]
+      "It's Nice to Have A Friend", "Daylight", "Only the Young", "Christmas Tree Farm","The 1","Cardigan","The Last Great American Dynasty ", "Exile", "My Tears Ricochet",
+      "Mirrorball", "Seven", "August", "This Is Me Trying", "Illicit Affairs","Invisible String","Mad Woman","Epiphany","Betty Peace","The Lakes"],
+  "taylorSwiftAlbums" : ["Taylor Swift","Fearless","Speak Now","Red","1989","reputation", "Lover","folklore"]
 }
