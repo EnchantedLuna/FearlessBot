@@ -271,6 +271,11 @@ bot.on('message', message => {
                 banCommand(message, parseInt(command[1]));
             }
             break;
+        case "!idban":
+            if (isMod(message.member, message.channel.guild)) {
+                idbanCommand(message, command[1]);
+            }
+            break;
         case "!addshitpost":
             if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
                 addShitpostCommand(message, params);
@@ -403,6 +408,12 @@ function channelCountsInStatistics(guild, channel)
 
 function isMod(member, guild)
 {
+    if (typeof member === 'string') {
+        member = guild.members.get(member);
+        if (typeof member === 'undefined')  {
+            return false;
+        }
+    }
     return hasRole(member, guild, 'mods') || member.id == config.botAdminUserId;
 }
 
@@ -1123,6 +1134,18 @@ function banCommand(message, days)
             + timeMessage + ' by ' + message.author.username);
         }
     });
+}
+
+function idbanCommand(message, userId)
+{
+    if (isMod(userId, message.channel.guild)) {
+        message.reply(":smirk:");
+    } else {
+        message.channel.guild.ban(userId).then(user => {
+                message.reply(`banned ${user.username || user.id || user}`);
+            }
+        );
+    }
 }
 
 // Bot admin commands
