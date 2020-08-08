@@ -252,6 +252,7 @@ bot.on('message', message => {
             }
             break;
         case "!supermute":
+        case "!hush":
             if (isMod(message.member, message.channel.guild)) {
                 supermuteCommand(message, parseInt(command[1]));
             }
