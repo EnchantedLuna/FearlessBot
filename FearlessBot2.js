@@ -216,7 +216,12 @@ bot.on('message', message => {
         case "!mods":
             modsCommand(message);
             break;
-
+        case "!lorpoints":
+            lorpointsCommand(message, params);
+            break;
+        case "!ranklorpoints":
+            rankThingCommand(message, "lorpoints", parseInt(command[1]));
+            break;
         // Mod commands
         case "!approve":
             if (isMod(message.member, message.channel.guild)) {
@@ -285,6 +290,11 @@ bot.on('message', message => {
         case "!addnamemix":
            if (isMod(message.member, message.channel.guild) && message.channel.guild.id === config.mainServer) {
                addNameMixCommand(message, parseInt(command[1]), command[2]);
+            }
+            break;
+        case "!award":
+           if (isMod(message.member, message.channel.guild)) {
+               awardCommand(message, parseInt(command[1]));
             }
             break;
 
@@ -758,6 +768,25 @@ function wordsCommand(message, params)
 
 }
 
+function lorpointsCommand(message, params)
+{
+    let member;
+    if (message.mentions.members.size > 0) {
+        member = message.mentions.members.first().user.id;
+    } else {
+        member = message.author.username;
+    }
+
+    db.query("SELECT username, lorpoints FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, member], function (err,rows) {
+        if (rows[0] !== null) {
+            db.query("SELECT SUM(lorpoints) AS total FROM members WHERE server = ?", [message.channel.guild.id], function(err, totals) {
+                let percent = Math.round((rows[0].lorpoints / totals[0].total) * 10000) / 100;
+                message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints (' + percent + '% of total lorpoints).');
+            });
+        }
+    });
+}
+
 function awardsCommand(message)
 {
     let member;
@@ -1147,6 +1176,19 @@ function idbanCommand(message, userId)
             }
         );
     }
+}
+
+function awardCommand(message, number)
+{
+    let list = [];
+    message.mentions.members.forEach(function (member, key, map) {
+        db.query("UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?", [number, message.channel.guild.id, member.id]);
+        list.push(member.user.username);
+    });
+    let finalList = list.join(", ");
+    let lorpointWord = (number !== 1) ? "lorpoints" : "lorpoint";
+    message.reply(number + " " + lorpointWord + " have been awarded to: " + finalList);
+    log(message.channel.guild, number + " " + lorpointWord + " have been awarded to: " + finalList + " by " + message.author.username);
 }
 
 // Bot admin commands
