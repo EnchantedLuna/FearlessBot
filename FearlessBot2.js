@@ -16,7 +16,6 @@ var db = mysql.createConnection({
 bot.on('ready', () => {
     console.log('FearlessBot2 is ready.');
     setInterval(runScheduledActions, 60000);
-    setInterval(logModStats, 900000);
 });
 
 function runScheduledActions()
@@ -26,70 +25,36 @@ function runScheduledActions()
     WHERE completed=0 AND effectivetime < NOW() ORDER BY id",
      [], function(err,rows) {
          for (var i = 0; i < rows.length; i++) {
-             var guild = bot.guilds.get(rows[i].guild);
+             var guild = bot.guilds.cache.get(rows[i].guild);
              if (typeof guild == 'undefined') {
                  console.log("Scheduled actions: Guild " + rows[i].guild + " not found.");
                  continue;
              }
              switch (rows[i].action) {
                  case "unmute":
-                    var supermute = guild.roles.find('name','supermute');
+                    var supermute = guild.roles.cache.find(role => role.name === 'supermute');
                     if (typeof supermute == 'undefined') {
                         console.log("Scheduled actions: Supermute role not found in guild " + rows[i].guild);
                         continue;
                     }
-                    var member = guild.members.get(rows[i].user);
+                    var member = guild.members.cache.get(rows[i].user);
                     if (typeof member == 'undefined') {
                         log(guild, 'Warning: ' + rows[i].username + ' was scheduled to be unmuted, but this member was not found. Have they left?');
                         db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
                         continue;
                     }
-                    member.removeRole(supermute);
+                    member.roles.removeRole(supermute);
                     log(guild, member.user.username + "'s supermute has expired.");
                     db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
                     break;
                 case "unban":
-                    guild.unban(rows[i].user);
+                    guild.members.unban(rows[i].user);
                     log(guild, rows[i].username + "'s ban has expired.");
                     db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
                     break;
              }
          }
      });
-}
-
-function logModStats()
-{
-    let guild = bot.guilds.get(config.mainServer);
-    let mods = guild.roles.find('name','mods');
-
-    if (mods === null) {
-        return;
-    }
-
-    let online = 0;
-    let idle = 0;
-    let dnd = 0;
-    let offline = 0;
-    mods.members.forEach(function (member, id, map) {
-        switch (member.presence.status) {
-            case "online":
-                online++;
-                break;
-            case "idle":
-                idle++;
-                break;
-            case "dnd":
-                dnd++;
-                break;
-            case "offline":
-                offline++;
-                break;
-        }
-    });
-
-    db.query("INSERT INTO mod_stats (time, online, idle, dnd, offline) VALUES (now(), ?, ?, ?, ?)",
-        [online, idle, dnd, offline]);
 }
 
 bot.on('message', message => {
@@ -113,8 +78,8 @@ bot.on('message', message => {
         let now = new Date();
         let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
         if (joinTime > 86400) {
-            let role = message.channel.guild.roles.find('name','active');
-            message.member.addRole(role);
+            let role = message.channel.guild.roles.cache.find(role => role.name === 'active');
+            message.member.roles.add(role);
         }
     }
 
@@ -149,7 +114,7 @@ bot.on('message', message => {
             break;
         case "!region":
         case "!setregion":
-            regionCommand(message, command[1]);
+            regionCommand(message, command[1]); //todo
             break;
         case "!namemix":
             namemixCommand(message);
@@ -189,17 +154,17 @@ bot.on('message', message => {
             getlistCommand(message);
             break;
         case "!save":
-            saveCommand(message);
+            saveCommand(message); //todo
             break;
         case "!seen":
         case "!last":
-            seenCommand(message, params);
+            seenCommand(message, params); //todo
             break;
         case "!words":
-            wordsCommand(message, params);
+            wordsCommand(message, params); //todo
             break;
         case "!rankwords":
-            rankThingCommand(message, "words", parseInt(command[1]));
+            rankThingCommand(message, "words", parseInt(command[1])); //todo
             break;
         case "!shitpost":
             shitpostCommand(message, command[1]);
@@ -211,21 +176,21 @@ bot.on('message', message => {
             activityCommand(message);
             break;
         case "!awards":
-            awardsCommand(message);
+            awardsCommand(message); // todo
             break;
         case "!mods":
-            modsCommand(message);
+            modsCommand(message); //todo
             break;
         case "!lorpoints":
-            lorpointsCommand(message, params);
+            lorpointsCommand(message, params); // todo
             break;
         case "!ranklorpoints":
-            rankThingCommand(message, "lorpoints", parseInt(command[1]));
+            rankThingCommand(message, "lorpoints", parseInt(command[1])); // todo
             break;
         // Mod commands
         case "!approve":
             if (isMod(message.member, message.channel.guild)) {
-                approveCommand(message, command[1]);
+                approveCommand(message, command[1]); // todo
             }
             break;
         case "!review":
@@ -241,17 +206,12 @@ bot.on('message', message => {
                 getUnapprovedCommand(message);
             }
             break;
-        case "!topic":
-            if (isMod(message.member, message.channel.guild)) {
-                topicCommand(message, params);
-            }
-            break;
-        case "!mute":
+        case "!mute": // todo
             if (isMod(message.member, message.channel.guild)) {
                 muteCommand(message);
             }
             break;
-        case "!unmute":
+        case "!unmute": // todo
             if (isMod(message.member, message.channel.guild)) {
                 unmuteCommand(message);
             }
@@ -262,17 +222,17 @@ bot.on('message', message => {
                 supermuteCommand(message, parseInt(command[1]));
             }
             break;
-        case "!unsupermute":
+        case "!unsupermute": // todo
             if (isMod(message.member, message.channel.guild)) {
                 unsupermuteCommand(message);
             }
             break;
-        case "!kick":
+        case "!kick": // todo
             if (isMod(message.member, message.channel.guild)) {
                 kickCommand(message);
             }
             break;
-        case "!ban":
+        case "!ban": // todo
             if (isMod(message.member, message.channel.guild)) {
                 banCommand(message, parseInt(command[1]));
             }
@@ -292,7 +252,7 @@ bot.on('message', message => {
                addNameMixCommand(message, parseInt(command[1]), command[2]);
             }
             break;
-        case "!award":
+        case "!award": // todo
            if (isMod(message.member, message.channel.guild)) {
                awardCommand(message, parseInt(command[1]));
             }
@@ -420,7 +380,7 @@ function channelCountsInStatistics(guild, channel)
 function isMod(member, guild)
 {
     if (typeof member === 'string') {
-        member = guild.members.get(member);
+        member = guild.members.cache.get(member);
         if (typeof member === 'undefined')  {
             return false;
         }
@@ -430,17 +390,17 @@ function isMod(member, guild)
 
 function hasRole(member, guild, roleName)
 {
-    let role = guild.roles.find('name', roleName);
+    let role = guild.roles.cache.find(role => role.name === roleName);
     if (role === null) {
         return false;
     }
 
-    return member.roles.has(role.id);
+    return member.roles.cache.some(memberRole => memberRole.id === role.id);
 }
 
 function log(guild, message)
 {
-    let logChannel = guild.channels.find('name', 'log');
+    let logChannel = guild.channels.cache.find(channel => channel.name === 'log');
     if (logChannel) {
         logChannel.send(message);
     }
@@ -647,7 +607,6 @@ function totalsCommand(message, options)
             total += rows[i].total_messages;
         }
         totalsMessage += "\nTotal messages: " + total.toLocaleString();
-        var startdate = new Date(rows[0].startdate*1000);
         message.reply(totalsMessage);
     });
 }
@@ -960,22 +919,14 @@ function getUnapprovedCommand(message)
 
 // Guild property commands (roles, permissions, etc)
 
-function topicCommand(message, topic)
-{
-    message.channel.setTopic(topic, "Set by " + message.author.username);
-    log(message.channel.guild, "Topic in " + message.channel.name + " has been changed by "
-    + message.author.username + " to " + topic );
-    message.reply("topic updated.");
-}
-
 function regionCommand(message, region)
 {
-    var northamerica = message.channel.guild.roles.find('name','northamerica');
-    var southamerica = message.channel.guild.roles.find('name', 'southamerica');
-    var europe = message.channel.guild.roles.find('name','europe');
-    var asia = message.channel.guild.roles.find('name','asia');
-    var africa = message.channel.guild.roles.find('name','africa');
-    var oceania = message.channel.guild.roles.find('name','oceania');
+    var northamerica = message.channel.guild.roles.cache.find('name','northamerica');
+    var southamerica = message.channel.guild.roles.cache.find('name', 'southamerica');
+    var europe = message.channel.guild.roles.cache.find('name','europe');
+    var asia = message.channel.guild.roles.cache.find('name','asia');
+    var africa = message.channel.guild.roles.cache.find('name','africa');
+    var oceania = message.channel.guild.roles.cache.find('name','oceania');
     var allRegions = [northamerica, southamerica, europe, asia, africa, oceania];
 
     if (typeof region == 'undefined') {
@@ -1098,12 +1049,12 @@ function unmuteCommand(message)
 
 function supermuteCommand(message, hours)
 {
-    var supermute = message.channel.guild.roles.find('name','supermute');
+    var supermute = message.channel.guild.roles.cache.find(role => role.name === 'supermute');
     message.mentions.members.forEach(function (member, key, map) {
         if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
-            member.addRole(supermute);
+            member.roles.add(supermute);
             var timeMessage = '';
             if (hours > 0) {
                 db.query("INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unmute', ?, ?, NOW() + INTERVAL ? HOUR)",
@@ -1119,12 +1070,12 @@ function supermuteCommand(message, hours)
 
 function unsupermuteCommand(message)
 {
-    var supermute = message.channel.guild.roles.find('name','supermute');
+    var supermute = message.channel.guild.roles.cache.find(role => role.name === 'supermute');
     message.mentions.members.forEach(function (member, key, map) {
         if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
-            member.removeRole(supermute);
+            member.roles.remove(supermute);
             message.reply(member.user.username + " has been un-supermuted.");
         }
     });
@@ -1171,7 +1122,7 @@ function idbanCommand(message, userId)
     if (isMod(userId, message.channel.guild)) {
         message.reply(":smirk:");
     } else {
-        message.channel.guild.ban(userId).then(user => {
+        message.channel.guild.members.ban(userId).then(user => {
                 message.reply(`banned ${user.username || user.id || user}`);
             }
         );
