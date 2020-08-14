@@ -774,7 +774,7 @@ function lorpointsCommand(message, params)
     if (message.mentions.members.size > 0) {
         member = message.mentions.members.first().user.id;
     } else {
-        member = message.author.username;
+        member = message.author.id;
     }
 
     db.query("SELECT username, lorpoints FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, member], function (err,rows) {
