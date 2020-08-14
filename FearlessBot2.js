@@ -154,17 +154,17 @@ bot.on('message', message => {
             getlistCommand(message);
             break;
         case "!save":
-            saveCommand(message); //todo
+            saveCommand(message);
             break;
         case "!seen":
         case "!last":
-            seenCommand(message, params); //todo
+            seenCommand(message, params);
             break;
         case "!words":
-            wordsCommand(message, params); //todo
+            wordsCommand(message, params);
             break;
         case "!rankwords":
-            rankThingCommand(message, "words", parseInt(command[1])); //todo
+            rankThingCommand(message, "words", parseInt(command[1]));
             break;
         case "!shitpost":
             shitpostCommand(message, command[1]);
@@ -176,21 +176,21 @@ bot.on('message', message => {
             activityCommand(message);
             break;
         case "!awards":
-            awardsCommand(message); // todo
+            awardsCommand(message);
             break;
         case "!mods":
-            modsCommand(message); //todo
+            modsCommand(message);
             break;
         case "!lorpoints":
-            lorpointsCommand(message, params); // todo
+            lorpointsCommand(message, params);
             break;
         case "!ranklorpoints":
-            rankThingCommand(message, "lorpoints", parseInt(command[1])); // todo
+            rankThingCommand(message, "lorpoints", parseInt(command[1]));
             break;
         // Mod commands
         case "!approve":
             if (isMod(message.member, message.channel.guild)) {
-                approveCommand(message, command[1]); // todo
+                approveCommand(message, command[1]);
             }
             break;
         case "!review":
@@ -206,28 +206,18 @@ bot.on('message', message => {
                 getUnapprovedCommand(message);
             }
             break;
-        case "!mute": // todo
-            if (isMod(message.member, message.channel.guild)) {
-                muteCommand(message);
-            }
-            break;
-        case "!unmute": // todo
-            if (isMod(message.member, message.channel.guild)) {
-                unmuteCommand(message);
-            }
-            break;
         case "!supermute":
         case "!hush":
             if (isMod(message.member, message.channel.guild)) {
                 supermuteCommand(message, parseInt(command[1]));
             }
             break;
-        case "!unsupermute": // todo
+        case "!unsupermute":
             if (isMod(message.member, message.channel.guild)) {
                 unsupermuteCommand(message);
             }
             break;
-        case "!kick": // todo
+        case "!kick":
             if (isMod(message.member, message.channel.guild)) {
                 kickCommand(message);
             }
@@ -252,7 +242,7 @@ bot.on('message', message => {
                addNameMixCommand(message, parseInt(command[1]), command[2]);
             }
             break;
-        case "!award": // todo
+        case "!award":
            if (isMod(message.member, message.channel.guild)) {
                awardCommand(message, parseInt(command[1]));
             }
@@ -679,9 +669,7 @@ function seenCommand(message, params)
         member = params;
     }
 
-    if (member == bot.user.id) {
-        message.reply("I'm right here!");
-    } else if (member == message.author.id) {
+    if (member == message.author.username) {
         message.reply("look in a mirror!");
     } else {
         db.query("SELECT username, discriminator, lastseen, active FROM members WHERE server = ? AND username = ? ORDER BY messages DESC LIMIT 1",
@@ -992,7 +980,7 @@ function toggleRoleCommand(message, roleName)
 
 function modsCommand(message)
 {
-    let mods = message.channel.guild.roles.find('name','mods');
+    let mods = message.channel.guild.roles.cache.find(role => role.name === 'mods');
     if (mods === 'undefined') {
         return;
     }
@@ -1023,29 +1011,6 @@ function arrayRemove(array, element) {
     }
 }
 
-function muteCommand(message)
-{
-    message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member, message.channel.guild)) {
-            message.reply(":smirk:");
-        } else {
-            message.channel.overwritePermissions(member, { 'SEND_MESSAGES' : false });
-            message.reply(member.user.username + " has been muted.");
-        }
-    });
-}
-
-function unmuteCommand(message)
-{
-    message.mentions.members.forEach(function (member, key, map) {
-        if (isMod(member, message.channel.guild)) {
-            message.reply(":smirk:");
-        } else {
-            message.channel.overwritePermissions(member, { 'SEND_MESSAGES' : null });
-            message.reply(member.user.username + " has been unmuted.");
-        }
-    });
-}
 
 function supermuteCommand(message, hours)
 {
