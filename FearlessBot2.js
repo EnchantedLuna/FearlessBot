@@ -116,7 +116,7 @@ bot.on('message', message => {
             break;
         case "!region":
         case "!setregion":
-            regionCommand(message, command[1]); //todo
+            regionCommand(message, command[1]);
             break;
         case "!namemix":
             namemixCommand(message);
