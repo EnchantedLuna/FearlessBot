@@ -224,7 +224,8 @@ bot.on('message', message => {
                 kickCommand(message);
             }
             break;
-        case "!ban": // todo
+        case "!ban":
+        case "!exile":
             if (isMod(message.member, message.channel.guild)) {
                 banCommand(message, parseInt(command[1]));
             }
