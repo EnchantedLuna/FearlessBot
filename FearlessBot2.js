@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 const staticData = require("./staticData.json");
 
+const TWELVE_HOURS = 43200000;
+
 var bot = new Discord.Client({ "disableEveryone" : true, "fetchAllMembers" : true});
 
 var db = mysql.createConnection({
@@ -111,8 +113,8 @@ bot.on('message', message => {
     if (message.channel.guild.id == config.mainServer && !hasRole(message.member, message.channel.guild, 'active')) {
         let joinDate = message.member.joinedAt;
         let now = new Date();
-        let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
-        if (joinTime > 86400) {
+        let joinTime = (now.getTime() - joinDate.getTime());
+        if (joinTime > TWELVE_HOURS) {
             let role = message.channel.guild.roles.find('name','active');
             message.member.addRole(role);
         }
@@ -780,8 +782,7 @@ function lorpointsCommand(message, params)
     db.query("SELECT username, lorpoints FROM members WHERE server = ? AND id = ?", [message.channel.guild.id, member], function (err,rows) {
         if (rows[0] !== null) {
             db.query("SELECT SUM(lorpoints) AS total FROM members WHERE server = ?", [message.channel.guild.id], function(err, totals) {
-                let percent = Math.round((rows[0].lorpoints / totals[0].total) * 10000) / 100;
-                message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints (' + percent + '% of total lorpoints).');
+                message.reply(rows[0].username + " has " + rows[0].lorpoints + ' lorpoints (out of ' + totals[0].total + ' total lorpoints).');
             });
         }
     });
