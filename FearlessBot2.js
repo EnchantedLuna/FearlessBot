@@ -45,7 +45,7 @@ function runScheduledActions()
                         db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
                         continue;
                     }
-                    member.roles.removeRole(supermute);
+                    member.roles.remove(supermute);
                     log(guild, member.user.username + "'s supermute has expired.");
                     db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [rows[i].id]);
                     break;
