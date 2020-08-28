@@ -927,38 +927,38 @@ function regionCommand(message, region)
 
     switch (region.toLowerCase()) {
         case "clear":
-            message.member.removeRoles(allRegions);
+            message.member.roles.remove(allRegions);
             message.reply("your region has been cleared.");
         break;
         case "america":
         case "northamerica":
             arrayRemove(allRegions, northamerica);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(northamerica));
+            message.member.roles.remove(allRegions).then(updated => updated.roles.add(northamerica));
             message.reply("your region has been set to North America.");
         break;
         case "southamerica":
             arrayRemove(allRegions, southamerica);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(southamerica));
+            message.member.roles.remove(allRegions).then(updated => updated.roles.add(southamerica));
             message.reply("your region has been set to South America.");
         break;
         case "europe":
             arrayRemove(allRegions, europe);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(europe));
+            message.member.roles.remove(allRegions).then(updated => updated.roles.add(europe));
             message.reply("your region has been set to Europe.");
         break;
         case "asia":
             arrayRemove(allRegions, asia);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(asia));
+            message.member.roles.remove(allRegions).then(updated => updated.roles.add(asia));
             message.reply("your region has been set to Asia.");
         break;
         case "africa":
             arrayRemove(allRegions, africa);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(africa));
+            message.member.roles.remove(allRegions).then(updated => updated.roles.add(africa));
             message.reply("your region has been set to Africa.");
         break;
         case "oceania":
             arrayRemove(allRegions, oceania);
-            message.member.removeRoles(allRegions).then(updated => updated.addRole(oceania));
+            message.member.roles.remove(allRegions).then(updated => updated.roles.add(oceania));
             message.reply("your region has been set to Oceania.");
         break;
         default:
