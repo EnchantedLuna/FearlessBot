@@ -776,7 +776,18 @@ function getCommand(message, keyword, showUnapproved)
         } else if (!rows[0].approved && !showUnapproved) {
             message.reply("this item has not been approved yet.");
         } else {
-            message.reply(rows[0]['value']);
+            let text = rows[0]['value'];
+            let author = message.author.username + '#' + message.author.discriminator;
+            if (text.match('\(http\(s\?\)\:\)\(\[\/\|\.\|\\w\|\\s\|\-\]\)\*\\\.\(\?\:jpg\|gif\|png\)')) {
+                message.channel.send('', {
+                    embed: {
+                        title: keyword,
+                        image: {url: text},
+                        footer: {text: 'requested by ' + author}
+                    }});
+            } else {
+                message.reply(text);
+            }
             if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
                 db.query("UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
                  [keyword, message.channel.guild.id]);
