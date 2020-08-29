@@ -1164,11 +1164,13 @@ function answerCommand(message, params)
         db.query("SELECT * FROM trivia_answers WHERE user = ? AND questionid = ?", [message.author.id, question], function (err, rows) {
             if (rows.length == 0) {
                 db.query("INSERT INTO trivia_answers (user, questionid, answer, time) VALUES (?,?,?,now())", [message.author.id, question, answer]);
-                message.reply("Your answer to question #" + question +" has been submitted. Thank you!");
+                message.reply("Your answer to question #" + question +" (" + questionRow[0].question 
+                + ") has been submitted. Thank you!");
                 return;
             } else {
                 db.query("UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ? AND questionid = ?", [answer, message.author.id, question]);
-                message.reply("Your answer to question #" + question +" has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
+                message.reply("Your answer to question #" + question +" (" + questionRow[0].question 
+                + ") has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
             }
         });
     });
