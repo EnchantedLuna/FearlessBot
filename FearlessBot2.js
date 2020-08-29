@@ -286,13 +286,18 @@ function handleDirectMessage(message)
         case "!album":
             albumCommand(message);
             break;
+        // trivia
+        case "!question":
+            newQuestionCommand(message, params);
+            break;
+        case "!closequestion":
+            closeQuestionCommand(message, params);
+            break;
         case "!answer":
             answerCommand(message);
             break;
         case "!getanswers":
-            if (message.author.id == config.botAdminUserId) {
-                getAnswersCommand(message, params);
-            }
+            getAnswersCommand(message, params);
             break;
     }
 }
@@ -919,38 +924,7 @@ function getUnapprovedCommand(message)
     });
 }
 
-function badAnswerCommand(message)
-{
-    message.reply("answer only in my DMs!");
-    message.delete();
-}
 
-function answerCommand(message, params)
-{
-    let command = message.content.split(" ");
-    let question = command[1];
-    let answer = command.slice(2, command.length).join(" ");
-    db.query("SELECT * FROM trivia_questions WHERE id = ?", [question], function(err, questionRow) {
-        if (questionRow[0] == null) {
-            message.reply("Invalid question id.");
-            return;
-        }
-        if (!questionRow[0].isopen) {
-            message.reply("Question #" + rows[0].id + " is no longer taking answers.");
-            return;
-        }
-        db.query("SELECT * FROM trivia_answers WHERE user = ?", [message.author.id], function (err, rows) {
-            if (rows.length == 0) {
-                db.query("INSERT INTO trivia_answers (user, answer, time) VALUES (?,?,now())", [message.author.id, answer]);
-                message.reply("Your answer to question #" + question +" has been submitted. Thank you!");
-                return;
-            } else {
-                db.query("UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ?", [answer, message.author.id]);
-                message.reply("Your answer to question # " + question +" has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
-            }
-        });
-    });
-}
 
 // Guild property commands (roles, permissions, etc)
 
@@ -1162,11 +1136,66 @@ function fsayCommand(message, params)
     message.delete();
 }
 
+// Trivia
+
+function badAnswerCommand(message)
+{
+    message.reply("answer only in my DMs!");
+    message.delete();
+}
+
+function answerCommand(message, params)
+{
+    let command = message.content.split(" ");
+    let question = command[1];
+    let answer = command.slice(2, command.length).join(" ");
+    db.query("SELECT * FROM trivia_questions WHERE id = ?", [question], function(err, questionRow) {
+        if (questionRow[0] == null) {
+            message.reply("That question id does not exist. Please try again.");
+            return;
+        }
+        if (!questionRow[0].isopen) {
+            message.reply("Question #" + questionRow[0].id + " is no longer taking answers.");
+            return;
+        }
+        db.query("SELECT * FROM trivia_answers WHERE user = ? AND questionid = ?", [message.author.id, question], function (err, rows) {
+            if (rows.length == 0) {
+                db.query("INSERT INTO trivia_answers (user, questionid, answer, time) VALUES (?,?,?,now())", [message.author.id, question, answer]);
+                message.reply("Your answer to question #" + question +" has been submitted. Thank you!");
+                return;
+            } else {
+                db.query("UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ? AND questionid = ?", [answer, message.author.id, question]);
+                message.reply("Your answer to question #" + question +" has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
+            }
+        });
+    });
+}
+
 function newQuestionCommand(message, params)
 {
+    if (params == '') {
+        message.reply("Please enter a question, e.g. ``!question Is butt legs?``");
+        return;
+    }
     db.query("INSERT INTO trivia_questions (user, question, timecreated) VALUES (?, ?, now())", 
     [message.author.id, params], function (err, result) {
-        message.reply("Question #" + result.insertId + "has been registered.");
+        message.reply("Question #" + result.insertId + " has been registered.");
+    });
+}
+
+function closeQuestionCommand(message, params)
+{
+    db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function(err, rows) {
+        if (rows[0] == null) {
+            message.reply("Invalid question id");
+            return;
+        }
+        if (rows[0].user != message.author.id && message.author.id != config.botAdminUserId) {
+            message.reply("You do not have permission to close this question.");
+            return;
+        }
+        db.query("UPDATE trivia_questions SET isopen=0 WHERE id = ?", [params]);
+        message.reply("Question #" + params + " has been closed.");
     });
 }
 
@@ -1189,8 +1218,8 @@ function getAnswerList(message, id, question)
 {
     db.query("SELECT username, discriminator, answer FROM trivia_answers "
     + "JOIN members ON members.id=trivia_answers.user WHERE server = ? AND questionid = ? ORDER BY trivia_answers.id",
-     [config.mainServer, params], function(err, rows) {
-        let response = '__Answers for question #' + id + + ": " + question + "__\n";
+     [config.mainServer, id], function(err, rows) {
+        let response = '__Answers for question #' + id + ": " + question + "__\n";
         let userList = [];
         for (var i = 0; i < rows.length; i++) {
             let username = '@' + rows[i].username + "#" + rows[i].discriminator.toString().padStart(4, '0');
@@ -1198,7 +1227,10 @@ function getAnswerList(message, id, question)
             response += answer;
             userList.push(username);
         }
-        response += 'award all command: ```\n!award 1 ' + userList.join(' ') + '```';
+        let mainServer = bot.guilds.cache.get(config.mainServer);
+        if (typeof mainServer !== 'undefined' && isMod(message.author.id, mainServer)) {
+            response += 'award all command: ```\n!award 1 ' + userList.join(' ') + '```';
+        }
 
         message.reply(response, {split: true});
     });
