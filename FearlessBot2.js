@@ -784,9 +784,9 @@ function getCommand(message, keyword, showUnapproved)
             if (text.match('^\(http\(s\?\)\:\)\(\[\/\|\.\|\\w\|\\s\|\-\]\)\*\\\.\(\?\:jpg\|gif\|png\)$')) {
                 message.channel.send('', {
                     embed: {
-                        title: keyword,
+                        title: keyword + ' (requested by ' + author + ')',
                         image: {url: text},
-                        footer: {text: 'Requested by ' + author}
+                        footer: {text: 'Created: ' + rows[0].timeadded.toDateString()}
                     }});
             } else {
                 message.reply(text);
