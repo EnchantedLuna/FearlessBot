@@ -1213,12 +1213,15 @@ function getAnswersCommand(message, params)
             message.reply("You do not have permission to view these answers.");
             return;
         }
-        getAnswerList(message, rows[0].id, rows[0].question);
+        getAnswerList(message, rows[0]);
     });
 }
 
-function getAnswerList(message, id, question)
+function getAnswerList(message, questionRow)
 {
+    let id = questionRow.id;
+    let question = questionRow.question;
+    let questionAsker = questionRow.user;
     db.query("SELECT user, answer FROM trivia_answers WHERE questionid = ? ORDER BY id",
      [id], function(err, rows) {
         let response = '__Answers for question #' + id + ": " + question + "__\n";
@@ -1233,9 +1236,11 @@ function getAnswerList(message, id, question)
         }
         let mainServer = bot.guilds.cache.get(config.mainServer);
         if (typeof mainServer !== 'undefined' && isMod(message.author.id, mainServer)) {
-            response += 'award all command: ```\n!award 1 ' + userList.join(' ') + '```';
+            response += 'Award all command: ```\n!award 1 ' + userList.join(' ') + '```';
         }
-        db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
+        if (message.author.id == questionAsker) {
+            db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
+        }
 
         message.reply(response, {split: true});
     });
