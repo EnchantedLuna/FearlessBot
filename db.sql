@@ -92,10 +92,20 @@ CREATE TABLE namemix
   addedby BIGINT(20)
 );
 
+CREATE TABLE trivia_questions
+(
+  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user BIGINT(20) NOT NULL,
+  question VARCHAR(400) NOT NULL,
+  timecreated DATETIME,
+  isopen TINYINT(1) NOT NULL DEFAULT 1
+);
+
 CREATE TABLE trivia_answers
 (
   id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user BIGINT(20) NOT NULL,
+  questionid INT(11) NOT NULL,
   answer VARCHAR(1500) NOT NULL,
   time DATETIME
 );

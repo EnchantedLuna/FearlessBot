@@ -287,16 +287,11 @@ function handleDirectMessage(message)
             albumCommand(message);
             break;
         case "!answer":
-            answerCommand(message, params);
+            answerCommand(message);
             break;
         case "!getanswers":
             if (message.author.id == config.botAdminUserId) {
-                getAnswersCommand(message);
-            }
-            break;
-        case "!clearanswers":
-            if (message.author.id == config.botAdminUserId) {
-                clearAnswersCommand(message);
+                getAnswersCommand(message, params);
             }
             break;
     }
@@ -932,15 +927,28 @@ function badAnswerCommand(message)
 
 function answerCommand(message, params)
 {
-    db.query("SELECT * FROM trivia_answers WHERE user = ?", [message.author.id], function (err, rows) {
-        if (rows.length == 0) {
-            db.query("INSERT INTO trivia_answers (user, answer, time) VALUES (?,?,now())", [message.author.id, params]);
-            message.reply("Your answer has been submitted. Thank you!");
+    let command = message.content.split(" ");
+    let question = command[1];
+    let answer = command.slice(2, command.length).join(" ");
+    db.query("SELECT * FROM trivia_questions WHERE id = ?", [question], function(err, questionRow) {
+        if (questionRow[0] == null) {
+            message.reply("Invalid question id.");
             return;
-        } else {
-            db.query("UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ?", [params, message.author.id]);
-            message.reply("Your answer has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
         }
+        if (!questionRow[0].isopen) {
+            message.reply("Question #" + rows[0].id + " is no longer taking answers.");
+            return;
+        }
+        db.query("SELECT * FROM trivia_answers WHERE user = ?", [message.author.id], function (err, rows) {
+            if (rows.length == 0) {
+                db.query("INSERT INTO trivia_answers (user, answer, time) VALUES (?,?,now())", [message.author.id, answer]);
+                message.reply("Your answer to question #" + question +" has been submitted. Thank you!");
+                return;
+            } else {
+                db.query("UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ?", [answer, message.author.id]);
+                message.reply("Your answer to question # " + question +" has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
+            }
+        });
     });
 }
 
@@ -1154,35 +1162,47 @@ function fsayCommand(message, params)
     message.delete();
 }
 
-function getAnswersCommand(message)
+function newQuestionCommand(message, params)
+{
+    db.query("INSERT INTO trivia_questions (user, question, timecreated) VALUES (?, ?, now())", 
+    [message.author.id, params], function (err, result) {
+        message.reply("Question #" + result.insertId + "has been registered.");
+    });
+}
+
+function getAnswersCommand(message, params)
+{
+    db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function(err, rows) {
+        if (rows[0] == null) {
+            message.reply("Invalid question id");
+            return;
+        }
+        if (rows[0].user != message.author.id && message.author.id != config.botAdminUserId) {
+            message.reply("You do not have permission to view these answers.");
+            return;
+        }
+        getAnswerList(message, rows[0].id, rows[0].question);
+    });
+}
+
+function getAnswerList(message, id, question)
 {
     db.query("SELECT username, discriminator, answer FROM trivia_answers "
-    + "JOIN members ON members.id=trivia_answers.user WHERE server = ? ORDER BY trivia_answers.id",
-     [config.mainServer], function(err, rows) {
-        let response = '';
+    + "JOIN members ON members.id=trivia_answers.user WHERE server = ? AND questionid = ? ORDER BY trivia_answers.id",
+     [config.mainServer, params], function(err, rows) {
+        let response = '__Answers for question #' + id + + ": " + question + "__\n";
         let userList = [];
         for (var i = 0; i < rows.length; i++) {
             let username = '@' + rows[i].username + "#" + rows[i].discriminator.toString().padStart(4, '0');
             let answer = '**' + username + '**\n' + rows[i].answer + "\n\n";
-            if (response.length + answer.length > 1900) {
-                message.reply(response);
-                response = '';
-            }
             response += answer;
             userList.push(username);
         }
+        response += 'award all command: ```\n!award 1 ' + userList.join(' ') + '```';
 
-        message.reply(response);
-        message.reply('award all command: ```\n!award 1 ' + userList.join(' ') + '```');
+        message.reply(response, {split: true});
     });
 }
-
-function clearAnswersCommand(message)
-{
-    db.query("DELETE FROM trivia_answers");
-    message.reply("Answers cleared.");
-}
-
 // lol
 
 function dontAtMe(message)
