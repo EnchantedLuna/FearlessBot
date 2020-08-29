@@ -1160,17 +1160,20 @@ function getAnswersCommand(message)
     + "JOIN members ON members.id=trivia_answers.user WHERE server = ? ORDER BY trivia_answers.id",
      [config.mainServer], function(err, rows) {
         let response = '';
+        let userList = [];
         for (var i = 0; i < rows.length; i++) {
-            let username = rows[i].username + "#" + rows[i].discriminator.toString().padStart(4, '0');
-            let answer = '**@' + username + '**\n' + rows[i].answer + "\n\n";
+            let username = '@' + rows[i].username + "#" + rows[i].discriminator.toString().padStart(4, '0');
+            let answer = '**' + username + '**\n' + rows[i].answer + "\n\n";
             if (response.length + answer.length > 1900) {
                 message.reply(response);
                 response = '';
             }
             response += answer;
+            userList.push(username);
         }
 
         message.reply(response);
+        message.reply('award all command: ```\n!award 1 ' + userList.join(' ') + '```');
     });
 }
 
