@@ -782,11 +782,17 @@ function getCommand(message, keyword, showUnapproved)
             let text = rows[0]['value'];
             let author = message.author.username + '#' + message.author.discriminator;
             if (text.match('^\(http\(s\?\)\:\)\(\[\/\|\.\|\\w\|\\s\|\-\]\)\*\\\.\(\?\:jpg\|gif\|png\)$')) {
+                let date = 'Created: ';
+                if (rows[0].timeadded !== null) {
+                    date += rows[0].timeadded.toDateString();
+                } else {
+                    date += 'a long time ago';
+                }
                 message.channel.send('', {
                     embed: {
                         title: keyword + ' (requested by ' + author + ')',
                         image: {url: text},
-                        footer: {text: 'Created: ' + rows[0].timeadded.toDateString()}
+                        footer: {text: date}
                     }});
             } else {
                 message.reply(text);
