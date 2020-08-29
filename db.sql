@@ -91,3 +91,11 @@ CREATE TABLE namemix
   addedon DATETIME,
   addedby BIGINT(20)
 );
+
+CREATE TABLE trivia_answers
+(
+  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user BIGINT(20) NOT NULL,
+  answer VARCHAR(1500) NOT NULL,
+  time DATETIME
+);

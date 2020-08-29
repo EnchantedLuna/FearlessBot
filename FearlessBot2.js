@@ -71,10 +71,6 @@ bot.on('message', message => {
     updateUserStats(message);
     updateChannelStatsAndLog(message);
 
-    if (config.noCommandChannels.includes(message.channel.id) && !isMod(message.member, message.channel.guild)) {
-        return;
-    }
-
     if (message.channel.guild.id == config.mainServer && !hasRole(message.member, message.channel.guild, 'active')) {
         let joinDate = message.member.joinedAt;
         let now = new Date();
@@ -189,6 +185,9 @@ bot.on('message', message => {
         case "!ranklorpoints":
             rankThingCommand(message, "lorpoints", parseInt(command[1]));
             break;
+        case "!answer":
+            badAnswerCommand(message);
+            break;
         // Mod commands
         case "!approve":
             if (isMod(message.member, message.channel.guild)) {
@@ -287,18 +286,25 @@ function handleDirectMessage(message)
         case "!album":
             albumCommand(message);
             break;
+        case "!answer":
+            answerCommand(message, params);
+            break;
+        case "!getanswers":
+            if (message.author.id == config.botAdminUserId) {
+                getAnswersCommand(message);
+            }
+            break;
+        case "!clearanswers":
+            if (message.author.id == config.botAdminUserId) {
+                clearAnswersCommand(message);
+            }
+            break;
     }
 }
 
 
 bot.on('guildMemberRemove', member => {
     db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [member.guild.id, member.id]);
-    let joinDate = member.joinedAt;
-    let now = new Date();
-    let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
-    if (joinTime < 300) {
-        //member.guild.defaultChannel.send(member.user.username + ' has already left us. :disappointed:');
-    }
 });
 
 
@@ -918,6 +924,26 @@ function getUnapprovedCommand(message)
     });
 }
 
+function badAnswerCommand(message)
+{
+    message.reply("answer only in my DMs!");
+    message.delete();
+}
+
+function answerCommand(message, params)
+{
+    db.query("SELECT * FROM trivia_answers WHERE user = ?", [message.author.id], function (err, rows) {
+        if (rows.length == 0) {
+            db.query("INSERT INTO trivia_answers (user, answer, time) VALUES (?,?,now())", [message.author.id, params]);
+            message.reply("Your answer has been submitted. Thank you!");
+            return;
+        } else {
+            db.query("UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ?", [params, message.author.id]);
+            message.reply("Your answer has been updated, replacing your previous answer (" + rows[0].answer + "). Thank you!");
+        }
+    });
+}
+
 // Guild property commands (roles, permissions, etc)
 
 function regionCommand(message, region)
@@ -1126,6 +1152,31 @@ function fsayCommand(message, params)
 {
     message.channel.send(params);
     message.delete();
+}
+
+function getAnswersCommand(message)
+{
+    db.query("SELECT username, discriminator, answer FROM trivia_answers "
+    + "JOIN members ON members.id=trivia_answers.user WHERE server = ? ORDER BY trivia_answers.id",
+     [config.mainServer], function(err, rows) {
+        let response = '';
+        for (var i = 0; i < rows.length; i++) {
+            let answer = '**' + rows[i].username + "#" + rows[i].discriminator + '**\n' + rows[i].answer + "\n\n";
+            if (response.length + answer.length > 1900) {
+                message.reply(response);
+                response = '';
+            }
+            response += answer;
+        }
+
+        message.reply(response);
+    });
+}
+
+function clearAnswersCommand(message)
+{
+    db.query("DELETE FROM trivia_answers");
+    message.reply("Answers cleared.");
 }
 
 // lol
