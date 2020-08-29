@@ -261,9 +261,6 @@ bot.on('message', message => {
                 fsayCommand(message, params);
             }
             break;
-        default:
-            dontAtMe(message);
-            break;
   }
 });
 
@@ -1235,14 +1232,3 @@ function getAnswerList(message, id, question)
         message.reply(response, {split: true});
     });
 }
-// lol
-
-function dontAtMe(message)
-{
-    var lowerMessage = message.content.toLowerCase();
-    if (lowerMessage.includes('dont @ me') || lowerMessage.includes("don't @ me") || lowerMessage.includes("do not @ me")) {
-        message.reply(":smirk:");
-    }
-}
-
-// event commands
