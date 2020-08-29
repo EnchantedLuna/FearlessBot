@@ -1161,7 +1161,8 @@ function getAnswersCommand(message)
      [config.mainServer], function(err, rows) {
         let response = '';
         for (var i = 0; i < rows.length; i++) {
-            let answer = '**' + rows[i].username + "#" + rows[i].discriminator + '**\n' + rows[i].answer + "\n\n";
+            let username = rows[i].username + "#" + rows[i].discriminator.toString().padStart(4, '0');
+            let answer = '**@' + username + '**\n' + rows[i].answer + "\n\n";
             if (response.length + answer.length > 1900) {
                 message.reply(response);
                 response = '';
