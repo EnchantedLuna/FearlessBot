@@ -778,12 +778,12 @@ function getCommand(message, keyword, showUnapproved)
         } else {
             let text = rows[0]['value'];
             let author = message.author.username + '#' + message.author.discriminator;
-            if (text.match('\(http\(s\?\)\:\)\(\[\/\|\.\|\\w\|\\s\|\-\]\)\*\\\.\(\?\:jpg\|gif\|png\)')) {
+            if (text.match('^\(http\(s\?\)\:\)\(\[\/\|\.\|\\w\|\\s\|\-\]\)\*\\\.\(\?\:jpg\|gif\|png\)$')) {
                 message.channel.send('', {
                     embed: {
                         title: keyword,
                         image: {url: text},
-                        footer: {text: 'requested by ' + author}
+                        footer: {text: 'Requested by ' + author}
                     }});
             } else {
                 message.reply(text);
