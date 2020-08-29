@@ -911,12 +911,12 @@ function getUnapprovedCommand(message)
 
 function regionCommand(message, region)
 {
-    var northamerica = message.channel.guild.roles.cache.find('name','northamerica');
-    var southamerica = message.channel.guild.roles.cache.find('name', 'southamerica');
-    var europe = message.channel.guild.roles.cache.find('name','europe');
-    var asia = message.channel.guild.roles.cache.find('name','asia');
-    var africa = message.channel.guild.roles.cache.find('name','africa');
-    var oceania = message.channel.guild.roles.cache.find('name','oceania');
+    var northamerica = message.channel.guild.roles.cache.find(role => role.name === 'northamerica');
+    var southamerica = message.channel.guild.roles.cache.find(role => role.name === 'southamerica');
+    var europe = message.channel.guild.roles.cache.find(role => role.name === 'europe');
+    var asia = message.channel.guild.roles.cache.find(role => role.name === 'asia');
+    var africa = message.channel.guild.roles.cache.find(role => role.name === 'africa');
+    var oceania = message.channel.guild.roles.cache.find(role => role.name === 'oceania');
     var allRegions = [northamerica, southamerica, europe, asia, africa, oceania];
 
     if (typeof region == 'undefined') {
@@ -969,7 +969,7 @@ function regionCommand(message, region)
 
 function toggleRoleCommand(message, roleName)
 {
-    let role = message.channel.guild.roles.find('name',roleName);
+    let role = message.channel.guild.roles.find(role => role.name === roleName);
     let member = message.member;
     if (member.roles.has(role.id)) {
         message.member.removeRole(role);
