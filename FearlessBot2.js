@@ -780,7 +780,7 @@ function getCommand(message, keyword, showUnapproved)
             message.reply("this item has not been approved yet.");
         } else {
             let text = rows[0]['value'];
-            let author = message.author.username + '#' + message.author.discriminator;
+            let author = message.author.tag;
             if (text.match('^\(http\(s\?\)\:\)\(\[\/\|\.\|\\w\|\\s\|\-\]\)\*\\\.\(\?\:jpg\|gif\|png\)$')) {
                 let date = 'Created: ';
                 if (rows[0].timeadded !== null) {
@@ -1219,21 +1219,23 @@ function getAnswersCommand(message, params)
 
 function getAnswerList(message, id, question)
 {
-    db.query("SELECT username, discriminator, answer FROM trivia_answers "
-    + "JOIN members ON members.id=trivia_answers.user WHERE server = ? AND questionid = ? ORDER BY trivia_answers.id",
-     [config.mainServer, id], function(err, rows) {
+    db.query("SELECT user, answer FROM trivia_answers WHERE questionid = ? ORDER BY id",
+     [id], function(err, rows) {
         let response = '__Answers for question #' + id + ": " + question + "__\n";
         let userList = [];
         for (var i = 0; i < rows.length; i++) {
-            let username = '@' + rows[i].username + "#" + rows[i].discriminator.toString().padStart(4, '0');
-            let answer = '**' + username + '**\n' + rows[i].answer + "\n\n";
-            response += answer;
+            let answer = rows[i].answer;
+            let user = bot.users.resolve(rows[i].user);
+            let username = '@' + user.tag;
+            let answerEntry = '**' + username + '**\n' + answer + "\n\n";
+            response += answerEntry;
             userList.push(username);
         }
         let mainServer = bot.guilds.cache.get(config.mainServer);
         if (typeof mainServer !== 'undefined' && isMod(message.author.id, mainServer)) {
             response += 'award all command: ```\n!award 1 ' + userList.join(' ') + '```';
         }
+        db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
 
         message.reply(response, {split: true});
     });

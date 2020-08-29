@@ -107,5 +107,6 @@ CREATE TABLE trivia_answers
   user BIGINT(20) NOT NULL,
   questionid INT(11) NOT NULL,
   answer VARCHAR(1500) NOT NULL,
+  viewed TINYINT(1) NOT NULL DEFAULT 0,
   time DATETIME
 );
