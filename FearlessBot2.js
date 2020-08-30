@@ -330,15 +330,6 @@ bot.on('messageDelete', message => {
     db.query("UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?", [words, message.channel.id]);
 });
 
-bot.on('guildBanAdd', (guild, user) => {
-    log(guild, user.username + "#" + user.discriminator + " has been banned.");
-});
-
-
-bot.on('guildBanRemove', (guild, user) => {
-    log(guild, user.username + "#" + user.discriminator + " has been unbanned.");
-});
-
 bot.login(config.token);
 
 function updateUserStats(message)
