@@ -719,7 +719,7 @@ function rankThingCommand(message, thing, page) {
   if (isNaN(page) || page < 1) {
     page = 1;
   }
-  let offset = 20 * page - 1;
+  let offset = 20 * (page - 1);
   let rankString = "";
   db.query(
     "SELECT username, " +
@@ -731,7 +731,7 @@ function rankThingCommand(message, thing, page) {
       " DESC LIMIT ?, 20",
     [message.channel.guild.id, offset],
     function (err, rows) {
-      var count = offset * 20 + 1;
+      var count = offset + 1;
       rows.forEach(function (member) {
         rankString +=
           count +
