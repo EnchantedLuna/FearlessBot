@@ -294,7 +294,10 @@ function handleDirectMessage(message)
             answerCommand(message);
             break;
         case "!getanswers":
-            getAnswersCommand(message, params);
+            getAnswersCommand(message, params, false);
+            break;
+        case "!getnewanswers":
+            getAnswersCommand(message, params, true);
             break;
     }
 }
@@ -1204,7 +1207,7 @@ function closeQuestionCommand(message, params)
     });
 }
 
-function getAnswersCommand(message, params)
+function getAnswersCommand(message, params, showOnlyNew)
 {
     db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function(err, rows) {
         if (rows[0] == null) {
@@ -1215,16 +1218,20 @@ function getAnswersCommand(message, params)
             message.reply("You do not have permission to view these answers.");
             return;
         }
-        getAnswerList(message, rows[0]);
+        getAnswerList(message, rows[0], showOnlyNew);
     });
 }
 
-function getAnswerList(message, questionRow)
+function getAnswerList(message, questionRow, showOnlyNew)
 {
     let id = questionRow.id;
     let question = questionRow.question;
     let questionAsker = questionRow.user;
-    db.query("SELECT user, answer FROM trivia_answers WHERE questionid = ? ORDER BY id",
+    let query = "SELECT user, answer FROM trivia_answers WHERE questionid = ? ORDER BY id";
+    if (showOnlyNew) {
+        query = "SELECT user, answer FROM trivia_answers WHERE questionid = ? AND viewed = 0 ORDER BY id";
+    }
+    db.query(query,
      [id], function(err, rows) {
         let response = '__Answers for question #' + id + ": " + question + "__\n";
         let userList = [];
