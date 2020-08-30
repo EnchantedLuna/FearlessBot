@@ -645,10 +645,10 @@ function addNameMixCommand(message, part, namePiece)
 
 function rankThingCommand(message, thing, number)
 {
-    var rankString = "Users with most " + thing + ":\n";
     if (isNaN(number) || number < 1 || number > 50) {
         number = 10;
     }
+    let rankString = '';
     db.query("SELECT username, " + thing + " AS thing FROM members WHERE server = ? AND " + thing + " > 0 AND active=1 ORDER BY " + thing + " DESC LIMIT ?",
      [message.channel.guild.id, number], function (err, rows)
     {
@@ -657,7 +657,12 @@ function rankThingCommand(message, thing, number)
             rankString += count + ": " + member.username + " - " + member.thing + " " + thing + "\n";
             count++;
         });
-        message.reply(rankString);
+        message.channel.send('', {
+            embed: {
+                title: "Users with most " + thing,
+                description: rankString
+            }
+        });
     });
 }
 
