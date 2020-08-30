@@ -1032,12 +1032,14 @@ function arrayRemove(array, element) {
 
 function supermuteCommand(message, hours)
 {
-    var supermute = message.channel.guild.roles.cache.find(role => role.name === 'supermute');
+    let supermute = message.channel.guild.roles.cache.find(role => role.name === 'supermute');
+    let active = message.channel.guild.roles.cache.find(role => role.name === 'active');
     message.mentions.members.forEach(function (member, key, map) {
         if (isMod(member, message.channel.guild)) {
             message.reply(":smirk:");
         } else {
             member.roles.add(supermute);
+            member.roles.remove(active);
             var timeMessage = '';
             if (hours > 0) {
                 db.query("INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unmute', ?, ?, NOW() + INTERVAL ? HOUR)",
