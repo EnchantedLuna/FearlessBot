@@ -748,7 +748,7 @@ function rankThingCommand(message, thing, page) {
         embed: {
           title: "Users with most " + thing,
           description: rankString,
-          footer: "Page " + page,
+          footer: { text: "Page " + page },
         },
       });
     }
