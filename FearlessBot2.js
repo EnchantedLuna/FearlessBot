@@ -142,9 +142,6 @@ bot.on("message", (message) => {
     case "!namemix":
       namemixCommand(message);
       break;
-    case "!xd":
-      xdCommand(message);
-      break;
     case "!clap":
       clapCommand(message);
       break;
@@ -587,18 +584,6 @@ function namemixCommand(message) {
       message.reply(rows[0].name);
     }
   );
-}
-
-function xdCommand(message) {
-  let xd = ["x", "d"];
-  let xdd = rand(0, 1) == 1 ? "X" : "x";
-  let incomplete = true;
-  while (incomplete) {
-    for (let i = 0; i < rand(2, 10); i++)
-      xdd += rand(0, 1) == 1 ? xd[rand(0, 1)] : xd[rand(0, 1)].toUpperCase();
-    if (xdd.toLowerCase().indexOf("d") !== -1) incomplete = false;
-  }
-  message.reply(xdd);
 }
 
 function clapCommand(message) {
