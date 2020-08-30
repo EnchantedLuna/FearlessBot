@@ -715,10 +715,11 @@ function addNameMixCommand(message, part, namePiece) {
   message.reply("added!");
 }
 
-function rankThingCommand(message, thing, number) {
-  if (isNaN(number) || number < 1 || number > 50) {
-    number = 10;
+function rankThingCommand(message, thing, page) {
+  if (isNaN(page) || page < 1) {
+    page = 1;
   }
+  let offset = page - 1;
   let rankString = "";
   db.query(
     "SELECT username, " +
@@ -727,10 +728,10 @@ function rankThingCommand(message, thing, number) {
       thing +
       " > 0 AND active=1 ORDER BY " +
       thing +
-      " DESC LIMIT ?",
-    [message.channel.guild.id, number],
+      " DESC LIMIT ?, 20",
+    [message.channel.guild.id, offset],
     function (err, rows) {
-      var count = 1;
+      var count = offset * 20 + 1;
       rows.forEach(function (member) {
         rankString +=
           count +
@@ -747,6 +748,7 @@ function rankThingCommand(message, thing, number) {
         embed: {
           title: "Users with most " + thing,
           description: rankString,
+          footer: "Page " + page,
         },
       });
     }
