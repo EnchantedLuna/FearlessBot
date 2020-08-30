@@ -719,7 +719,7 @@ function rankThingCommand(message, thing, page) {
   if (isNaN(page) || page < 1) {
     page = 1;
   }
-  let offset = page - 1;
+  let offset = 20 * page - 1;
   let rankString = "";
   db.query(
     "SELECT username, " +
