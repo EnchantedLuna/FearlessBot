@@ -498,7 +498,7 @@ function rand(min, max) {
 // Basic commands (no db involvement, usable by all users)
 
 function eightBallCommand(message) {
-  var answer =
+  let answer =
     staticData.eightBallAnswers[
       Math.floor(Math.random() * staticData.eightBallAnswers.length)
     ];
@@ -510,15 +510,15 @@ function botVersionCommand(message) {
 }
 
 function chooseCommand(message, params) {
-  var choices = params.split(",");
+  let choices = params.split(",");
   if (choices.length > 1) {
-    var selectedChoice = choices[Math.floor(Math.random() * choices.length)];
+    let selectedChoice = choices[Math.floor(Math.random() * choices.length)];
     message.reply("I pick: " + selectedChoice.trim());
   }
 }
 
 function songCommand(message) {
-  var answer =
+  let answer =
     staticData.taylorSwiftSongs[
       Math.floor(Math.random() * staticData.taylorSwiftSongs.length)
     ];
@@ -526,7 +526,7 @@ function songCommand(message) {
 }
 
 function albumCommand(message) {
-  var answer =
+  let answer =
     staticData.taylorSwiftAlbums[
       Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)
     ];
@@ -534,14 +534,14 @@ function albumCommand(message) {
 }
 
 function bCommand(message, params, level) {
-  var changed = params;
+  let changed = params;
   changed = changed.replaceAll("b", ":b:").replaceAll("B", ":b:");
   if (level >= 2) {
     changed = changed.replaceAll("C", ":b:").replaceAll("c", ":b:");
   }
   if (level == 3) {
-    var characters = changed.split("");
-    for (var i = 0; i < characters.length; i++) {
+    let characters = changed.split("");
+    for (let i = 0; i < characters.length; i++) {
       if (characters[i].match("[AD-Zad-z]") && Math.random() < 0.1) {
         characters[i] = ":b:";
       }
@@ -1088,7 +1088,15 @@ function approveCommand(message, keyword) {
     [message.author.id, keyword, message.channel.guild.id],
     function (err, result) {
       if (result.changedRows > 0) {
-        message.reply("approved.");
+        message.channel.send("", {
+          embed: {
+            description:
+              ":white_check_mark: Saved item '" +
+              keyword +
+              "' has been approved.",
+            color: 0x00ff00,
+          },
+        });
         log(
           message.channel.guild,
           "Saved item " +
