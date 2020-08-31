@@ -1105,7 +1105,12 @@ function approveCommand(message, keyword) {
             message.author.username
         );
       } else {
-        message.reply("nothing to approve.");
+        message.channel.send("", {
+          embed: {
+            description: ":warning: Nothing to approve.",
+            color: 0xffff00,
+          },
+        });
       }
     }
   );
