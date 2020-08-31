@@ -106,157 +106,162 @@ bot.on("message", (message) => {
     }
   }
 
-  switch (command[0].toLowerCase()) {
+  if (message.content.indexOf(config.prefix) !== 0) {
+    return;
+  }
+  const commandName = command[0].toLowerCase().slice(config.prefix.length);
+
+  switch (commandName) {
     // Normal user basic commands (no db)
-    case "!8ball":
+    case "8ball":
       eightBallCommand(message);
       break;
-    case "!choose":
+    case "choose":
       chooseCommand(message, params);
       break;
-    case "!song":
+    case "song":
       songCommand(message);
       break;
-    case "!album":
+    case "album":
       albumCommand(message);
       break;
-    case "!fversion":
+    case "fversion":
       botVersionCommand(message);
       break;
-    case "!n":
+    case "n":
       nCommand(message, params);
       break;
-    case "!b":
+    case "b":
       bCommand(message, params, 1);
       break;
-    case "!b2":
+    case "b2":
       bCommand(message, params, 2);
       break;
-    case "!b3":
+    case "b3":
       bCommand(message, params, 3);
       break;
-    case "!region":
-    case "!setregion":
+    case "region":
+    case "setregion":
       regionCommand(message, command[1]);
       break;
-    case "!namemix":
+    case "namemix":
       namemixCommand(message);
       break;
-    case "!clap":
+    case "clap":
       clapCommand(message);
       break;
-    case "!ha":
+    case "ha":
       haCommand(message);
       break;
-    case "!hm":
+    case "hm":
       hmCommand(message);
       break;
-    case "!yesno":
+    case "yesno":
       yesnoCommand(message);
       break;
 
     // Normal user database commands
-    case "!totals":
+    case "totals":
       totalsCommand(message, params);
       break;
-    case "!g":
-    case "!get":
+    case "g":
+    case "get":
       getCommand(message, command[1], false);
       break;
-    case "!gmeta":
-    case "!getmeta":
+    case "gmeta":
+    case "getmeta":
       getMetaCommand(message, command[1]);
       break;
-    case "!rg":
+    case "rg":
       rgCommand(message);
       break;
-    case "!getlist":
+    case "getlist":
       getlistCommand(message);
       break;
-    case "!save":
+    case "save":
       saveCommand(message);
       break;
-    case "!seen":
-    case "!last":
+    case "seen":
+    case "last":
       seenCommand(message, params);
       break;
-    case "!words":
+    case "words":
       wordsCommand(message, params);
       break;
-    case "!rankwords":
+    case "rankwords":
       rankThingCommand(message, "words", parseInt(command[1]));
       break;
-    case "!shitpost":
+    case "shitpost":
       shitpostCommand(message, command[1]);
       break;
-    case "!randmember":
+    case "randmember":
       randomMemberCommand(message, command[1]);
       break;
-    case "!activity":
+    case "activity":
       activityCommand(message);
       break;
-    case "!awards":
+    case "awards":
       awardsCommand(message);
       break;
-    case "!mods":
+    case "mods":
       modsCommand(message);
       break;
-    case "!lorpoints":
+    case "lorpoints":
       lorpointsCommand(message, params);
       break;
-    case "!ranklorpoints":
+    case "ranklorpoints":
       rankThingCommand(message, "lorpoints", parseInt(command[1]));
       break;
-    case "!answer":
+    case "answer":
       badAnswerCommand(message);
       break;
     // Mod commands
-    case "!approve":
+    case "approve":
       if (isMod(message.member, message.channel.guild)) {
         approveCommand(message, command[1]);
       }
       break;
-    case "!review":
+    case "review":
       if (isMod(message.member, message.channel.guild)) {
         getCommand(message, command[1], true);
       }
       break;
-    case "!delete":
+    case "delete":
       deleteCommand(message, command[1]);
       break;
-    case "!getunapproved":
+    case "getunapproved":
       if (isMod(message.member, message.channel.guild)) {
         getUnapprovedCommand(message);
       }
       break;
-    case "!supermute":
-    case "!hush":
+    case "supermute":
+    case "hush":
       if (isMod(message.member, message.channel.guild)) {
         supermuteCommand(message, parseInt(command[1]));
       }
       break;
-    case "!unsupermute":
+    case "unsupermute":
       if (isMod(message.member, message.channel.guild)) {
         unsupermuteCommand(message);
       }
       break;
-    case "!kick":
+    case "kick":
       if (isMod(message.member, message.channel.guild)) {
         kickCommand(message);
       }
       break;
-    case "!ban":
-    case "!exile":
+    case "ban":
+    case "exile":
       if (isMod(message.member, message.channel.guild)) {
         banCommand(message, parseInt(command[1]));
       }
       break;
-    case "!idban":
+    case "idban":
       if (isMod(message.member, message.channel.guild)) {
         idbanCommand(message, command[1]);
       }
       break;
-    case "!addshitpost":
+    case "addshitpost":
       if (
         isMod(message.member, message.channel.guild) &&
         message.channel.guild.id === config.mainServer
@@ -264,7 +269,7 @@ bot.on("message", (message) => {
         addShitpostCommand(message, params);
       }
       break;
-    case "!addnamemix":
+    case "addnamemix":
       if (
         isMod(message.member, message.channel.guild) &&
         message.channel.guild.id === config.mainServer
@@ -272,19 +277,19 @@ bot.on("message", (message) => {
         addNameMixCommand(message, parseInt(command[1]), command[2]);
       }
       break;
-    case "!award":
+    case "award":
       if (isMod(message.member, message.channel.guild)) {
         awardCommand(message, parseInt(command[1]));
       }
       break;
 
     // Bot admin commands
-    case "!fbotrestart":
+    case "fbotrestart":
       if (message.author.id == config.botAdminUserId) {
         process.exit(-1);
       }
       break;
-    case "!fsay":
+    case "fsay":
       if (message.author.id == config.botAdminUserId) {
         fsayCommand(message, params);
       }

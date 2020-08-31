@@ -1,14 +1,15 @@
 {
   "token": "",
-  "mysqlHost" : "",
-  "mysqlUser" : "",
-  "mysqlPass" : "",
-  "mysqlDB" : "",
+  "mysqlHost": "",
+  "mysqlUser": "",
+  "mysqlPass": "",
+  "mysqlDB": "",
 
-  "mainServer" : "",
-  "statCountingChannels" : ["",""],
-  "noCommandChannels" : [""],
-  "botAdminUserId" : "",
+  "prefix": "!",
+  "mainServer": "",
+  "statCountingChannels": ["", ""],
+  "noCommandChannels": [""],
+  "botAdminUserId": "",
 
-  "baseUrl" : ""
+  "baseUrl": ""
 }
