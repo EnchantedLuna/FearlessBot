@@ -128,9 +128,6 @@ bot.on("message", (message) => {
     case "fversion":
       botVersionCommand(message);
       break;
-    case "n":
-      nCommand(message, params);
-      break;
     case "b":
       bCommand(message, params, 1);
       break;
@@ -554,14 +551,6 @@ function bCommand(message, params, level) {
     changed = characters.join("");
   }
   message.reply(changed);
-}
-
-function nCommand(message, params) {
-  let nenified = params
-    .replaceAll("m", "n")
-    .replaceAll("M", "N")
-    .replaceAll("\uD83C\uDDF2", "\uD83C\uDDF3");
-  message.reply(nenified);
 }
 
 function activityCommand(message) {
