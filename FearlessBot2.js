@@ -66,6 +66,36 @@ function runScheduledActions() {
               rows[i].id,
             ]);
             break;
+          case "unbowlmute":
+            let bowlmute = guild.roles.cache.find(
+              (role) => role.name === "bowlmute"
+            );
+            if (typeof bowlmute == "undefined") {
+              console.log(
+                "Scheduled actions: Bowl mute role not found in guild " +
+                  rows[i].guild
+              );
+              continue;
+            }
+            var member = guild.members.cache.get(rows[i].user);
+            if (typeof member == "undefined") {
+              log(
+                guild,
+                "Warning: " +
+                  rows[i].username +
+                  " was scheduled to be unmuted for bowls, but this member was not found. Have they left?"
+              );
+              db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+                rows[i].id,
+              ]);
+              continue;
+            }
+            member.roles.remove(bowlmute);
+            log(guild, member.user.username + "'s bowl mute has expired.");
+            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+              rows[i].id,
+            ]);
+            break;
           case "unban":
             guild.members.unban(rows[i].user);
             log(guild, rows[i].username + "'s ban has expired.");
@@ -229,6 +259,11 @@ bot.on("message", (message) => {
     case "getunapproved":
       if (isMod(message.member, message.channel.guild)) {
         getUnapprovedCommand(message);
+      }
+      break;
+    case "bowlmute":
+      if (isMod(message.member, message.channel.guild)) {
+        bowlmuteCommand(message, parseInt(command[1]));
       }
       break;
     case "supermute":
@@ -1323,6 +1358,31 @@ function supermuteCommand(message, hours) {
       }
       message.reply(
         member.user.username + " has been supermuted" + timeMessage + "."
+      );
+    }
+  });
+}
+
+function bowlmuteCommand(message, hours) {
+  let bowlMute = message.channel.guild.roles.cache.find(
+    (role) => role.name === "bowlmute"
+  );
+  message.mentions.members.forEach(function (member, key, map) {
+    if (isMod(member, message.channel.guild)) {
+      message.reply(":smirk:");
+    } else {
+      member.roles.add(bowlMute);
+      var timeMessage = "";
+      if (hours > 0) {
+        db.query(
+          "INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unbowlmute', ?, ?, NOW() + INTERVAL ? HOUR)",
+          [message.channel.guild.id, member.user.id, hours]
+        );
+        timeMessage = " for " + hours + " hour";
+        timeMessage += hours != 1 ? "s" : "";
+      }
+      message.reply(
+        member.user.username + " has been bowl muted" + timeMessage + "."
       );
     }
   });
