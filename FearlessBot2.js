@@ -1421,7 +1421,11 @@ function banCommand(message, days) {
     } else {
       var reason = message.cleanContent.replace("!ban ", "");
       member.ban(reason);
-      message.reply(member.user.username + " has been banned.");
+      message.channel.send("", {
+        embed: {
+          description: ":hammer: " + member.user.username + " has been banned.",
+        },
+      });
       var timeMessage = "indefinitely";
       if (days > 0) {
         db.query(
@@ -1449,7 +1453,11 @@ function idbanCommand(message, userId) {
     message.reply(":smirk:");
   } else {
     message.channel.guild.members.ban(userId).then((user) => {
-      message.reply(`banned ${user.username || user.id || user}`);
+      message.channel.send("", {
+        embed: {
+          description: `:hammer: Banned ${user.username || user.id || user}.`,
+        },
+      });
     });
   }
 }
