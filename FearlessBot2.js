@@ -375,7 +375,7 @@ bot.on("guildMemberRemove", (member) => {
   let now = new Date();
   let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
   if (joinTime < 300) {
-    member.guild.defaultChannel.send(
+    member.guild.systemChannel.send(
       member.user.username + " has already left us. :disappointed:"
     );
   }
