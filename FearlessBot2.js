@@ -370,6 +370,15 @@ bot.on("guildMemberRemove", (member) => {
     member.guild.id,
     member.id,
   ]);
+
+  let joinDate = member.joinedAt;
+  let now = new Date();
+  let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
+  if (joinTime < 300) {
+    member.guild.defaultChannel.send(
+      member.user.username + " has already left us. :disappointed:"
+    );
+  }
 });
 
 bot.on("messageDelete", (message) => {
