@@ -1531,7 +1531,7 @@ function answerCommand(message, params) {
           return;
         } else {
           db.query(
-            "UPDATE trivia_answers SET answer = ?, time=now() WHERE user = ? AND questionid = ?",
+            "UPDATE trivia_answers SET answer = ?, time=now(), viewed=0 WHERE user = ? AND questionid = ?",
             [answer, message.author.id, question]
           );
           message.reply(
