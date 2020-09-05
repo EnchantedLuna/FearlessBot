@@ -1,8 +1,7 @@
 const config = require("../config.json");
 const Discord = require("discord.js");
-const staticData = require("../staticData.json");
 
-var bot = new Discord.Client({ disableEveryone: true, fetchAllMembers: true });
+var bot = new Discord.Client();
 
 bot.on("ready", () => {
   console.log("monitor script is ready");
