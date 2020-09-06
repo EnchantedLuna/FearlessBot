@@ -362,6 +362,12 @@ function handleDirectMessage(message) {
     case "!getnewanswers":
       getAnswersCommand(message, params, true);
       break;
+    case "!watch":
+      setWatchedCommand(message, params, 1);
+      break;
+    case "!unwatch":
+      setWatchedCommand(message, params, 0);
+      break;
   }
 }
 
@@ -1545,7 +1551,13 @@ function answerCommand(message, params) {
               questionRow[0].question +
               ") has been submitted. Thank you!"
           );
-          return;
+          if (questionRow[0].watched) {
+            bot.users.cache
+              .get(questionRow[0].user)
+              .send(
+                "**New answer from " + message.author.tag + "**\n" + answer
+              );
+          }
         } else {
           db.query(
             "UPDATE trivia_answers SET answer = ?, time=now(), viewed=0 WHERE user = ? AND questionid = ?",
@@ -1560,6 +1572,13 @@ function answerCommand(message, params) {
               rows[0].answer +
               "). Thank you!"
           );
+          if (questionRow[0].watched) {
+            bot.users.cache
+              .get(questionRow[0].user)
+              .send(
+                "**Edited answer from " + message.author.tag + "**\n" + answer
+              );
+          }
         }
       }
     );
@@ -1618,6 +1637,30 @@ function getAnswersCommand(message, params, showOnlyNew) {
       return;
     }
     getAnswerList(message, rows[0], showOnlyNew);
+  });
+}
+
+function setWatchedCommand(message, params, watched) {
+  db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function (
+    err,
+    rows
+  ) {
+    if (rows[0] == null) {
+      message.reply("Invalid question id");
+      return;
+    }
+    if (rows[0].user != message.author.id) {
+      message.reply("You do not have permission to update this.");
+      return;
+    }
+    db.query("UPDATE trivia_questions SET watched = ? WHERE id = ?", [
+      watched,
+      params,
+    ]);
+    let response = watched
+      ? "This question is now watched."
+      : "This question is now unwatched.";
+    message.reply(response);
   });
 }
 
