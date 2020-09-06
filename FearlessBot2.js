@@ -1555,7 +1555,12 @@ function answerCommand(message, params) {
             bot.users.cache
               .get(questionRow[0].user)
               .send(
-                "**New answer from " + message.author.tag + "**\n" + answer
+                "**New answer for question #" +
+                  question +
+                  " from " +
+                  message.author.tag +
+                  "**\n" +
+                  answer
               );
           }
         } else {
@@ -1576,7 +1581,12 @@ function answerCommand(message, params) {
             bot.users.cache
               .get(questionRow[0].user)
               .send(
-                "**Edited answer from " + message.author.tag + "**\n" + answer
+                "**Edited answer for question #" +
+                  question +
+                  " from " +
+                  message.author.tag +
+                  "**\n" +
+                  answer
               );
           }
         }
