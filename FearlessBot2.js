@@ -558,7 +558,11 @@ function eightBallCommand(message) {
 }
 
 function botVersionCommand(message) {
-  message.reply("FearlessBot2 version: " + staticData.version);
+  message.channel.send("", {
+    embed: {
+      description: ":robot: FearlessBot version: " + staticData.version,
+    },
+  });
 }
 
 function chooseCommand(message, params) {
@@ -814,7 +818,13 @@ function seenCommand(message, params) {
       [message.channel.guild.id, member],
       function (err, rows) {
         if (rows[0] == null) {
-          message.reply("user not found. Please double check the username.");
+          message.channel.send("", {
+            embed: {
+              title: member,
+              description:
+                ":warning: User not found. Please double check the username.",
+            },
+          });
         } else {
           var seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
           var date = new Date(rows[0].lastseen * 1000);
