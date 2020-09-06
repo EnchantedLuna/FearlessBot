@@ -2,7 +2,7 @@ CREATE TABLE channel_stats
 (
   channel VARCHAR(30) NOT NULL,
   total_messages INT(11) DEFAULT '0' NOT NULL,
-  name VARCHAR(20),
+  name VARCHAR(32),
   web TINYINT(1) DEFAULT '0',
   server VARCHAR(30) DEFAULT '' NOT NULL,
   startdate INT(11),
