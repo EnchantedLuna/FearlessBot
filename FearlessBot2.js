@@ -831,17 +831,22 @@ function seenCommand(message, params) {
           var leftServerText = rows[0].active
             ? ""
             : "\nThis user has left the server.";
-          message.reply(
-            rows[0].username +
-              "#" +
-              rows[0].discriminator +
-              " was last seen " +
-              secondsToTime(seconds, false) +
-              "ago. (" +
-              date.toDateString() +
-              ")" +
-              leftServerText
-          );
+          message.channel.send("", {
+            embed: {
+              title: member,
+              description:
+                ":clock2: " +
+                rows[0].username +
+                "#" +
+                rows[0].discriminator +
+                " was last seen " +
+                secondsToTime(seconds, false) +
+                "ago. (" +
+                date.toDateString() +
+                ")" +
+                leftServerText,
+            },
+          });
         }
       }
     );
