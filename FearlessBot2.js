@@ -1536,6 +1536,9 @@ function answerCommand(message, params) {
   let command = message.content.split(" ");
   let question = command[1];
   let answer = command.slice(2, command.length).join(" ");
+  message.attachments.each(
+    (attachment) => (answer += "\n<" + attachment.url + ">")
+  );
   db.query("SELECT * FROM trivia_questions WHERE id = ?", [question], function (
     err,
     questionRow
