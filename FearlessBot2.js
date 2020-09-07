@@ -826,9 +826,9 @@ function seenCommand(message, params) {
             },
           });
         } else {
-          var seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
-          var date = new Date(rows[0].lastseen * 1000);
-          var leftServerText = rows[0].active
+          let seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
+          let date = new Date(rows[0].lastseen * 1000);
+          let leftServerText = rows[0].active
             ? ""
             : "\nThis user has left the server.";
           message.channel.send("", {
@@ -1540,8 +1540,8 @@ function answerCommand(message, params) {
     err,
     questionRow
   ) {
-    if (questionRow[0] == null) {
-      message.reply("That question id does not exist. Please try again.");
+    if (questionRow[0] == null || questionRow[0].id != question) {
+      message.reply("That question id is invalid. Please try again.");
       return;
     }
     if (!questionRow[0].isopen) {
