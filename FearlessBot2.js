@@ -957,17 +957,28 @@ function awardsCommand(message) {
 
 function getCommand(message, keyword, showUnapproved) {
   if (keyword == null) return;
+  let author = message.author.tag;
   db.query(
     "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
     [message.channel.guild.id, keyword],
     function (err, rows) {
       if (rows[0] == null) {
-        message.reply("nothing is stored for keyword " + keyword + ".");
+        message.channel.send("", {
+          embed: {
+            title: keyword + " (requested by " + author + ")",
+            description:
+              ":warning: Nothing is stored for keyword " + keyword + ".",
+          },
+        });
       } else if (!rows[0].approved && !showUnapproved) {
-        message.reply("this item has not been approved yet.");
+        message.channel.send("", {
+          embed: {
+            title: keyword + " (requested by " + author + ")",
+            description: ":warning: This item has not been approved yet.",
+          },
+        });
       } else {
         let text = rows[0]["value"];
-        let author = message.author.tag;
         if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$")) {
           let date = "Created: ";
           if (rows[0].timeadded !== null) {
