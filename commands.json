@@ -102,6 +102,28 @@
     "permissions": "all",
     "type": "server"
   },
+  "getlist": {
+    "action": "getlist",
+    "permissions": "all",
+    "type": "server"
+  },
+  "rankwords": {
+    "action": "rankthing",
+    "permissions": "all",
+    "type": "server",
+    "extra": "words"
+  },
+  "ranklorpoints": {
+    "action": "rankthing",
+    "permissions": "all",
+    "type": "server",
+    "extra": "lorpoints"
+  },
+  "lorpoints": {
+    "action": "lorpoints",
+    "permissions": "all",
+    "type": "server"
+  },
   "fsay": {
     "action": "fsay",
     "permissions": "admin",

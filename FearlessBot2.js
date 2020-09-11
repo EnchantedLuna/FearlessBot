@@ -170,29 +170,17 @@ bot.on("message", (message) => {
     case "getmeta":
       getMetaCommand(message, command[1]);
       break;
-    case "getlist":
-      getlistCommand(message);
-      break;
     case "save":
       saveCommand(message);
       break;
     case "words":
       wordsCommand(message, params);
       break;
-    case "rankwords":
-      rankThingCommand(message, "words", parseInt(command[1]));
-      break;
     case "awards":
       awardsCommand(message);
       break;
     case "mods":
       modsCommand(message);
-      break;
-    case "lorpoints":
-      lorpointsCommand(message, params);
-      break;
-    case "ranklorpoints":
-      rankThingCommand(message, "lorpoints", parseInt(command[1]));
       break;
     case "answer":
       badAnswerCommand(message);
@@ -501,46 +489,6 @@ function addNameMixCommand(message, part, namePiece) {
   message.reply("added!");
 }
 
-function rankThingCommand(message, thing, page) {
-  if (isNaN(page) || page < 1) {
-    page = 1;
-  }
-  let offset = 20 * (page - 1);
-  let rankString = "";
-  db.query(
-    "SELECT username, " +
-      thing +
-      " AS thing FROM members WHERE server = ? AND " +
-      thing +
-      " > 0 AND active=1 ORDER BY " +
-      thing +
-      " DESC LIMIT ?, 20",
-    [message.channel.guild.id, offset],
-    function (err, rows) {
-      var count = offset + 1;
-      rows.forEach(function (member) {
-        rankString +=
-          count +
-          ": " +
-          member.username +
-          " - " +
-          member.thing +
-          " " +
-          thing +
-          "\n";
-        count++;
-      });
-      message.channel.send("", {
-        embed: {
-          title: "Users with most " + thing,
-          description: rankString,
-          footer: { text: "Page " + page },
-        },
-      });
-    }
-  );
-}
-
 function wordsCommand(message, params) {
   var member;
   if (message.mentions.members.size > 0) {
@@ -576,38 +524,6 @@ function wordsCommand(message, params) {
         );
       } else {
         message.reply("user not found. Please double check the username.");
-      }
-    }
-  );
-}
-
-function lorpointsCommand(message, params) {
-  let member;
-  if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user.id;
-  } else {
-    member = message.author.id;
-  }
-
-  db.query(
-    "SELECT username, lorpoints FROM members WHERE server = ? AND id = ?",
-    [message.channel.guild.id, member],
-    function (err, rows) {
-      if (rows[0] !== null) {
-        db.query(
-          "SELECT SUM(lorpoints) AS total FROM members WHERE server = ?",
-          [message.channel.guild.id],
-          function (err, totals) {
-            message.reply(
-              rows[0].username +
-                " has " +
-                rows[0].lorpoints +
-                " lorpoints (out of " +
-                totals[0].total +
-                " total lorpoints)."
-            );
-          }
-        );
       }
     }
   );
@@ -735,12 +651,6 @@ function getMetaCommand(message, keyword) {
         );
       }
     }
-  );
-}
-
-function getlistCommand(message) {
-  message.reply(
-    config.baseUrl + "fearlessdata.php?server=" + message.channel.guild.id
   );
 }
 
