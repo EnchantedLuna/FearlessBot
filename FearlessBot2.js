@@ -143,7 +143,10 @@ bot.on("message", (message) => {
   const commandName = command[0].toLowerCase().slice(config.prefix.length);
 
   if (commandName in commands) {
-    if (!hasPermission(commands[commandName].permissions)) {
+    if (commands[commandName].type === "dm") {
+      return;
+    }
+    if (!hasPermission(commands[commandName].permissions, "server")) {
       message.reply("you do not have permission to run this command.");
       return;
     }
@@ -154,9 +157,6 @@ bot.on("message", (message) => {
 
   switch (commandName) {
     // Normal user basic commands (no db)
-    case "8ball":
-      eightBallCommand(message);
-      break;
     case "choose":
       chooseCommand(message, params);
       break;
@@ -341,10 +341,21 @@ function handleDirectMessage(message) {
   let command = message.content.split(" ");
   let params = command.slice(1, command.length).join(" ");
 
+  const commandName = command[0].toLowerCase().slice(config.prefix.length);
+  if (commandName in commands) {
+    if (commands[commandName].type === "server") {
+      return;
+    }
+    if (!hasPermission(commands[commandName].permissions, "dm")) {
+      message.reply("You do not have permission to run this command.");
+      return;
+    }
+    let action = require("./commands/" + commands[commandName].action);
+    action.run(message, params, bot, db);
+    return;
+  }
+
   switch (command[0].toLowerCase()) {
-    case "!8ball":
-      eightBallCommand(message);
-      break;
     case "!choose":
       chooseCommand(message, params);
       break;
@@ -423,7 +434,7 @@ bot.on("messageDelete", (message) => {
 
 bot.login(config.token);
 
-function hasPermission(permission) {
+function hasPermission(permission, context) {
   return true;
 }
 

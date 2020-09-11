@@ -3,5 +3,10 @@
     "action": "album",
     "permissions": "all",
     "type": "both"
+  },
+  "8ball": {
+    "action": "8ball",
+    "permissions": "all",
+    "type": "both"
   }
 }
