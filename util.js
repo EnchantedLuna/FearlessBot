@@ -26,3 +26,12 @@ exports.hasRole = function (member, guild, roleName) {
 
   return member.roles.cache.some((memberRole) => memberRole.id === role.id);
 };
+
+exports.log = function (guild, message) {
+  let logChannel = guild.channels.cache.find(
+    (channel) => channel.name === "log"
+  );
+  if (logChannel) {
+    logChannel.send(message);
+  }
+};

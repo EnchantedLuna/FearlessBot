@@ -1,8 +1,10 @@
 const config = require("./config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
+
 const commands = require("./commands.json");
 const util = require("./util");
+const stats = require("./stats");
 
 const TWELVE_HOURS = 43200000;
 
@@ -116,11 +118,11 @@ bot.on("message", (message) => {
     return;
   }
 
-  var command = message.content.split(" ");
-  var params = command.slice(1, command.length).join(" ");
+  let command = message.content.split(" ");
+  let params = command.slice(1, command.length).join(" ");
 
-  updateUserStats(message);
-  updateChannelStatsAndLog(message);
+  stats.updateUserStats(message, db);
+  stats.updateChannelStats(message, db);
 
   if (
     message.channel.guild.id == config.mainServer &&
@@ -168,9 +170,6 @@ bot.on("message", (message) => {
     case "words":
       wordsCommand(message, params);
       break;
-    case "awards":
-      awardsCommand(message);
-      break;
     case "mods":
       modsCommand(message);
       break;
@@ -206,22 +205,6 @@ bot.on("message", (message) => {
     case "exile":
       if (isMod(message.member, message.channel.guild)) {
         banCommand(message, parseInt(command[1]));
-      }
-      break;
-    case "addshitpost":
-      if (
-        isMod(message.member, message.channel.guild) &&
-        message.channel.guild.id === config.mainServer
-      ) {
-        addShitpostCommand(message, params);
-      }
-      break;
-    case "addnamemix":
-      if (
-        isMod(message.member, message.channel.guild) &&
-        message.channel.guild.id === config.mainServer
-      ) {
-        addNameMixCommand(message, parseInt(command[1]), command[2]);
       }
       break;
     case "award":
@@ -310,63 +293,15 @@ function hasPermission(user, permission) {
       return true;
     case "mods":
       return util.isMod(user, user.guild);
+    case "mainServerMods":
+      return (
+        util.isMod(user, user.guild) && user.guild.id === config.mainServer
+      );
     case "admin":
       return user.id === config.botAdminUserId;
     default:
       return false;
   }
-}
-
-function updateUserStats(message) {
-  var words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
-  if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
-    db.query(
-      "INSERT INTO members (server, id, username, discriminator, lastseen, words, messages) VALUES (?,?,?,?,UNIX_TIMESTAMP(),?,1)" +
-        "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1, active=1",
-      [
-        message.channel.guild.id,
-        message.author.id,
-        message.author.username,
-        message.author.discriminator,
-        words,
-        message.author.username,
-        message.author.discriminator,
-        words,
-      ]
-    );
-  } else {
-    db.query(
-      "INSERT INTO members (server, id, username, discriminator, lastseen) VALUES (?,?,?,?,UNIX_TIMESTAMP())" +
-        "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), active=1",
-      [
-        message.channel.guild.id,
-        message.author.id,
-        message.author.username,
-        message.author.discriminator,
-        message.author.username,
-        message.author.discriminator,
-      ]
-    );
-  }
-}
-
-function updateChannelStatsAndLog(message) {
-  db.query(
-    "INSERT INTO channel_stats (channel, server, total_messages, name, web, startdate) VALUES (?,?,1,?,0,UNIX_TIMESTAMP()) " +
-      "ON DUPLICATE KEY UPDATE total_messages=total_messages+1, name=?",
-    [
-      message.channel.id,
-      message.channel.guild.id,
-      message.channel.name,
-      message.channel.name,
-    ]
-  );
-
-  db.query(
-    "INSERT INTO user_message_stats (user, guild, channel, year, month, message_count) VALUES (?,?,?,YEAR(CURDATE()),MONTH(CURDATE()), 1) " +
-      "ON DUPLICATE KEY UPDATE message_count=message_count+1",
-    [message.author.id, message.channel.guild.id, message.channel.id]
-  );
 }
 
 function channelCountsInStatistics(guild, channel) {
@@ -405,38 +340,6 @@ function log(guild, message) {
 
 // Database-oriented commands
 
-function addShitpostCommand(message, shitpost) {
-  db.query(
-    "INSERT INTO shitposts (shitpost, addedby, addedon) VALUES (?,?,now())",
-    [shitpost, message.author.id],
-    function (err, result) {
-      message.reply("added #" + result.insertId + ".");
-      log(
-        message.channel.guild,
-        "New Shitpost #" +
-          result.insertId +
-          " added by " +
-          message.author.username +
-          ": " +
-          shitpost
-      );
-    }
-  );
-}
-
-function addNameMixCommand(message, part, namePiece) {
-  if ((part !== 1 && part !== 2) || namePiece === null) {
-    message.reply("invalid part. usage: ``!namemix [1,2] [name piece]``");
-    return;
-  }
-
-  db.query(
-    "INSERT INTO namemix (name_piece, part, addedby, addedon) VALUES (?,?,?,now())",
-    [namePiece, part, message.author.id]
-  );
-  message.reply("added!");
-}
-
 function wordsCommand(message, params) {
   var member;
   if (message.mentions.members.size > 0) {
@@ -472,36 +375,6 @@ function wordsCommand(message, params) {
         );
       } else {
         message.reply("user not found. Please double check the username.");
-      }
-    }
-  );
-}
-
-function awardsCommand(message) {
-  let member;
-  if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user;
-  } else {
-    member = message.author;
-  }
-
-  db.query(
-    "SELECT * FROM awards WHERE server = ? AND member = ? ORDER BY date, id",
-    [message.channel.guild.id, member.id],
-    function (err, rows) {
-      if (err != null) {
-        console.log(err);
-        return;
-      }
-      if (rows[0] != null) {
-        let awardsText = "\nAwards for " + member.username + ":\n";
-        for (let i = 0; i < rows.length; i++) {
-          let date = rows[i].date.toDateString();
-          awardsText += i + 1 + ". " + rows[i].award + " [" + date + "]\n";
-        }
-        message.reply(awardsText);
-      } else {
-        message.reply("no awards :(");
       }
     }
   );

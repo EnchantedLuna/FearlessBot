@@ -124,6 +124,11 @@
     "permissions": "all",
     "type": "server"
   },
+  "awards": {
+    "action": "awards",
+    "permissions": "all",
+    "type": "server"
+  },
   "g": {
     "action": "get",
     "permissions": "all",
@@ -165,6 +170,16 @@
   "getunapproved": {
     "action": "getunapproved",
     "permissions": "mods",
+    "type": "server"
+  },
+  "addshitpost": {
+    "action": "addshitpost",
+    "permissions": "mainServerMods",
+    "type": "server"
+  },
+  "addnamemix": {
+    "action": "addnamemix",
+    "permissions": "mainServerMods",
     "type": "server"
   },
   "fsay": {
