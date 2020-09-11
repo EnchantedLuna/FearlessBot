@@ -157,12 +157,6 @@ bot.on("message", (message) => {
 
   switch (commandName) {
     // Normal user basic commands (no db)
-    case "choose":
-      chooseCommand(message, params);
-      break;
-    case "song":
-      songCommand(message);
-      break;
     case "b":
       bCommand(message, params, 1);
       break;
@@ -187,9 +181,6 @@ bot.on("message", (message) => {
       break;
     case "hm":
       hmCommand(message);
-      break;
-    case "yesno":
-      yesnoCommand(message);
       break;
 
     // Normal user database commands
@@ -350,12 +341,6 @@ function handleDirectMessage(message) {
   }
 
   switch (command[0].toLowerCase()) {
-    case "!choose":
-      chooseCommand(message, params);
-      break;
-    case "!song":
-      songCommand(message);
-      break;
     // trivia
     case "!question":
       newQuestionCommand(message, params);
@@ -563,22 +548,6 @@ function rand(min, max) {
 
 // Basic commands (no db involvement, usable by all users)
 
-function chooseCommand(message, params) {
-  let choices = params.split(",");
-  if (choices.length > 1) {
-    let selectedChoice = choices[Math.floor(Math.random() * choices.length)];
-    message.reply("I pick: " + selectedChoice.trim());
-  }
-}
-
-function songCommand(message) {
-  let answer =
-    staticData.taylorSwiftSongs[
-      Math.floor(Math.random() * staticData.taylorSwiftSongs.length)
-    ];
-  message.reply("you should listen to " + answer + ".");
-}
-
 function bCommand(message, params, level) {
   let changed = params;
   changed = changed.replaceAll("b", ":b:").replaceAll("B", ":b:");
@@ -630,14 +599,6 @@ function hmCommand(message) {
     hm += "m";
   }
   message.reply(hm);
-}
-
-function yesnoCommand(message) {
-  message.react("👍").then(function () {
-    message.react("👎").then(function () {
-      message.react("🤷");
-    });
-  });
 }
 
 // Database-oriented commands

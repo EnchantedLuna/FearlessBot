@@ -1,4 +1,9 @@
 {
+  "song": {
+    "action": "song",
+    "permissions": "all",
+    "type": "both"
+  },
   "album": {
     "action": "album",
     "permissions": "all",
@@ -18,5 +23,15 @@
     "action": "activity",
     "permissions": "all",
     "type": "server"
+  },
+  "yesno": {
+    "action": "yesno",
+    "permissions": "all",
+    "type": "server"
+  },
+  "choose": {
+    "action": "choose",
+    "permissions": "all",
+    "type": "both"
   }
 }
