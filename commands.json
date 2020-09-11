@@ -8,5 +8,10 @@
     "action": "8ball",
     "permissions": "all",
     "type": "both"
+  },
+  "fversion": {
+    "action": "version",
+    "permissions": "all",
+    "type": "both"
   }
 }

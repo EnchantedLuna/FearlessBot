@@ -163,9 +163,6 @@ bot.on("message", (message) => {
     case "song":
       songCommand(message);
       break;
-    case "fversion":
-      botVersionCommand(message);
-      break;
     case "b":
       bCommand(message, params, 1);
       break;
@@ -568,22 +565,6 @@ function rand(min, max) {
 }
 
 // Basic commands (no db involvement, usable by all users)
-
-function eightBallCommand(message) {
-  let answer =
-    staticData.eightBallAnswers[
-      Math.floor(Math.random() * staticData.eightBallAnswers.length)
-    ];
-  message.reply(answer);
-}
-
-function botVersionCommand(message) {
-  message.channel.send("", {
-    embed: {
-      description: ":robot: FearlessBot version: " + staticData.version,
-    },
-  });
-}
 
 function chooseCommand(message, params) {
   let choices = params.split(",");
