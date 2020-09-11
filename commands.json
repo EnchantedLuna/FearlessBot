@@ -33,5 +33,63 @@
     "action": "choose",
     "permissions": "all",
     "type": "both"
+  },
+  "b": {
+    "action": "b",
+    "permissions": "all",
+    "type": "both",
+    "extra": 1
+  },
+  "b2": {
+    "action": "b",
+    "permissions": "all",
+    "type": "both",
+    "extra": 2
+  },
+  "b3": {
+    "action": "b",
+    "permissions": "all",
+    "type": "both",
+    "extra": 3
+  },
+  "clap": {
+    "action": "clap",
+    "permissions": "all",
+    "type": "both"
+  },
+  "ha": {
+    "action": "ha",
+    "permissions": "all",
+    "type": "both"
+  },
+  "hm": {
+    "action": "hm",
+    "permissions": "all",
+    "type": "both"
+  },
+  "namemix": {
+    "action": "namemix",
+    "permissions": "all",
+    "type": "both"
+  },
+  "randmember": {
+    "action": "randmember",
+    "permissions": "all",
+    "type": "server"
+  },
+  "shitpost": {
+    "action": "shitpost",
+    "permissions": "all",
+    "type": "both"
+  },
+  "rg": {
+    "action": "rg",
+    "permissions": "all",
+    "type": "server"
+  },
+  "fsay": {
+    "action": "fsay",
+    "permissions": "admin",
+    "type": "server"
   }
 }

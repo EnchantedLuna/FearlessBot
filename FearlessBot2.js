@@ -146,43 +146,21 @@ bot.on("message", (message) => {
     if (commands[commandName].type === "dm") {
       return;
     }
-    if (!hasPermission(commands[commandName].permissions, "server")) {
+    if (!hasPermission(message.member, commands[commandName].permissions)) {
       message.reply("you do not have permission to run this command.");
       return;
     }
     let action = require("./commands/" + commands[commandName].action);
-    action.run(message, params, bot, db);
+    action.run(message, params, bot, db, commands[commandName].extra);
     return;
   }
 
   switch (commandName) {
     // Normal user basic commands (no db)
-    case "b":
-      bCommand(message, params, 1);
-      break;
-    case "b2":
-      bCommand(message, params, 2);
-      break;
-    case "b3":
-      bCommand(message, params, 3);
-      break;
     case "region":
     case "setregion":
       regionCommand(message, command[1]);
       break;
-    case "namemix":
-      namemixCommand(message);
-      break;
-    case "clap":
-      clapCommand(message);
-      break;
-    case "ha":
-      haCommand(message);
-      break;
-    case "hm":
-      hmCommand(message);
-      break;
-
     // Normal user database commands
     case "totals":
       totalsCommand(message, params);
@@ -194,9 +172,6 @@ bot.on("message", (message) => {
     case "gmeta":
     case "getmeta":
       getMetaCommand(message, command[1]);
-      break;
-    case "rg":
-      rgCommand(message);
       break;
     case "getlist":
       getlistCommand(message);
@@ -213,12 +188,6 @@ bot.on("message", (message) => {
       break;
     case "rankwords":
       rankThingCommand(message, "words", parseInt(command[1]));
-      break;
-    case "shitpost":
-      shitpostCommand(message, command[1]);
-      break;
-    case "randmember":
-      randomMemberCommand(message, command[1]);
       break;
     case "awards":
       awardsCommand(message);
@@ -314,11 +283,6 @@ bot.on("message", (message) => {
         process.exit(-1);
       }
       break;
-    case "fsay":
-      if (message.author.id == config.botAdminUserId) {
-        fsayCommand(message, params);
-      }
-      break;
   }
 });
 
@@ -331,12 +295,12 @@ function handleDirectMessage(message) {
     if (commands[commandName].type === "server") {
       return;
     }
-    if (!hasPermission(commands[commandName].permissions, "dm")) {
+    if (!hasPermission(message.author, commands[commandName].permissions)) {
       message.reply("You do not have permission to run this command.");
       return;
     }
     let action = require("./commands/" + commands[commandName].action);
-    action.run(message, params, bot, db);
+    action.run(message, params, bot, db, commands[commandName].extra);
     return;
   }
 
@@ -413,8 +377,15 @@ bot.on("messageDelete", (message) => {
 
 bot.login(config.token);
 
-function hasPermission(permission, context) {
-  return true;
+function hasPermission(user, permission) {
+  switch (permission) {
+    case "all":
+      return true;
+    case "admin":
+      return user.id === config.botAdminUserId;
+    default:
+      return false;
+  }
 }
 
 function updateUserStats(message) {
@@ -503,11 +474,6 @@ function log(guild, message) {
   }
 }
 
-String.prototype.replaceAll = function (search, replacement) {
-  let target = this;
-  return target.replace(new RegExp(search, "g"), replacement);
-};
-
 function secondsToTime(seconds, short) {
   var sec = seconds % 60;
   var minutes = Math.floor(seconds / 60) % 60;
@@ -542,83 +508,7 @@ function secondsToTime(seconds, short) {
   return result;
 }
 
-function rand(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Basic commands (no db involvement, usable by all users)
-
-function bCommand(message, params, level) {
-  let changed = params;
-  changed = changed.replaceAll("b", ":b:").replaceAll("B", ":b:");
-  if (level >= 2) {
-    changed = changed.replaceAll("C", ":b:").replaceAll("c", ":b:");
-  }
-  if (level == 3) {
-    let characters = changed.split("");
-    for (let i = 0; i < characters.length; i++) {
-      if (characters[i].match("[AD-Zad-z]") && Math.random() < 0.1) {
-        characters[i] = ":b:";
-      }
-    }
-    changed = characters.join("");
-  }
-  message.reply(changed);
-}
-
-function namemixCommand(message) {
-  db.query(
-    "SELECT CONCAT((SELECT name_piece FROM namemix WHERE part=1 ORDER BY RAND() LIMIT 1), " +
-      "(SELECT name_piece FROM namemix WHERE part=2 ORDER BY RAND() LIMIT 1)) AS name",
-    [],
-    function (err, rows) {
-      message.reply(rows[0].name);
-    }
-  );
-}
-
-function clapCommand(message) {
-  message.reply(
-    message.content.replace(/!clap /i, "").replace(/ /g, " :clap: ") + " :clap:"
-  );
-}
-
-function haCommand(message) {
-  let count = rand(2, 15);
-  let ha = "";
-  for (let i = 1; i <= count; i++) {
-    ha += "ha";
-  }
-  message.reply(ha);
-}
-
-function hmCommand(message) {
-  let mCount = rand(2, 20);
-  let hm = "h";
-  for (let i = 1; i <= mCount; i++) {
-    hm += "m";
-  }
-  message.reply(hm);
-}
-
 // Database-oriented commands
-
-function randomMemberCommand(message, days) {
-  var dayLimit = parseInt(days, 10);
-  if (!dayLimit) {
-    dayLimit = 1;
-  }
-  var time = Math.floor(new Date() / 1000) - 86400 * dayLimit;
-  db.query(
-    "SELECT username FROM members WHERE server = ? AND lastseen > ? AND active=1 ORDER BY RAND() LIMIT 1",
-    [message.channel.guild.id, time],
-    function (err, rows) {
-      if (rows != null) {
-        message.reply("random member: " + rows[0].username);
-      }
-    }
-  );
-}
 
 function totalsCommand(message, options) {
   var web = message.member && options == "hidden" ? "" : " AND web=1";
@@ -637,33 +527,6 @@ function totalsCommand(message, options) {
       message.reply(totalsMessage);
     }
   );
-}
-
-function shitpostCommand(message, number) {
-  var number = parseInt(number, 10);
-  if (number > 0) {
-    db.query(
-      "SELECT id, shitpost FROM shitposts WHERE id=?",
-      [number],
-      function (err, rows) {
-        if (rows[0] != null) {
-          message.reply(rows[0].shitpost + " (#" + rows[0].id + ")");
-        } else {
-          message.reply("that shitpost doesn't exist!");
-        }
-      }
-    );
-  } else {
-    db.query(
-      "SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1",
-      [],
-      function (err, rows) {
-        if (rows[0] != null) {
-          message.reply(rows[0].shitpost + " (#" + rows[0].id + ")");
-        }
-      }
-    );
-  }
 }
 
 function addShitpostCommand(message, shitpost) {
@@ -985,16 +848,6 @@ function getMetaCommand(message, keyword) {
   );
 }
 
-function rgCommand(message) {
-  db.query(
-    "SELECT * FROM data_store WHERE server = ? AND approved = 1 ORDER BY RAND() LIMIT 1",
-    [message.channel.guild.id],
-    function (err, rows) {
-      message.reply(rows[0]["keyword"] + ": " + rows[0]["value"]);
-    }
-  );
-}
-
 function getlistCommand(message) {
   message.reply(
     config.baseUrl + "fearlessdata.php?server=" + message.channel.guild.id
@@ -1258,18 +1111,6 @@ function regionCommand(message, region) {
   }
 }
 
-function toggleRoleCommand(message, roleName) {
-  let role = message.channel.guild.roles.find((role) => role.name === roleName);
-  let member = message.member;
-  if (member.roles.has(role.id)) {
-    message.member.removeRole(role);
-    message.reply(roleName + " role removed!");
-  } else {
-    message.member.addRole(role);
-    message.reply(roleName + " role added!");
-  }
-}
-
 function modsCommand(message) {
   let mods = message.channel.guild.roles.cache.find(
     (role) => role.name === "mods"
@@ -1462,13 +1303,6 @@ function awardCommand(message, number) {
       " by " +
       message.author.username
   );
-}
-
-// Bot admin commands
-
-function fsayCommand(message, params) {
-  message.channel.send(params);
-  message.delete();
 }
 
 // Trivia
