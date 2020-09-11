@@ -229,9 +229,6 @@ bot.on("message", (message) => {
     case "randmember":
       randomMemberCommand(message, command[1]);
       break;
-    case "activity":
-      activityCommand(message);
-      break;
     case "awards":
       awardsCommand(message);
       break;
@@ -598,22 +595,6 @@ function bCommand(message, params, level) {
     changed = characters.join("");
   }
   message.reply(changed);
-}
-
-function activityCommand(message) {
-  search =
-    message.mentions.members.size > 0
-      ? message.mentions.members.first().id
-      : message.author.id;
-  let botsString = message.content.includes("bots") ? "&includebots=true" : "";
-  message.reply(
-    config.baseUrl +
-      "activityreport.php?server=" +
-      message.channel.guild.id +
-      "&user=" +
-      search +
-      botsString
-  );
 }
 
 function namemixCommand(message) {
