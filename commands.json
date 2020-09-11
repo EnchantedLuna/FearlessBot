@@ -166,5 +166,39 @@
     "action": "fsay",
     "permissions": "admin",
     "type": "server"
+  },
+  "question": {
+    "action": "question",
+    "permissions": "all",
+    "type": "dm"
+  },
+  "closequestion": {
+    "action": "closequestion",
+    "permissions": "all",
+    "type": "dm"
+  },
+  "watch": {
+    "action": "watch",
+    "permissions": "all",
+    "type": "dm",
+    "extra": 1
+  },
+  "unwatch": {
+    "action": "watch",
+    "permissions": "all",
+    "type": "dm",
+    "extra": 0
+  },
+  "getanswers": {
+    "action": "getanswers",
+    "permissions": "all",
+    "type": "dm",
+    "extra": false
+  },
+  "getnewanswers": {
+    "action": "getanswers",
+    "permissions": "all",
+    "type": "dm",
+    "extra": true
   }
 }

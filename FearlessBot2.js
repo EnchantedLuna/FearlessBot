@@ -264,27 +264,8 @@ function handleDirectMessage(message) {
   }
 
   switch (command[0].toLowerCase()) {
-    // trivia
-    case "!question":
-      newQuestionCommand(message, params);
-      break;
-    case "!closequestion":
-      closeQuestionCommand(message, params);
-      break;
     case "!answer":
       answerCommand(message);
-      break;
-    case "!getanswers":
-      getAnswersCommand(message, params, false);
-      break;
-    case "!getnewanswers":
-      getAnswersCommand(message, params, true);
-      break;
-    case "!watch":
-      setWatchedCommand(message, params, 1);
-      break;
-    case "!unwatch":
-      setWatchedCommand(message, params, 0);
       break;
   }
 }
@@ -1044,121 +1025,5 @@ function answerCommand(message, params) {
         }
       }
     );
-  });
-}
-
-function newQuestionCommand(message, params) {
-  if (params == "") {
-    message.reply("Please enter a question, e.g. ``!question Is butt legs?``");
-    return;
-  }
-  db.query(
-    "INSERT INTO trivia_questions (user, question, timecreated) VALUES (?, ?, now())",
-    [message.author.id, params],
-    function (err, result) {
-      message.reply("Question #" + result.insertId + " has been registered.");
-    }
-  );
-}
-
-function closeQuestionCommand(message, params) {
-  db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function (
-    err,
-    rows
-  ) {
-    if (rows[0] == null) {
-      message.reply("Invalid question id");
-      return;
-    }
-    if (
-      rows[0].user != message.author.id &&
-      message.author.id != config.botAdminUserId
-    ) {
-      message.reply("You do not have permission to close this question.");
-      return;
-    }
-    db.query("UPDATE trivia_questions SET isopen=0 WHERE id = ?", [params]);
-    message.reply("Question #" + params + " has been closed.");
-  });
-}
-
-function getAnswersCommand(message, params, showOnlyNew) {
-  db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function (
-    err,
-    rows
-  ) {
-    if (rows[0] == null) {
-      message.reply("Invalid question id");
-      return;
-    }
-    if (
-      rows[0].user != message.author.id &&
-      message.author.id != config.botAdminUserId
-    ) {
-      message.reply("You do not have permission to view these answers.");
-      return;
-    }
-    getAnswerList(message, rows[0], showOnlyNew);
-  });
-}
-
-function setWatchedCommand(message, params, watched) {
-  db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function (
-    err,
-    rows
-  ) {
-    if (rows[0] == null) {
-      message.reply("Invalid question id");
-      return;
-    }
-    if (rows[0].user != message.author.id) {
-      message.reply("You do not have permission to update this.");
-      return;
-    }
-    db.query("UPDATE trivia_questions SET watched = ? WHERE id = ?", [
-      watched,
-      params,
-    ]);
-    let response = watched
-      ? "This question is now watched."
-      : "This question is now unwatched.";
-    message.reply(response);
-  });
-}
-
-function getAnswerList(message, questionRow, showOnlyNew) {
-  let id = questionRow.id;
-  let question = questionRow.question;
-  let questionAsker = questionRow.user;
-  let query =
-    "SELECT user, answer FROM trivia_answers WHERE questionid = ? ORDER BY id";
-  if (showOnlyNew) {
-    query =
-      "SELECT user, answer FROM trivia_answers WHERE questionid = ? AND viewed = 0 ORDER BY id";
-  }
-  db.query(query, [id], function (err, rows) {
-    let response = "__Answers for question #" + id + ": " + question + "__\n";
-    let userList = [];
-    for (var i = 0; i < rows.length; i++) {
-      let answer = rows[i].answer;
-      let user = bot.users.resolve(rows[i].user);
-      let username = "@" + user.tag;
-      let answerEntry = "**" + username + "**\n" + answer + "\n\n";
-      response += answerEntry;
-      userList.push(username);
-    }
-    let mainServer = bot.guilds.cache.get(config.mainServer);
-    if (
-      typeof mainServer !== "undefined" &&
-      isMod(message.author.id, mainServer)
-    ) {
-      response +=
-        "Award all command: ```\n!award 1 " + userList.join(" ") + "```";
-    }
-    if (message.author.id == questionAsker) {
-      db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
-    }
-
-    message.reply(response, { split: true });
   });
 }
