@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 const staticData = require("./staticData.json");
 const commands = require("./commands.json");
+const util = require("./util");
 
 const TWELVE_HOURS = 43200000;
 
@@ -162,14 +163,6 @@ bot.on("message", (message) => {
       regionCommand(message, command[1]);
       break;
     // Normal user database commands
-    case "g":
-    case "get":
-      getCommand(message, command[1], false);
-      break;
-    case "gmeta":
-    case "getmeta":
-      getMetaCommand(message, command[1]);
-      break;
     case "save":
       saveCommand(message);
       break;
@@ -189,11 +182,6 @@ bot.on("message", (message) => {
     case "approve":
       if (isMod(message.member, message.channel.guild)) {
         approveCommand(message, command[1]);
-      }
-      break;
-    case "review":
-      if (isMod(message.member, message.channel.guild)) {
-        getCommand(message, command[1], true);
       }
       break;
     case "delete":
@@ -362,6 +350,8 @@ function hasPermission(user, permission) {
   switch (permission) {
     case "all":
       return true;
+    case "mods":
+      return util.isMod(user, user.guild);
     case "admin":
       return user.id === config.botAdminUserId;
     default:
@@ -554,101 +544,6 @@ function awardsCommand(message) {
         message.reply(awardsText);
       } else {
         message.reply("no awards :(");
-      }
-    }
-  );
-}
-
-function getCommand(message, keyword, showUnapproved) {
-  if (keyword == null) return;
-  let author = message.author.tag;
-  db.query(
-    "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
-    [message.channel.guild.id, keyword],
-    function (err, rows) {
-      if (rows[0] == null) {
-        message.channel.send("", {
-          embed: {
-            title: keyword + " (requested by " + author + ")",
-            description:
-              ":warning: Nothing is stored for keyword " + keyword + ".",
-          },
-        });
-      } else if (!rows[0].approved && !showUnapproved) {
-        message.channel.send("", {
-          embed: {
-            title: keyword + " (requested by " + author + ")",
-            description: ":warning: This item has not been approved yet.",
-          },
-        });
-      } else {
-        let text = rows[0]["value"];
-        if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$")) {
-          let date = "Created: ";
-          if (rows[0].timeadded !== null) {
-            date += rows[0].timeadded.toDateString();
-          } else {
-            date += "a long time ago";
-          }
-          message.channel.send("", {
-            embed: {
-              title: keyword + " (requested by " + author + ")",
-              image: { url: text },
-              footer: { text: date },
-            },
-          });
-        } else {
-          message.reply(text);
-        }
-        if (
-          channelCountsInStatistics(
-            message.channel.guild.id,
-            message.channel.id
-          )
-        ) {
-          db.query(
-            "UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
-            [keyword, message.channel.guild.id]
-          );
-        }
-      }
-    }
-  );
-}
-
-function getMetaCommand(message, keyword) {
-  if (keyword == null) return;
-  db.query(
-    "SELECT keyword, value, uses, saver.username AS username, approver.username AS approver, lastused, approved, timeadded \
-            FROM data_store \
-            LEFT JOIN members saver ON data_store.owner=saver.id AND data_store.server=saver.server \
-            LEFT JOIN members approver ON data_store.approvedby=approver.id AND data_store.server=approver.server \
-            WHERE data_store.server = ? AND keyword = ?",
-    [message.channel.guild.id, keyword],
-    function (err, rows) {
-      if (rows[0] == null) {
-        message.reply("nothing is stored for keyword " + keyword + ".");
-      } else if (!rows[0].approved) {
-        message.reply("this item has not been approved yet.");
-      } else {
-        var lastused = rows[0].lastused !== null ? rows[0].lastused : "never";
-        var timeadded =
-          rows[0].timeadded !== null
-            ? "\nTime added: " + rows[0].timeadded
-            : "";
-        var approver =
-          rows[0].approver !== null ? "\nApproved by: " + rows[0].approver : "";
-        message.reply(
-          rows[0].value +
-            "\nUses: " +
-            rows[0].uses +
-            "\nLast used: " +
-            lastused +
-            "\nSaved by: " +
-            rows[0].username +
-            timeadded +
-            approver
-        );
       }
     }
   );

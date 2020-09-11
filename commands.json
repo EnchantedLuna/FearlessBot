@@ -124,6 +124,34 @@
     "permissions": "all",
     "type": "server"
   },
+  "g": {
+    "action": "get",
+    "permissions": "all",
+    "type": "server",
+    "extra": false
+  },
+  "get": {
+    "action": "get",
+    "permissions": "all",
+    "type": "server",
+    "extra": false
+  },
+  "review": {
+    "action": "get",
+    "permissions": "mods",
+    "type": "server",
+    "extra": true
+  },
+  "gmeta": {
+    "action": "getmeta",
+    "permissions": "all",
+    "type": "server"
+  },
+  "getmeta": {
+    "action": "getmeta",
+    "permissions": "all",
+    "type": "server"
+  },
   "fsay": {
     "action": "fsay",
     "permissions": "admin",
