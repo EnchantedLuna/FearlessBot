@@ -167,9 +167,6 @@ bot.on("message", (message) => {
     case "save":
       saveCommand(message);
       break;
-    case "words":
-      wordsCommand(message, params);
-      break;
     case "mods":
       modsCommand(message);
       break;
@@ -196,20 +193,10 @@ bot.on("message", (message) => {
         supermuteCommand(message, parseInt(command[1]));
       }
       break;
-    case "unsupermute":
-      if (isMod(message.member, message.channel.guild)) {
-        unsupermuteCommand(message);
-      }
-      break;
     case "ban":
     case "exile":
       if (isMod(message.member, message.channel.guild)) {
         banCommand(message, parseInt(command[1]));
-      }
-      break;
-    case "award":
-      if (isMod(message.member, message.channel.guild)) {
-        awardCommand(message, parseInt(command[1]));
       }
       break;
   }
@@ -270,9 +257,9 @@ bot.on("messageDelete", (message) => {
 
   var words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
 
-  if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
-    // To help discourage spamming for wordcount
-    var removedWords = words > 20 ? Math.round(words * 1.25) : words;
+  if (
+    util.channelCountsInStatistics(message.channel.guild.id, message.channel.id)
+  ) {
     db.query(
       "UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
       [removedWords, message.author.id, message.channel.guild.id]
@@ -304,12 +291,6 @@ function hasPermission(user, permission) {
   }
 }
 
-function channelCountsInStatistics(guild, channel) {
-  return (
-    guild != config.mainServer || config.statCountingChannels.includes(channel)
-  );
-}
-
 function isMod(member, guild) {
   if (typeof member === "string") {
     member = guild.members.cache.get(member);
@@ -339,46 +320,6 @@ function log(guild, message) {
 }
 
 // Database-oriented commands
-
-function wordsCommand(message, params) {
-  var member;
-  if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user.username;
-  } else if (params != "") {
-    member = params;
-  } else {
-    member = message.author.username;
-  }
-
-  db.query(
-    "SELECT words, messages, username FROM members WHERE server = ? AND username = ?",
-    [message.channel.guild.id, member],
-    function (err, rows) {
-      if (err != null) {
-        console.log(err);
-        return;
-      }
-      if (rows[0] != null) {
-        var average =
-          rows[0].messages > 0
-            ? Math.round((rows[0].words / rows[0].messages) * 100) / 100
-            : 0;
-        message.reply(
-          rows[0].username +
-            " has used " +
-            rows[0].words +
-            " words in " +
-            rows[0].messages +
-            " messages, an average of " +
-            average +
-            " words per message."
-        );
-      } else {
-        message.reply("user not found. Please double check the username.");
-      }
-    }
-  );
-}
 
 function saveCommand(message) {
   var command = message.content.split(" ");
@@ -712,20 +653,6 @@ function bowlmuteCommand(message, hours) {
   });
 }
 
-function unsupermuteCommand(message) {
-  var supermute = message.channel.guild.roles.cache.find(
-    (role) => role.name === "supermute"
-  );
-  message.mentions.members.forEach(function (member, key, map) {
-    if (isMod(member, message.channel.guild)) {
-      message.reply(":smirk:");
-    } else {
-      member.roles.remove(supermute);
-      message.reply(member.user.username + " has been un-supermuted.");
-    }
-  });
-}
-
 function banCommand(message, days) {
   message.mentions.members.forEach(function (member, key, map) {
     if (isMod(member, message.channel.guild)) {
@@ -758,32 +685,6 @@ function banCommand(message, days) {
       );
     }
   });
-}
-
-function awardCommand(message, number) {
-  let list = [];
-  message.mentions.members.forEach(function (member, key, map) {
-    db.query(
-      "UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?",
-      [number, message.channel.guild.id, member.id]
-    );
-    list.push(member.user.username);
-  });
-  let finalList = list.join(", ");
-  let lorpointWord = number !== 1 ? "lorpoints" : "lorpoint";
-  message.reply(
-    number + " " + lorpointWord + " have been awarded to: " + finalList
-  );
-  log(
-    message.channel.guild,
-    number +
-      " " +
-      lorpointWord +
-      " have been awarded to: " +
-      finalList +
-      " by " +
-      message.author.username
-  );
 }
 
 // Trivia

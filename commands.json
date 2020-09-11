@@ -124,6 +124,11 @@
     "permissions": "all",
     "type": "server"
   },
+  "words": {
+    "action": "words",
+    "permissions": "all",
+    "type": "server"
+  },
   "awards": {
     "action": "awards",
     "permissions": "all",
@@ -164,6 +169,16 @@
   },
   "idban": {
     "action": "idban",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "award": {
+    "action": "award",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "unsupermute": {
+    "action": "unsupermute",
     "permissions": "mods",
     "type": "server"
   },
