@@ -87,6 +87,21 @@
     "permissions": "all",
     "type": "server"
   },
+  "seen": {
+    "action": "seen",
+    "permissions": "all",
+    "type": "server"
+  },
+  "last": {
+    "action": "seen",
+    "permissions": "all",
+    "type": "server"
+  },
+  "totals": {
+    "action": "totals",
+    "permissions": "all",
+    "type": "server"
+  },
   "fsay": {
     "action": "fsay",
     "permissions": "admin",
