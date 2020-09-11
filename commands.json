@@ -152,6 +152,11 @@
     "permissions": "all",
     "type": "server"
   },
+  "kick": {
+    "action": "kick",
+    "permissions": "mods",
+    "type": "server"
+  },
   "fsay": {
     "action": "fsay",
     "permissions": "admin",

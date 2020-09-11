@@ -208,11 +208,6 @@ bot.on("message", (message) => {
         unsupermuteCommand(message);
       }
       break;
-    case "kick":
-      if (isMod(message.member, message.channel.guild)) {
-        kickCommand(message);
-      }
-      break;
     case "ban":
     case "exile":
       if (isMod(message.member, message.channel.guild)) {
@@ -910,18 +905,6 @@ function unsupermuteCommand(message) {
     } else {
       member.roles.remove(supermute);
       message.reply(member.user.username + " has been un-supermuted.");
-    }
-  });
-}
-
-function kickCommand(message) {
-  message.mentions.members.forEach(function (member, key, map) {
-    if (isMod(member, message.channel.guild)) {
-      message.reply(":smirk:");
-    } else {
-      var reason = message.cleanContent.replace("!kick ", "");
-      member.kick(reason);
-      message.reply(member.user.username + " has been kicked.");
     }
   });
 }
