@@ -2,6 +2,7 @@ const config = require("./config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
 const staticData = require("./staticData.json");
+const commands = require("./commands.json");
 
 const TWELVE_HOURS = 43200000;
 
@@ -141,6 +142,16 @@ bot.on("message", (message) => {
   }
   const commandName = command[0].toLowerCase().slice(config.prefix.length);
 
+  if (commandName in commands) {
+    if (!hasPermission(commands[commandName].permissions)) {
+      message.reply("you do not have permission to run this command.");
+      return;
+    }
+    let action = require("./commands/" + commands[commandName].action);
+    action.run(message, params, bot, db);
+    return;
+  }
+
   switch (commandName) {
     // Normal user basic commands (no db)
     case "8ball":
@@ -151,9 +162,6 @@ bot.on("message", (message) => {
       break;
     case "song":
       songCommand(message);
-      break;
-    case "album":
-      albumCommand(message);
       break;
     case "fversion":
       botVersionCommand(message);
@@ -343,9 +351,6 @@ function handleDirectMessage(message) {
     case "!song":
       songCommand(message);
       break;
-    case "!album":
-      albumCommand(message);
-      break;
     // trivia
     case "!question":
       newQuestionCommand(message, params);
@@ -417,6 +422,10 @@ bot.on("messageDelete", (message) => {
 });
 
 bot.login(config.token);
+
+function hasPermission(permission) {
+  return true;
+}
 
 function updateUserStats(message) {
   var words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
@@ -577,14 +586,6 @@ function songCommand(message) {
   let answer =
     staticData.taylorSwiftSongs[
       Math.floor(Math.random() * staticData.taylorSwiftSongs.length)
-    ];
-  message.reply("you should listen to " + answer + ".");
-}
-
-function albumCommand(message) {
-  let answer =
-    staticData.taylorSwiftAlbums[
-      Math.floor(Math.random() * staticData.taylorSwiftAlbums.length)
     ];
   message.reply("you should listen to " + answer + ".");
 }

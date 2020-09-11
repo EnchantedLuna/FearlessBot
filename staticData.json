@@ -1,5 +1,5 @@
 {
-  "version": "2020.09.09a",
+  "version": "2020.09.10a",
   "eightBallAnswers": [
     "it is certain",
     "it is decidedly so",
@@ -168,15 +168,5 @@
     "peace",
     "hoax",
     "the lakes"
-  ],
-  "taylorSwiftAlbums": [
-    "Taylor Swift",
-    "Fearless",
-    "Speak Now",
-    "Red",
-    "1989",
-    "reputation",
-    "Lover",
-    "folklore"
   ]
 }
