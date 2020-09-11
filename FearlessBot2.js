@@ -187,11 +187,6 @@ bot.on("message", (message) => {
     case "delete":
       deleteCommand(message, command[1]);
       break;
-    case "getunapproved":
-      if (isMod(message.member, message.channel.guild)) {
-        getUnapprovedCommand(message);
-      }
-      break;
     case "bowlmute":
       if (isMod(message.member, message.channel.guild)) {
         bowlmuteCommand(message, parseInt(command[1]));
@@ -691,25 +686,6 @@ function deleteCommand(message, keyword) {
       } else {
         message.reply("keyword not found.");
       }
-    }
-  );
-}
-
-function getUnapprovedCommand(message) {
-  db.query(
-    "SELECT * FROM data_store WHERE approved = 0 AND server = ?",
-    [message.channel.guild.id],
-    function (err, rows) {
-      if (rows.length == 0) {
-        message.reply("no unapproved items.");
-        return;
-      }
-
-      var list = "";
-      for (var i = 0; i < rows.length; i++) {
-        list = list + rows[i].keyword + " ";
-      }
-      message.reply("unapproved: ``" + list + "``");
     }
   );
 }

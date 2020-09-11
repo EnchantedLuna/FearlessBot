@@ -157,6 +157,11 @@
     "permissions": "mods",
     "type": "server"
   },
+  "getunapproved": {
+    "action": "getunapproved",
+    "permissions": "mods",
+    "type": "server"
+  },
   "fsay": {
     "action": "fsay",
     "permissions": "admin",
