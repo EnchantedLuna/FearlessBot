@@ -157,6 +157,11 @@
     "permissions": "mods",
     "type": "server"
   },
+  "idban": {
+    "action": "idban",
+    "permissions": "mods",
+    "type": "server"
+  },
   "getunapproved": {
     "action": "getunapproved",
     "permissions": "mods",

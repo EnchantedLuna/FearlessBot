@@ -1,7 +1,6 @@
 const config = require("./config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
-const staticData = require("./staticData.json");
 const commands = require("./commands.json");
 const util = require("./util");
 
@@ -209,11 +208,6 @@ bot.on("message", (message) => {
         banCommand(message, parseInt(command[1]));
       }
       break;
-    case "idban":
-      if (isMod(message.member, message.channel.guild)) {
-        idbanCommand(message, command[1]);
-      }
-      break;
     case "addshitpost":
       if (
         isMod(message.member, message.channel.guild) &&
@@ -233,13 +227,6 @@ bot.on("message", (message) => {
     case "award":
       if (isMod(message.member, message.channel.guild)) {
         awardCommand(message, parseInt(command[1]));
-      }
-      break;
-
-    // Bot admin commands
-    case "fbotrestart":
-      if (message.author.id == config.botAdminUserId) {
-        process.exit(-1);
       }
       break;
   }
@@ -898,20 +885,6 @@ function banCommand(message, days) {
       );
     }
   });
-}
-
-function idbanCommand(message, userId) {
-  if (isMod(userId, message.channel.guild)) {
-    message.reply(":smirk:");
-  } else {
-    message.channel.guild.members.ban(userId).then((user) => {
-      message.channel.send("", {
-        embed: {
-          description: `:hammer: Banned ${user.username || user.id || user}.`,
-        },
-      });
-    });
-  }
 }
 
 function awardCommand(message, number) {
