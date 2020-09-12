@@ -1,6 +1,6 @@
 const Pagination = require("discord-paginationembed");
 
-function buildEmbed(message, title, entries, page) {
+function buildEmbed(message, title, entries) {
   const FieldsEmbed = new Pagination.FieldsEmbed()
     .setArray(entries)
     .setAuthorizedUsers(message.author.id)
@@ -14,9 +14,6 @@ function buildEmbed(message, title, entries, page) {
 }
 
 exports.run = function (message, page, bot, db, thing) {
-  if (isNaN(page) || page < 1) {
-    page = 1;
-  }
   let entries = [];
   db.query(
     "SELECT username, " +
@@ -36,7 +33,7 @@ exports.run = function (message, page, bot, db, thing) {
         });
         count++;
       });
-      buildEmbed(message, "Ranking for " + thing, entries, page);
+      buildEmbed(message, "Ranking for " + thing, entries);
     }
   );
 };
