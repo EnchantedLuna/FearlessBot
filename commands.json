@@ -162,6 +162,36 @@
     "permissions": "all",
     "type": "server"
   },
+  "save": {
+    "action": "save",
+    "permissions": "all",
+    "type": "server"
+  },
+  "approve": {
+    "action": "approve",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "delete": {
+    "action": "delete",
+    "permissions": "all",
+    "type": "server"
+  },
+  "mods": {
+    "action": "mods",
+    "permissions": "all",
+    "type": "server"
+  },
+  "region": {
+    "action": "region",
+    "permissions": "all",
+    "type": "server"
+  },
+  "setregion": {
+    "action": "region",
+    "permissions": "all",
+    "type": "server"
+  },
   "kick": {
     "action": "kick",
     "permissions": "mods",
