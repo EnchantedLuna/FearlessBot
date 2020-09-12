@@ -97,6 +97,8 @@ bot.on("guildMemberRemove", (member) => {
   }
 });
 
-bot.on("messageDelete", stats.handleMessageDelete);
+bot.on("messageDelete", function (message) {
+  stats.handleMessageDelete(message, db);
+});
 
 bot.login(config.token);

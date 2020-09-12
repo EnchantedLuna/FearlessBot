@@ -53,7 +53,7 @@ exports.updateUserStats = function (message, db) {
   }
 };
 
-exports.handleMessageDelete = function (message) {
+exports.handleMessageDelete = function (message, db) {
   if (
     message.channel.type != "text" ||
     (message.author.id === config.botAdminUserId &&
