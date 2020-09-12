@@ -1,3 +1,5 @@
+const { isMod } = require("../util");
+
 exports.run = function (message, keyword, bot, db) {
   if (keyword == null) return;
   let author = message.author.tag;
@@ -17,7 +19,10 @@ exports.run = function (message, keyword, bot, db) {
               ":warning: Nothing is stored for keyword " + keyword + ".",
           },
         });
-      } else if (!rows[0].approved) {
+      } else if (
+        !rows[0].approved &&
+        !isMod(message.member, message.channel.guild)
+      ) {
         message.channel.send("", {
           embed: {
             title: keyword + " (requested by " + author + ")",
@@ -34,6 +39,10 @@ exports.run = function (message, keyword, bot, db) {
           { name: "Saved By", value: rows[0].username },
           { name: "Time Added", value: timeadded },
         ];
+        if (isMod(message.member, message.channel.guild)) {
+          const approvedStatus = rows[0].approved ? "Yes" : "No";
+          fieldList.push({ name: "Approved", value: approvedStatus });
+        }
         if (
           rows[0].value.match(
             "^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$"
