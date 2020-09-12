@@ -64,9 +64,7 @@ exports.handleMessageDelete = function (message) {
 
   let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
 
-  if (
-    util.channelCountsInStatistics(message.channel.guild.id, message.channel.id)
-  ) {
+  if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
     db.query(
       "UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
       [words, message.author.id, message.channel.guild.id]
