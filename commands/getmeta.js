@@ -34,13 +34,27 @@ exports.run = function (message, keyword, bot, db) {
           { name: "Saved By", value: rows[0].username },
           { name: "Time Added", value: timeadded },
         ];
-        message.channel.send("", {
-          embed: {
-            title: keyword + " (requested by " + author + ")",
-            description: rows[0].value,
-            fields: fieldList,
-          },
-        });
+        if (
+          rows[0].value.match(
+            "^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$"
+          )
+        ) {
+          message.channel.send("", {
+            embed: {
+              title: keyword + " (requested by " + author + ")",
+              image: { url: rows[0].value },
+              fields: fieldList,
+            },
+          });
+        } else {
+          message.channel.send("", {
+            embed: {
+              title: keyword + " (requested by " + author + ")",
+              description: rows[0].value,
+              fields: fieldList,
+            },
+          });
+        }
       }
     }
   );
