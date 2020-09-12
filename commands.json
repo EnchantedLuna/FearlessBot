@@ -290,5 +290,10 @@
     "permissions": "all",
     "type": "dm",
     "extra": true
+  },
+  "answer": {
+    "action": "answer",
+    "permissions": "all",
+    "type": "both"
   }
 }

@@ -52,7 +52,7 @@ function runScheduledActions() {
             }
             var member = guild.members.cache.get(rows[i].user);
             if (typeof member == "undefined") {
-              log(
+              util.log(
                 guild,
                 "Warning: " +
                   rows[i].username +
@@ -64,7 +64,7 @@ function runScheduledActions() {
               continue;
             }
             member.roles.remove(supermute);
-            log(guild, member.user.username + "'s supermute has expired.");
+            util.log(guild, member.user.username + "'s supermute has expired.");
             db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
               rows[i].id,
             ]);
@@ -82,7 +82,7 @@ function runScheduledActions() {
             }
             var member = guild.members.cache.get(rows[i].user);
             if (typeof member == "undefined") {
-              log(
+              util.log(
                 guild,
                 "Warning: " +
                   rows[i].username +
@@ -94,14 +94,14 @@ function runScheduledActions() {
               continue;
             }
             member.roles.remove(bowlmute);
-            log(guild, member.user.username + "'s bowl mute has expired.");
+            util.log(guild, member.user.username + "'s bowl mute has expired.");
             db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
               rows[i].id,
             ]);
             break;
           case "unban":
             guild.members.unban(rows[i].user);
-            log(guild, rows[i].username + "'s ban has expired.");
+            util.log(guild, rows[i].username + "'s ban has expired.");
             db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
               rows[i].id,
             ]);
@@ -148,7 +148,9 @@ bot.on("message", (message) => {
     if (commands[commandName].type === "dm") {
       return;
     }
-    if (!hasPermission(message.member, commands[commandName].permissions)) {
+    if (
+      !util.hasPermission(message.member, commands[commandName].permissions)
+    ) {
       message.channel.send(
         ":no_entry: You do not have permission to run this command."
       );
@@ -156,13 +158,6 @@ bot.on("message", (message) => {
     }
     let action = require("./commands/" + commands[commandName].action);
     action.run(message, params, bot, db, commands[commandName].extra);
-    return;
-  }
-
-  switch (commandName) {
-    case "answer":
-      badAnswerCommand(message);
-      break;
   }
 });
 
@@ -175,7 +170,9 @@ function handleDirectMessage(message) {
     if (commands[commandName].type === "server") {
       return;
     }
-    if (!hasPermission(message.author, commands[commandName].permissions)) {
+    if (
+      !util.hasPermission(message.author, commands[commandName].permissions)
+    ) {
       message.channel.send(
         ":no_entry: You do not have permission to run this command."
       );
@@ -183,13 +180,6 @@ function handleDirectMessage(message) {
     }
     let action = require("./commands/" + commands[commandName].action);
     action.run(message, params, bot, db, commands[commandName].extra);
-    return;
-  }
-
-  switch (command[0].toLowerCase()) {
-    case "!answer":
-      answerCommand(message);
-      break;
   }
 }
 
@@ -210,62 +200,32 @@ bot.on("guildMemberRemove", (member) => {
 });
 
 bot.on("messageDelete", (message) => {
-  if (message.channel.type != "text") {
-    return;
-  }
-
   if (
-    message.author.id === config.botAdminUserId &&
-    message.content.startsWith("!fsay")
+    message.channel.type != "text" ||
+    (message.author.id === config.botAdminUserId &&
+      message.content.startsWith("!fsay"))
   ) {
     return;
   }
 
-  var words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
+  let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
 
   if (
     util.channelCountsInStatistics(message.channel.guild.id, message.channel.id)
   ) {
     db.query(
       "UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
-      [removedWords, message.author.id, message.channel.guild.id]
+      [words, message.author.id, message.channel.guild.id]
     );
   }
 
   db.query(
     "UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?",
-    [words, message.channel.id]
+    [message.channel.id]
   );
 });
 
 bot.login(config.token);
-
-function hasPermission(user, permission) {
-  switch (permission) {
-    case "all":
-      return true;
-    case "mods":
-      return util.isMod(user, user.guild);
-    case "mainServerMods":
-      return (
-        util.isMod(user, user.guild) && user.guild.id === config.mainServer
-      );
-    case "admin":
-      return user.id === config.botAdminUserId;
-    default:
-      return false;
-  }
-}
-
-function isMod(member, guild) {
-  if (typeof member === "string") {
-    member = guild.members.cache.get(member);
-    if (typeof member === "undefined") {
-      return false;
-    }
-  }
-  return hasRole(member, guild, "mods") || member.id == config.botAdminUserId;
-}
 
 function hasRole(member, guild, roleName) {
   let role = guild.roles.cache.find((role) => role.name === roleName);
@@ -274,101 +234,4 @@ function hasRole(member, guild, roleName) {
   }
 
   return member.roles.cache.some((memberRole) => memberRole.id === role.id);
-}
-
-function log(guild, message) {
-  let logChannel = guild.channels.cache.find(
-    (channel) => channel.name === "log"
-  );
-  if (logChannel) {
-    logChannel.send(message);
-  }
-}
-
-// Trivia
-
-function badAnswerCommand(message) {
-  message.reply("answer only in my DMs!");
-  message.delete();
-}
-
-function answerCommand(message, params) {
-  let command = message.content.split(" ");
-  let question = command[1];
-  let answer = command.slice(2, command.length).join(" ");
-  message.attachments.each(
-    (attachment) => (answer += "\n<" + attachment.url + ">")
-  );
-  db.query("SELECT * FROM trivia_questions WHERE id = ?", [question], function (
-    err,
-    questionRow
-  ) {
-    if (questionRow[0] == null || questionRow[0].id != question) {
-      message.reply("That question id is invalid. Please try again.");
-      return;
-    }
-    if (!questionRow[0].isopen) {
-      message.reply(
-        "Question #" + questionRow[0].id + " is no longer taking answers."
-      );
-      return;
-    }
-    db.query(
-      "SELECT * FROM trivia_answers WHERE user = ? AND questionid = ?",
-      [message.author.id, question],
-      function (err, rows) {
-        if (rows.length == 0) {
-          db.query(
-            "INSERT INTO trivia_answers (user, questionid, answer, time) VALUES (?,?,?,now())",
-            [message.author.id, question, answer]
-          );
-          message.reply(
-            "Your answer to question #" +
-              question +
-              " (" +
-              questionRow[0].question +
-              ") has been submitted. Thank you!"
-          );
-          if (questionRow[0].watched) {
-            bot.users.cache
-              .get(questionRow[0].user)
-              .send(
-                "**New answer for question #" +
-                  question +
-                  " from " +
-                  message.author.tag +
-                  "**\n" +
-                  answer
-              );
-          }
-        } else {
-          db.query(
-            "UPDATE trivia_answers SET answer = ?, time=now(), viewed=0 WHERE user = ? AND questionid = ?",
-            [answer, message.author.id, question]
-          );
-          message.reply(
-            "Your answer to question #" +
-              question +
-              " (" +
-              questionRow[0].question +
-              ") has been updated, replacing your previous answer (" +
-              rows[0].answer +
-              "). Thank you!"
-          );
-          if (questionRow[0].watched) {
-            bot.users.cache
-              .get(questionRow[0].user)
-              .send(
-                "**Edited answer for question #" +
-                  question +
-                  " from " +
-                  message.author.tag +
-                  "**\n" +
-                  answer
-              );
-          }
-        }
-      }
-    );
-  });
 }

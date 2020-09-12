@@ -35,3 +35,20 @@ exports.log = function (guild, message) {
     logChannel.send(message);
   }
 };
+
+exports.hasPermission = function (user, permission) {
+  switch (permission) {
+    case "all":
+      return true;
+    case "mods":
+      return exports.isMod(user, user.guild);
+    case "mainServerMods":
+      return (
+        exports.isMod(user, user.guild) && user.guild.id === config.mainServer
+      );
+    case "admin":
+      return user.id === config.botAdminUserId;
+    default:
+      return false;
+  }
+};
