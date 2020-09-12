@@ -75,5 +75,4 @@ exports.handleMessageDelete = function (message, db) {
     "UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?",
     [message.channel.id]
   );
-  console.log("delete");
 };

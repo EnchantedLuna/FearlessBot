@@ -1,9 +1,23 @@
+const Pagination = require("discord-paginationembed");
+
+function buildEmbed(message, title, entries, page) {
+  const FieldsEmbed = new Pagination.FieldsEmbed()
+    .setArray(entries)
+    .setAuthorizedUsers(message.author.id)
+    .setChannel(message.channel)
+    .setElementsPerPage(20)
+    .setPageIndicator(false)
+    .formatField("Users", (e) => e.user)
+    .setDisabledNavigationEmojis(["jump", "delete"]);
+  FieldsEmbed.embed.setColor(0x00ffff).setTitle(title);
+  FieldsEmbed.build();
+}
+
 exports.run = function (message, page, bot, db, thing) {
   if (isNaN(page) || page < 1) {
     page = 1;
   }
-  let offset = 20 * (page - 1);
-  let rankString = "";
+  let entries = [];
   db.query(
     "SELECT username, " +
       thing +
@@ -11,29 +25,18 @@ exports.run = function (message, page, bot, db, thing) {
       thing +
       " > 0 AND active=1 ORDER BY " +
       thing +
-      " DESC LIMIT ?, 20",
-    [message.channel.guild.id, offset],
+      " DESC",
+    [message.channel.guild.id],
     function (err, rows) {
-      let count = offset + 1;
+      let count = 1;
       rows.forEach(function (member) {
-        rankString +=
-          count +
-          ": " +
-          member.username +
-          " - " +
-          member.thing +
-          " " +
-          thing +
-          "\n";
+        entries.push({
+          user:
+            count + ": " + member.username + " - " + member.thing + " " + thing,
+        });
         count++;
       });
-      message.channel.send("", {
-        embed: {
-          title: "Users with most " + thing,
-          description: rankString,
-          footer: { text: "Page " + page },
-        },
-      });
+      buildEmbed(message, "Ranking for " + thing, entries, page);
     }
   );
 };
