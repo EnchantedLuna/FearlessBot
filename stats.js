@@ -1,4 +1,5 @@
 const { channelCountsInStatistics } = require("./util");
+const config = require("./config.json");
 
 exports.updateChannelStats = function (message, db) {
   db.query(
@@ -50,4 +51,31 @@ exports.updateUserStats = function (message, db) {
       ]
     );
   }
+};
+
+exports.handleMessageDelete = function (message) {
+  if (
+    message.channel.type != "text" ||
+    (message.author.id === config.botAdminUserId &&
+      message.content.startsWith("!fsay"))
+  ) {
+    return;
+  }
+
+  let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
+
+  if (
+    util.channelCountsInStatistics(message.channel.guild.id, message.channel.id)
+  ) {
+    db.query(
+      "UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
+      [words, message.author.id, message.channel.guild.id]
+    );
+  }
+
+  db.query(
+    "UPDATE channel_stats SET total_messages=total_messages-1 WHERE channel = ?",
+    [message.channel.id]
+  );
+  console.log("delete");
 };

@@ -1,0 +1,92 @@
+const util = require("./util");
+
+function runScheduledActions(bot, db) {
+  db.query(
+    "SELECT scheduled_actions.*, members.username FROM scheduled_actions \
+    JOIN members ON members.server=scheduled_actions.guild AND scheduled_actions.user=members.id \
+    WHERE completed=0 AND effectivetime < NOW() ORDER BY id",
+    [],
+    function (err, rows) {
+      for (let i = 0; i < rows.length; i++) {
+        let guild = bot.guilds.cache.get(rows[i].guild);
+        if (typeof guild == "undefined") {
+          console.log(
+            "Scheduled actions: Guild " + rows[i].guild + " not found."
+          );
+          continue;
+        }
+        let member;
+        switch (rows[i].action) {
+          case "unmute":
+            let supermute = guild.roles.cache.find(
+              (role) => role.name === "supermute"
+            );
+            if (typeof supermute == "undefined") {
+              console.log(
+                "Scheduled actions: Supermute role not found in guild " +
+                  rows[i].guild
+              );
+              continue;
+            }
+            member = guild.members.cache.get(rows[i].user);
+            if (typeof member == "undefined") {
+              util.log(
+                guild,
+                "Warning: " +
+                  rows[i].username +
+                  " was scheduled to be unmuted, but this member was not found. Have they left?"
+              );
+              db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+                rows[i].id,
+              ]);
+              continue;
+            }
+            member.roles.remove(supermute);
+            util.log(guild, member.user.username + "'s supermute has expired.");
+            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+              rows[i].id,
+            ]);
+            break;
+          case "unbowlmute":
+            let bowlmute = guild.roles.cache.find(
+              (role) => role.name === "bowlmute"
+            );
+            if (typeof bowlmute == "undefined") {
+              console.log(
+                "Scheduled actions: Bowl mute role not found in guild " +
+                  rows[i].guild
+              );
+              continue;
+            }
+            member = guild.members.cache.get(rows[i].user);
+            if (typeof member == "undefined") {
+              util.log(
+                guild,
+                "Warning: " +
+                  rows[i].username +
+                  " was scheduled to be unmuted for bowls, but this member was not found. Have they left?"
+              );
+              db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+                rows[i].id,
+              ]);
+              continue;
+            }
+            member.roles.remove(bowlmute);
+            util.log(guild, member.user.username + "'s bowl mute has expired.");
+            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+              rows[i].id,
+            ]);
+            break;
+          case "unban":
+            guild.members.unban(rows[i].user);
+            util.log(guild, rows[i].username + "'s ban has expired.");
+            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+              rows[i].id,
+            ]);
+            break;
+        }
+      }
+    }
+  );
+}
+exports.runScheduledActions = runScheduledActions;
