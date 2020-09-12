@@ -149,7 +149,9 @@ bot.on("message", (message) => {
       return;
     }
     if (!hasPermission(message.member, commands[commandName].permissions)) {
-      message.reply("you do not have permission to run this command.");
+      message.channel.send(
+        ":no_entry: You do not have permission to run this command."
+      );
       return;
     }
     let action = require("./commands/" + commands[commandName].action);
@@ -160,24 +162,6 @@ bot.on("message", (message) => {
   switch (commandName) {
     case "answer":
       badAnswerCommand(message);
-      break;
-    // Mod commands
-    case "bowlmute":
-      if (isMod(message.member, message.channel.guild)) {
-        bowlmuteCommand(message, parseInt(command[1]));
-      }
-      break;
-    case "supermute":
-    case "hush":
-      if (isMod(message.member, message.channel.guild)) {
-        supermuteCommand(message, parseInt(command[1]));
-      }
-      break;
-    case "ban":
-    case "exile":
-      if (isMod(message.member, message.channel.guild)) {
-        banCommand(message, parseInt(command[1]));
-      }
       break;
   }
 });
@@ -192,7 +176,9 @@ function handleDirectMessage(message) {
       return;
     }
     if (!hasPermission(message.author, commands[commandName].permissions)) {
-      message.reply("You do not have permission to run this command.");
+      message.channel.send(
+        ":no_entry: You do not have permission to run this command."
+      );
       return;
     }
     let action = require("./commands/" + commands[commandName].action);
@@ -297,94 +283,6 @@ function log(guild, message) {
   if (logChannel) {
     logChannel.send(message);
   }
-}
-
-function supermuteCommand(message, hours) {
-  let supermute = message.channel.guild.roles.cache.find(
-    (role) => role.name === "supermute"
-  );
-  let active = message.channel.guild.roles.cache.find(
-    (role) => role.name === "active"
-  );
-  message.mentions.members.forEach(function (member, key, map) {
-    if (isMod(member, message.channel.guild)) {
-      message.reply(":smirk:");
-    } else {
-      member.roles.add(supermute);
-      member.roles.remove(active);
-      var timeMessage = "";
-      if (hours > 0) {
-        db.query(
-          "INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unmute', ?, ?, NOW() + INTERVAL ? HOUR)",
-          [message.channel.guild.id, member.user.id, hours]
-        );
-        timeMessage = " for " + hours + " hour";
-        timeMessage += hours != 1 ? "s" : "";
-      }
-      message.reply(
-        member.user.username + " has been supermuted" + timeMessage + "."
-      );
-    }
-  });
-}
-
-function bowlmuteCommand(message, hours) {
-  let bowlMute = message.channel.guild.roles.cache.find(
-    (role) => role.name === "bowlmute"
-  );
-  message.mentions.members.forEach(function (member, key, map) {
-    if (isMod(member, message.channel.guild)) {
-      message.reply(":smirk:");
-    } else {
-      member.roles.add(bowlMute);
-      var timeMessage = "";
-      if (hours > 0) {
-        db.query(
-          "INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unbowlmute', ?, ?, NOW() + INTERVAL ? HOUR)",
-          [message.channel.guild.id, member.user.id, hours]
-        );
-        timeMessage = " for " + hours + " hour";
-        timeMessage += hours != 1 ? "s" : "";
-      }
-      message.reply(
-        member.user.username + " has been bowl muted" + timeMessage + "."
-      );
-    }
-  });
-}
-
-function banCommand(message, days) {
-  message.mentions.members.forEach(function (member, key, map) {
-    if (isMod(member, message.channel.guild)) {
-      message.reply(":smirk:");
-    } else {
-      var reason = message.cleanContent.replace("!ban ", "");
-      member.ban(reason);
-      message.channel.send("", {
-        embed: {
-          description: ":hammer: " + member.user.username + " has been banned.",
-        },
-      });
-      var timeMessage = "indefinitely";
-      if (days > 0) {
-        db.query(
-          "INSERT INTO scheduled_actions (action, guild, user, effectivetime) \
-                VALUES ('unban', ?, ?, NOW() + INTERVAL ? DAY)",
-          [message.channel.guild.id, member.user.id, days]
-        );
-        timeMessage = "for " + days + " day";
-        timeMessage += days != 1 ? "s" : "";
-      }
-      log(
-        message.channel.guild,
-        member.user.username +
-          " has been banned " +
-          timeMessage +
-          " by " +
-          message.author.username
-      );
-    }
-  });
 }
 
 // Trivia

@@ -192,6 +192,31 @@
     "permissions": "all",
     "type": "server"
   },
+  "bowlmute": {
+    "action": "bowlmute",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "supermute": {
+    "action": "supermute",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "hush": {
+    "action": "supermute",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "ban": {
+    "action": "ban",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "exile": {
+    "action": "ban",
+    "permissions": "mods",
+    "type": "server"
+  },
   "kick": {
     "action": "kick",
     "permissions": "mods",
