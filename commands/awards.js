@@ -15,14 +15,24 @@ exports.run = function (message, args, bot, db) {
         return;
       }
       if (rows[0] != null) {
-        let awardsText = "\nAwards for " + member.username + ":\n";
+        let awardsText = "";
         for (let i = 0; i < rows.length; i++) {
           let date = rows[i].date.toDateString();
           awardsText += i + 1 + ". " + rows[i].award + " [" + date + "]\n";
         }
-        message.reply(awardsText);
+        message.channel.send("", {
+          embed: {
+            title: "Awards for " + member.username,
+            description: awardsText,
+          },
+        });
       } else {
-        message.reply("no awards :(");
+        message.channel.send("", {
+          embed: {
+            title: "Awards for " + member.username,
+            description: "none :frowning: ",
+          },
+        });
       }
     }
   );

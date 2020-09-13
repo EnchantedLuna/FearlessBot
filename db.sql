@@ -111,3 +111,12 @@ CREATE TABLE trivia_answers
   viewed TINYINT(1) NOT NULL DEFAULT 0,
   time DATETIME
 );
+
+CREATE TABLE `awards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `server` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `member` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `award` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
