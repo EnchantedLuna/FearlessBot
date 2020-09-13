@@ -1,7 +1,9 @@
 const { channelCountsInStatistics } = require("../util");
 
-exports.run = function (message, keyword, bot, db, showUnapproved) {
-  if (keyword == null) return;
+exports.run = function (message, args, bot, db, showUnapproved) {
+  let arg = args.split(" ");
+  let keyword = arg[0];
+  if (keyword == "") return;
   let author = message.author.tag;
   db.query(
     "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
