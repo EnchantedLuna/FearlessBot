@@ -9,7 +9,7 @@ function buildEmbed(message, title, entries) {
     .setPageIndicator(false)
     .formatField("Users", (e) => e.user)
     .setDisabledNavigationEmojis(["jump", "delete"]);
-  FieldsEmbed.embed.setColor(0x00ffff).setTitle(title);
+  FieldsEmbed.embed.setColor(0xdbe07e).setTitle(title);
   FieldsEmbed.build();
 }
 
@@ -37,7 +37,7 @@ exports.run = function (message, page, bot, db, thing) {
             rank + ": " + member.username + " - " + member.thing + " " + thing,
         });
       });
-      buildEmbed(message, "Ranking for " + thing, entries);
+      buildEmbed(message, ":first_place: Ranking for " + thing, entries);
     }
   );
 };

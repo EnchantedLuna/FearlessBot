@@ -18,6 +18,7 @@ exports.run = function (message, args, bot, db) {
             const rank = totals[0].higher + 1;
             message.channel.send("", {
               embed: {
+                title: ":star: Lorpoints",
                 description:
                   rows[0].username +
                   " has " +

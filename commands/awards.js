@@ -22,7 +22,7 @@ exports.run = function (message, args, bot, db) {
         }
         message.channel.send("", {
           embed: {
-            title: "Awards for " + member.username,
+            title: ":trophy: Awards for " + member.username,
             description: awardsText,
           },
         });
