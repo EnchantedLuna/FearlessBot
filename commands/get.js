@@ -10,7 +10,14 @@ exports.run = function (message, keyword, bot, db, showUnapproved) {
       if (rows[0] == null) {
         message.channel.send("", {
           embed: {
-            author: { name: author, icon_url: message.author.avatarURL() },
+            author: {
+              name: author,
+              icon_url: message.author.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 64,
+              }),
+            },
             title: keyword,
             description:
               ":warning: Nothing is stored for keyword " + keyword + ".",
@@ -19,7 +26,14 @@ exports.run = function (message, keyword, bot, db, showUnapproved) {
       } else if (!rows[0].approved && !showUnapproved) {
         message.channel.send("", {
           embed: {
-            author: { name: author, icon_url: message.author.avatarURL() },
+            author: {
+              name: author,
+              icon_url: message.author.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 64,
+              }),
+            },
             title: keyword,
             description: ":warning: This item has not been approved yet.",
           },
@@ -35,7 +49,14 @@ exports.run = function (message, keyword, bot, db, showUnapproved) {
           }
           message.channel.send("", {
             embed: {
-              author: { name: author, icon_url: message.author.avatarURL() },
+              author: {
+                name: author,
+                icon_url: message.author.displayAvatarURL({
+                  dynamic: true,
+                  format: "png",
+                  size: 64,
+                }),
+              },
               title: keyword,
               image: { url: text },
               footer: { text: date },

@@ -14,7 +14,15 @@ exports.run = function (message, keyword, bot, db) {
       if (rows[0] == null) {
         message.channel.send("", {
           embed: {
-            title: keyword + " (requested by " + author + ")",
+            author: {
+              name: author,
+              icon_url: message.author.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 64,
+              }),
+            },
+            title: keyword,
             description:
               ":warning: Nothing is stored for keyword " + keyword + ".",
           },
@@ -25,7 +33,15 @@ exports.run = function (message, keyword, bot, db) {
       ) {
         message.channel.send("", {
           embed: {
-            title: keyword + " (requested by " + author + ")",
+            author: {
+              name: author,
+              icon_url: message.author.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 64,
+              }),
+            },
+            title: keyword,
             description: ":warning: This item has not been approved yet.",
           },
         });
@@ -50,7 +66,15 @@ exports.run = function (message, keyword, bot, db) {
         ) {
           message.channel.send("", {
             embed: {
-              title: keyword + " (requested by " + author + ")",
+              author: {
+                name: author,
+                icon_url: message.author.displayAvatarURL({
+                  dynamic: true,
+                  format: "png",
+                  size: 64,
+                }),
+              },
+              title: keyword,
               image: { url: rows[0].value },
               fields: fieldList,
             },
@@ -58,7 +82,15 @@ exports.run = function (message, keyword, bot, db) {
         } else {
           message.channel.send("", {
             embed: {
-              title: keyword + " (requested by " + author + ")",
+              author: {
+                name: author,
+                icon_url: message.author.displayAvatarURL({
+                  dynamic: true,
+                  format: "png",
+                  size: 64,
+                }),
+              },
+              title: keyword,
               description: rows[0].value,
               fields: fieldList,
             },
