@@ -31,6 +31,7 @@ exports.run = function (message, page, bot, db, thing) {
       rows.forEach(function (member) {
         count++;
         rank = member.thing === previousThing ? rank : count;
+        previousThing = member.thing;
         entries.push({
           user:
             rank + ": " + member.username + " - " + member.thing + " " + thing,
