@@ -12,16 +12,19 @@ exports.run = function (message, args, bot, db) {
     function (err, rows) {
       if (rows[0] !== null) {
         db.query(
-          "SELECT SUM(lorpoints) AS total FROM members WHERE server = ?",
-          [message.channel.guild.id],
+          "SELECT COUNT(*) AS higher FROM members WHERE server = ? AND lorpoints > ?",
+          [message.channel.guild.id, rows[0].lorpoints],
           function (err, totals) {
+            const rank = totals[0].higher + 1;
             message.channel.send("", {
               embed: {
                 description:
                   rows[0].username +
                   " has " +
                   rows[0].lorpoints +
-                  " lorpoints.",
+                  " lorpoints.\nCurrent Rank: " +
+                  rank +
+                  getSuffix(rank),
               },
             });
           }
@@ -30,3 +33,15 @@ exports.run = function (message, args, bot, db) {
     }
   );
 };
+
+function getSuffix(number) {
+  const lastDigit = number % 10;
+  if (lastDigit === 1 && number != 11) {
+    return "st";
+  } else if (lastDigit === 2 && number != 12) {
+    return "nd";
+  } else if (lastDigit === 3 && number != 13) {
+    return "rd";
+  }
+  return "th";
+}
