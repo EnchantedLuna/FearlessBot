@@ -25,13 +25,16 @@ exports.run = function (message, page, bot, db, thing) {
       " DESC",
     [message.channel.guild.id],
     function (err, rows) {
-      let count = 1;
+      let count = 0;
+      let rank = 0;
+      let previousThing = null;
       rows.forEach(function (member) {
+        count++;
+        rank = member.thing === previousThing ? rank : count;
         entries.push({
           user:
-            count + ": " + member.username + " - " + member.thing + " " + thing,
+            rank + ": " + member.username + " - " + member.thing + " " + thing,
         });
-        count++;
       });
       buildEmbed(message, "Ranking for " + thing, entries);
     }
