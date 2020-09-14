@@ -48,7 +48,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       isMod(message.author.id, mainServer)
     ) {
       response +=
-        "Award all command: ```\n!award 1 " + userList.join(" ") + "```";
+        "Award all command: ```\n!alp 1 " + userList.join(" ") + "```";
     }
     if (message.author.id == questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
