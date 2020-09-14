@@ -37,9 +37,9 @@ exports.run = function (message, args, bot, db) {
   let lorpointWord = number !== 1 ? "lorpoints" : "lorpoint";
   message.channel.send("", {
     embed: {
-      title: ":star: Awarding Lorpoints",
+      title: ":star: Adding Lorpoints",
       description:
-        number + " " + lorpointWord + " have been awarded to:\n" + finalList,
+        number + " " + lorpointWord + " have been added to:\n" + finalList,
       color: 0xdbe07e,
     },
   });

@@ -232,8 +232,13 @@
     "permissions": "mods",
     "type": "server"
   },
-  "award": {
-    "action": "award",
+  "addlorpoints": {
+    "action": "addlorpoints",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "alp": {
+    "action": "addlorpoints",
     "permissions": "mods",
     "type": "server"
   },
