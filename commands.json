@@ -272,6 +272,11 @@
     "permissions": "all",
     "type": "dm"
   },
+  "openquestion": {
+    "action": "openquestion",
+    "permissions": "all",
+    "type": "dm"
+  },
   "closequestion": {
     "action": "closequestion",
     "permissions": "all",
