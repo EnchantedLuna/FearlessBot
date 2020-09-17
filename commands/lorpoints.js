@@ -37,11 +37,11 @@ exports.run = function (message, args, bot, db) {
 
 function getSuffix(number) {
   const lastDigit = number % 10;
-  if (lastDigit === 1 && number != 11) {
+  if (lastDigit === 1 && number % 100 != 11) {
     return "st";
-  } else if (lastDigit === 2 && number != 12) {
+  } else if (lastDigit === 2 && number % 100 != 12) {
     return "nd";
-  } else if (lastDigit === 3 && number != 13) {
+  } else if (lastDigit === 3 && number % 100 != 13) {
     return "rd";
   }
   return "th";
