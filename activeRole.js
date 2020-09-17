@@ -1,5 +1,5 @@
 const config = require("./config.json");
-const TWELVE_HOURS = 43200000;
+const THREE_HOURS = 10800000;
 
 exports.checkActiveRole = function (message) {
   if (
@@ -9,7 +9,7 @@ exports.checkActiveRole = function (message) {
     let joinDate = message.member.joinedAt;
     let now = new Date();
     let joinTime = now.getTime() - joinDate.getTime();
-    if (joinTime > TWELVE_HOURS) {
+    if (joinTime > THREE_HOURS) {
       let role = message.channel.guild.roles.cache.find(
         (role) => role.name === "active"
       );
