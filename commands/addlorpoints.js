@@ -9,7 +9,7 @@ exports.run = function (message, args, bot, db) {
     message.channel.send("", {
       embed: {
         description:
-          ":x: You must enter a valid number of lorpoints to award.\nUsage: ``!award [number] @user1 @user2``",
+          ":x: You must enter a valid number of lorpoints to add.\nUsage: ``!alp [number] @user1 @user2``",
         color: 0xff0000,
       },
     });
@@ -19,7 +19,7 @@ exports.run = function (message, args, bot, db) {
   if (message.mentions.members.size === 0) {
     message.channel.send("", {
       embed: {
-        description: ":x: You must mention a member to award lorpoints to.",
+        description: ":x: You must mention a member to add lorpoints to.",
         color: 0xff0000,
       },
     });
@@ -43,14 +43,16 @@ exports.run = function (message, args, bot, db) {
       color: 0xdbe07e,
     },
   });
-  log(
-    message.channel.guild,
-    number +
-      " " +
-      lorpointWord +
-      " have been awarded to: " +
-      finalList +
-      " by " +
-      message.author.username
-  );
+  if (number != 0) {
+    log(
+      message.channel.guild,
+      number +
+        " " +
+        lorpointWord +
+        " have been awarded to: " +
+        finalList +
+        " by " +
+        message.author.username
+    );
+  }
 };
