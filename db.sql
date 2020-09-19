@@ -33,6 +33,7 @@ CREATE TABLE members
   active TINYINT(1) DEFAULT '1',
   discriminator INT(4),
   lorpoints int(11) NOT NULL DEFAULT 0,
+  eventpoints int(11) NOT NULL DEFAULT 0,
   CONSTRAINT `PRIMARY` PRIMARY KEY (server, id)
 );
 CREATE INDEX idx_username ON members (server, username);

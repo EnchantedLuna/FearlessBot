@@ -242,6 +242,16 @@
     "permissions": "mods",
     "type": "server"
   },
+  "acp": {
+    "action": "addcappedpoints",
+    "permissions": "mods",
+    "type": "server"
+  },
+  "resetcap": {
+    "action": "resetcap",
+    "permissions": "admin",
+    "type": "server"
+  },
   "unsupermute": {
     "action": "unsupermute",
     "permissions": "mods",
