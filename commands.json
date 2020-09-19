@@ -1,4 +1,9 @@
 {
+  "fhelp": {
+    "action": "fhelp",
+    "permissions": "all",
+    "type": "both"
+  },
   "song": {
     "action": "song",
     "permissions": "all",
