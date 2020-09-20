@@ -18,10 +18,10 @@ while ($query->fetch()) {
     $counts[$month."/".$year] += $count;
 }
 
-$query = $db->prepare("SELECT name, SUM(message_count) AS msgCount
+$query = $db->prepare("SELECT name, SUM(message_count) 
 FROM user_message_stats ums
 JOIN channel_stats cs ON ums.guild=cs.server AND ums.channel=cs.channel
-WHERE ums.guild = ? AND user = ? AND web=1 ORDER BY msgCount DESC
+WHERE ums.guild = ? AND user = ? AND web=1
 GROUP BY name
 ");
 $query->bind_param('ss', $_GET['server'], $_GET['user']);
@@ -32,6 +32,7 @@ $channelCounts = array();
 while ($query->fetch()) {
     $channelCounts[$channel] = $messageCount;
 }
+arsort($channelCounts);
 
 ?>
 <!DOCTYPE html>
