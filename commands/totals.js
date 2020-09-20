@@ -1,6 +1,6 @@
 exports.run = function (message, args, bot, db) {
   db.query(
-    "SELECT * FROM channel_stats WHERE server = ?",
+    "SELECT * FROM channel_stats WHERE server = ? AND web=1",
     [message.channel.guild.id],
     function (err, rows) {
       let totalsMessage = "";
