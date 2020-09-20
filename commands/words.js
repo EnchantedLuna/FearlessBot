@@ -1,13 +1,11 @@
 exports.run = function (message, params, bot, db) {
-  let member = message.author.username;
+  let member = message.author.id;
   if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user.username;
-  } else if (params != "") {
-    member = params;
+    member = message.mentions.members.first().user.id;
   }
 
   db.query(
-    "SELECT words, messages, username FROM members WHERE server = ? AND username = ?",
+    "SELECT words, messages, username FROM members WHERE server = ? AND id = ?",
     [message.channel.guild.id, member],
     function (err, rows) {
       if (err != null) {
