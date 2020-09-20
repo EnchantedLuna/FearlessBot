@@ -31,7 +31,6 @@ $db->set_charset("utf8mb4");
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="fearlessdata.php">Saved Items</a></li>
-                    <li><a href="members.php">Members</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
