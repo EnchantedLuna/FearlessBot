@@ -29,11 +29,12 @@ exports.run = function (message, args, bot, db) {
         if (rows[i].eventpoints >= eventCap) {
           cappedList.push(rows[i].username);
         } else {
+          let count = rows[i].eventpoints + 1;
           db.query(
             "UPDATE members SET lorpoints=lorpoints+?, eventpoints=eventpoints+1 WHERE server = ? AND id = ?",
             [pointsPerEvent, rows[i].server, rows[i].id]
           );
-          list.push(rows[i].username);
+          list.push(rows[i].username + " (" + count + ")");
         }
       }
 
