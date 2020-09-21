@@ -37,7 +37,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     for (var i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
       let user = bot.users.resolve(rows[i].user);
-      let username = "@" + user.tag;
+      let username = user ? "@" + user.tag : "Unknown user " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
       response += answerEntry;
       userList.push(username);
