@@ -40,15 +40,16 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       let username = user ? "@" + user.tag : "Unknown user " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
       response += answerEntry;
-      userList.push(username);
+      if (user) {
+        userList.push(username);
+      }
     }
     let mainServer = bot.guilds.cache.get(config.mainServer);
     if (
       typeof mainServer !== "undefined" &&
       isMod(message.author.id, mainServer)
     ) {
-      response +=
-        "Award all command: ```\n!alp 1 " + userList.join(" ") + "```";
+      response += "User list for awarding: ```\n" + userList.join(" ") + "```";
     }
     if (message.author.id == questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
