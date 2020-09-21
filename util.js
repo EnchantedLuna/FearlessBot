@@ -29,8 +29,11 @@ exports.hasRole = function (member, guild, roleName) {
 
 exports.log = function (guild, message) {
   let logChannel = guild.channels.cache.find(
-    (channel) => channel.name === "log"
+    (channel) => channel.name === config.logChannelName
   );
+  if (!logChannel) {
+    logChannel = guild.channels.cache.find((channel) => channel.name === "log");
+  }
   if (logChannel) {
     logChannel.send(message);
   }
