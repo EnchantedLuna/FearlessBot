@@ -27,6 +27,10 @@ exports.run = function (message, args, bot, db) {
       );
       return;
     }
+    if (answer.length > 1500) {
+      message.reply("There's a 1500 character limit on answers. Sorry!");
+      return;
+    }
     db.query(
       "SELECT * FROM trivia_answers WHERE user = ? AND questionid = ?",
       [message.author.id, question],
