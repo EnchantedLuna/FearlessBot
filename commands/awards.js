@@ -1,10 +1,7 @@
+const { findMember } = require("../util");
+
 exports.run = function (message, args, bot, db) {
-  let member;
-  if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user;
-  } else {
-    member = message.author;
-  }
+  const member = findMember(message, args, bot);
 
   db.query(
     "SELECT * FROM awards WHERE server = ? AND member = ? ORDER BY date, id",
@@ -22,14 +19,14 @@ exports.run = function (message, args, bot, db) {
         }
         message.channel.send("", {
           embed: {
-            title: ":trophy: Awards for " + member.username,
+            title: ":trophy: Awards for " + member.displayName,
             description: awardsText,
           },
         });
       } else {
         message.channel.send("", {
           embed: {
-            title: "Awards for " + member.username,
+            title: "Awards for " + member.displayName,
             description: "none :frowning: ",
           },
         });

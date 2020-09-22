@@ -1,3 +1,4 @@
+const { Message, Client } = require("discord.js");
 const config = require("./config.json");
 
 exports.channelCountsInStatistics = function (guild, channel) {
@@ -54,4 +55,57 @@ exports.hasPermission = function (user, permission) {
     default:
       return false;
   }
+};
+
+/**
+ *
+ * @param {Message} message
+ * @param {string} args
+ * @param {Client} bot
+ */
+exports.findMemberID = function (message, args, bot) {
+  let memberId = message.author.id;
+  if (message.mentions.members.size > 0) {
+    return message.mentions.members.first().user.id;
+  }
+  const idResolve = bot.users.resolve(args);
+  if (idResolve) {
+    return idResolve.id;
+  }
+  const guildMember = message.channel.guild.members.cache.find(
+    (member) => member.user.username.toLowerCase() === args.toLowerCase()
+  );
+  if (guildMember) {
+    return guildMember.id;
+  }
+
+  return memberId;
+};
+
+/**
+ *
+ * @param {Message} message
+ * @param {string} args
+ * @param {Client} bot
+ */
+exports.findMember = function (message, args, bot) {
+  let member = message.member;
+  if (message.mentions.members.size > 0) {
+    return message.mentions.members.first();
+  }
+  const idResolve = bot.users.resolve(args);
+  if (idResolve) {
+    const member = message.channel.guild.member(idResolve);
+    if (member) {
+      return member;
+    }
+  }
+  const guildMember = message.channel.guild.members.cache.find(
+    (member) => member.user.username.toLowerCase() === args.toLowerCase()
+  );
+  if (guildMember) {
+    return guildMember;
+  }
+
+  return member;
 };

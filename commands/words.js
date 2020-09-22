@@ -1,8 +1,7 @@
+const { findMemberID } = require("../util");
+
 exports.run = function (message, params, bot, db) {
-  let member = message.author.id;
-  if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user.id;
-  }
+  const member = findMemberID(message, params, bot);
 
   db.query(
     "SELECT words, messages, username FROM members WHERE server = ? AND id = ?",

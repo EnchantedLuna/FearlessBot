@@ -1,10 +1,7 @@
+const { findMemberID } = require("../util");
+
 exports.run = function (message, args, bot, db) {
-  let member;
-  if (message.mentions.members.size > 0) {
-    member = message.mentions.members.first().user.id;
-  } else {
-    member = message.author.id;
-  }
+  const member = findMemberID(message, args, bot);
 
   db.query(
     "SELECT username, lorpoints FROM members WHERE server = ? AND id = ?",
