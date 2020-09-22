@@ -7,7 +7,7 @@ exports.run = function (message, args, bot, db, showOnlyNew) {
     rows
   ) {
     if (rows[0] == null) {
-      message.reply("Invalid question id");
+      message.reply("That question does not exist.");
       return;
     }
     if (
