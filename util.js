@@ -73,7 +73,9 @@ exports.findMemberID = function (message, args, bot) {
     return idResolve.id;
   }
   const guildMember = message.channel.guild.members.cache.find(
-    (member) => member.user.username.toLowerCase() === args.toLowerCase()
+    (member) =>
+      member.user.username.toLowerCase() === args.toLowerCase() ||
+      member.user.tag === args
   );
   if (guildMember) {
     return guildMember.id;
