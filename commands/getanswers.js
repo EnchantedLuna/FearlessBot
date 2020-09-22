@@ -47,7 +47,8 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     let mainServer = bot.guilds.cache.get(config.mainServer);
     if (
       typeof mainServer !== "undefined" &&
-      isMod(message.author.id, mainServer)
+      isMod(message.author.id, mainServer) &&
+      userList.length > 0
     ) {
       response += "User list for awarding: ```\n" + userList.join(" ") + "```";
     }
