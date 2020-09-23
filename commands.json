@@ -15,7 +15,7 @@
     "type": "both"
   },
   "8ball": {
-    "action": "8ball",
+    "action": "fun/8ball",
     "permissions": "all",
     "type": "both"
   },
@@ -40,35 +40,35 @@
     "type": "both"
   },
   "b": {
-    "action": "b",
+    "action": "fun/b",
     "permissions": "all",
     "type": "both",
     "extra": 1
   },
   "b2": {
-    "action": "b",
+    "action": "fun/b",
     "permissions": "all",
     "type": "both",
     "extra": 2
   },
   "b3": {
-    "action": "b",
+    "action": "fun/b",
     "permissions": "all",
     "type": "both",
     "extra": 3
   },
   "clap": {
-    "action": "clap",
+    "action": "fun/clap",
     "permissions": "all",
     "type": "both"
   },
   "ha": {
-    "action": "ha",
+    "action": "fun/ha",
     "permissions": "all",
     "type": "both"
   },
   "hm": {
-    "action": "hm",
+    "action": "fun/hm",
     "permissions": "all",
     "type": "both"
   },
