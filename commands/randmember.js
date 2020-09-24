@@ -23,6 +23,7 @@ exports.run = function (message, days, bot, db) {
             title: ":game_die: Random Member",
             description: nickname + user.tag,
             thumbnail: { url: user.avatarURL() },
+            color: member.displayColor,
           },
         });
       }
