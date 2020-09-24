@@ -9,14 +9,19 @@ exports.run = function (message, days, bot, db) {
     [message.channel.guild.id, time],
     function (err, rows) {
       if (rows != null) {
-        let user = bot.users.resolve(rows[0].id);
+        const user = bot.users.resolve(rows[0].id);
         if (!user) {
           return;
         }
+        const member = message.channel.guild.member(user);
+        if (!member) {
+          return;
+        }
+        const nickname = member.nickname ? member.nickname + "\n" : "";
         message.channel.send("", {
           embed: {
             title: ":game_die: Random Member",
-            description: user.tag,
+            description: nickname + user.tag,
             thumbnail: { url: user.avatarURL() },
           },
         });
