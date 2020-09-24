@@ -4,7 +4,7 @@ exports.run = function (message) {
     if (util.isMod(member, message.channel.guild)) {
       message.reply(":smirk:");
     } else {
-      let reason = message.cleanContent.replace("!kick ", "");
+      let reason = "Kicked by " + message.author.tag;
       if (!member.kickable) {
         message.channel.send("", {
           embed: {
@@ -15,7 +15,7 @@ exports.run = function (message) {
         return;
       }
       member.kick(reason);
-      message.channel.send(member.user.username + " has been kicked.");
+      message.channel.send(member.user.tag + " has been kicked.");
     }
   });
 };
