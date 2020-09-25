@@ -5,12 +5,12 @@
     "type": "both"
   },
   "song": {
-    "action": "song",
+    "action": "fun/song",
     "permissions": "all",
     "type": "both"
   },
   "album": {
-    "action": "album",
+    "action": "fun/album",
     "permissions": "all",
     "type": "both"
   },
@@ -35,7 +35,7 @@
     "type": "server"
   },
   "choose": {
-    "action": "choose",
+    "action": "fun/choose",
     "permissions": "all",
     "type": "both"
   },
@@ -325,5 +325,10 @@
     "action": "answer",
     "permissions": "all",
     "type": "both"
+  },
+  "reassign": {
+    "action": "question/reassign",
+    "permissions": "admin",
+    "type": "dm"
   }
 }
