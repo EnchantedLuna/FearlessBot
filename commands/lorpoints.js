@@ -4,7 +4,7 @@ exports.run = function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);
 
   db.query(
-    "SELECT username, lorpoints FROM members WHERE server = ? AND id = ?",
+    "SELECT username, lorpoints, eventpoints FROM members WHERE server = ? AND id = ?",
     [message.channel.guild.id, member],
     function (err, rows) {
       if (rows[0] !== null) {
@@ -22,7 +22,9 @@ exports.run = function (message, args, bot, db) {
                   rows[0].lorpoints +
                   " lorpoints.\nCurrent Rank: " +
                   rank +
-                  getSuffix(rank),
+                  getSuffix(rank) +
+                  "\nCapped events this week: " +
+                  rows[0].eventpoints,
               },
             });
           }
