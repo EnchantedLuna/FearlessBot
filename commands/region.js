@@ -26,6 +26,19 @@ exports.run = function (message, region) {
     );
     return;
   }
+  if (
+    !northamerica ||
+    !southamerica ||
+    !europe ||
+    !asia ||
+    !africa ||
+    !oceania
+  ) {
+    message.channel.send(
+      ":x: This server does not have all region roles set up, so this command cannot be used yet."
+    );
+    return;
+  }
 
   switch (region.toLowerCase()) {
     case "clear":
