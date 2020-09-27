@@ -16,6 +16,16 @@ exports.run = function (message, args, bot, db) {
     return;
   }
 
+  if (number > 1000000 || number < -10000000) {
+    message.channel.send("", {
+      embed: {
+        description: ":x: This amount is too high!",
+        color: 0xff0000,
+      },
+    });
+    return;
+  }
+
   if (message.mentions.members.size === 0) {
     message.channel.send("", {
       embed: {
