@@ -267,6 +267,18 @@
     "permissions": "mods",
     "type": "server"
   },
+  "showchannel": {
+    "action": "mod/setvisibility",
+    "permissions": "mods",
+    "type": "server",
+    "extra": 1
+  },
+  "hidechannel": {
+    "action": "mod/setvisibility",
+    "permissions": "mods",
+    "type": "server",
+    "extra": 0
+  },
   "addshitpost": {
     "action": "addshitpost",
     "permissions": "mainServerMods",
