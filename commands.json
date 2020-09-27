@@ -254,7 +254,7 @@
   },
   "resetcap": {
     "action": "resetcap",
-    "permissions": "admin",
+    "permissions": "mods",
     "type": "server"
   },
   "unsupermute": {
