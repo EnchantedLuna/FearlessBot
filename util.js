@@ -10,9 +10,9 @@ exports.channelCountsInStatistics = function (guild, channel) {
 exports.isMod = function (member, guild) {
   if (typeof member === "string") {
     member = guild.members.cache.get(member);
-    if (typeof member === "undefined") {
-      return false;
-    }
+  }
+  if (typeof member === "undefined") {
+    return false;
   }
   return (
     exports.hasRole(member, guild, "mods") || member.id == config.botAdminUserId
