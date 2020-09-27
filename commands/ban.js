@@ -7,6 +7,15 @@ exports.run = function (message, args, bot, db) {
     if (isMod(member, message.channel.guild)) {
       message.channel.send(":smirk:");
     } else {
+      if (!member.bannable) {
+        message.channel.send("", {
+          embed: {
+            description:
+              ":warning: I don't have permission to ban that member.",
+          },
+        });
+        return;
+      }
       let reason = message.cleanContent.replace("!ban ", "");
       member.ban(reason);
       message.channel.send("", {
