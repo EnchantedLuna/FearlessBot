@@ -20,8 +20,10 @@ exports.isMod = function (member, guild) {
 };
 
 exports.hasRole = function (member, guild, roleName) {
-  let role = guild.roles.cache.find((role) => role.name === roleName);
-  if (role === null) {
+  const role = guild.roles.cache.find(
+    (role) => role.name.toLowerCase() === roleName
+  );
+  if (!role) {
     return false;
   }
 
