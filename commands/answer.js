@@ -27,8 +27,8 @@ exports.run = function (message, args, bot, db) {
       );
       return;
     }
-    if (answer.length > 1500) {
-      message.reply("There's a 1500 character limit on answers. Sorry!");
+    if (answer.length > 1700) {
+      message.reply("There's a 1700 character limit on answers. Sorry!");
       return;
     }
     db.query(
