@@ -340,7 +340,7 @@
     "extra": true
   },
   "answer": {
-    "action": "answer",
+    "action": "question/answer",
     "permissions": "all",
     "type": "both"
   },

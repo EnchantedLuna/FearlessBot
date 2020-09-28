@@ -31,8 +31,16 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     query =
       "SELECT user, answer FROM trivia_answers WHERE questionid = ? AND viewed = 0 ORDER BY id";
   }
+  const questionStatus = questionRow.isopen ? "Open" : "Closed";
   db.query(query, [id], function (err, rows) {
-    let response = "__Answers for question #" + id + ": " + question + "__\n";
+    let response =
+      "**Answers for question #" +
+      id +
+      ": " +
+      question +
+      " (" +
+      questionStatus +
+      ")**\n";
     let userList = [];
     for (var i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
