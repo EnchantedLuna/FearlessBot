@@ -18,7 +18,7 @@ exports.run = function (message, args, bot, db) {
   let list = [];
   let cappedList = [];
   db.query(
-    "SELECT id, server, username, lorpoints, eventpoints FROM members WHERE server = ? AND id IN (?)",
+    "SELECT id, server, username, lorpoints, eventpoints FROM members WHERE server = ? AND id IN (?) ORDER BY username",
     [message.channel.guild.id, memberList],
     function (err, rows) {
       if (err) {
