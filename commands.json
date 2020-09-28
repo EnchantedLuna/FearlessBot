@@ -321,6 +321,12 @@
     "type": "dm",
     "extra": 0
   },
+  "ga": {
+    "action": "getanswers",
+    "permissions": "all",
+    "type": "dm",
+    "extra": false
+  },
   "getanswers": {
     "action": "getanswers",
     "permissions": "all",
