@@ -4,7 +4,9 @@ exports.run = function (message, args, bot, db) {
     [message.channel.guild.id],
     function (err, rows) {
       if (rows) {
-        message.reply(rows[0]["keyword"] + ": " + rows[0]["value"]);
+        message.reply(rows[0]["keyword"] + ": " + rows[0]["value"], {
+          allowedMentions: { users: [] },
+        });
       }
     }
   );
