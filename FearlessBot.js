@@ -8,7 +8,10 @@ const stats = require("./stats");
 const { runScheduledActions } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
 
-var bot = new Discord.Client({ disableEveryone: true, fetchAllMembers: true });
+var bot = new Discord.Client({
+  disableMentions: "everyone",
+  fetchAllMembers: true,
+});
 
 var db = mysql.createConnection({
   host: config.mysqlHost,

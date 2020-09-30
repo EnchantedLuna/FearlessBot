@@ -1,8 +1,8 @@
-const util = require("../util");
+const util = require("../../util");
 exports.run = function (message) {
   message.mentions.members.forEach(function (member, key, map) {
     if (util.isMod(member, message.channel.guild)) {
-      message.reply(":smirk:");
+      message.channel.send(":smirk:");
     } else {
       let reason = "Kicked by " + message.author.tag;
       if (!member.kickable) {

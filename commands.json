@@ -223,7 +223,7 @@
     "type": "server"
   },
   "kick": {
-    "action": "kick",
+    "action": "mod/kick",
     "permissions": "mods",
     "type": "server"
   },
@@ -348,5 +348,17 @@
     "action": "question/reassign",
     "permissions": "admin",
     "type": "dm"
+  },
+  "events": {
+    "action": "mod/events",
+    "permissions": "mods",
+    "type": "server",
+    "extra": "events"
+  },
+  "questionping": {
+    "action": "mod/events",
+    "permissions": "mods",
+    "type": "server",
+    "extra": "question"
   }
 }
