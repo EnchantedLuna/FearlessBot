@@ -3,6 +3,11 @@ exports.run = async function (message, args, bot, db, roleName) {
     (role) => role.name === roleName
   );
   if (!events) {
+    message.channel.send(":x: I could not find the " + roleName + " role.");
+    return;
+  }
+  if (!events.editable) {
+    message.channel.send(":x: I do not have permission to edit this role.");
     return;
   }
   const rolePing = "<@&" + events.id + "> ";
