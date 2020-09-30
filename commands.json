@@ -354,6 +354,11 @@
     "permissions": "admin",
     "type": "dm"
   },
+  "mystery": {
+    "action": "question/mystery",
+    "permissions": "all",
+    "type": "dm"
+  },
   "events": {
     "action": "mod/events",
     "permissions": "mods",
