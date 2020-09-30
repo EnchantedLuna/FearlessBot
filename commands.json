@@ -237,6 +237,11 @@
     "permissions": "mods",
     "type": "server"
   },
+  "addawards": {
+    "action": "addaward",
+    "permissions": "mods",
+    "type": "server"
+  },
   "addlorpoints": {
     "action": "addlorpoints",
     "permissions": "mods",
