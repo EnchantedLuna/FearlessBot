@@ -7,6 +7,10 @@ exports.run = function (message, args, bot, db) {
     "SELECT username, lorpoints, eventpoints FROM members WHERE server = ? AND id = ?",
     [message.channel.guild.id, member],
     function (err, rows) {
+      if (err) {
+        console.error("lorpoint command db error: " + err);
+        return;
+      }
       if (rows[0] !== null) {
         db.query(
           "SELECT COUNT(*) AS higher FROM members WHERE server = ? AND lorpoints > ?",
