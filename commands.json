@@ -203,12 +203,12 @@
     "type": "server"
   },
   "supermute": {
-    "action": "supermute",
+    "action": "mod/supermute",
     "permissions": "mods",
     "type": "server"
   },
   "hush": {
-    "action": "supermute",
+    "action": "mod/supermute",
     "permissions": "mods",
     "type": "server"
   },
@@ -263,7 +263,7 @@
     "type": "server"
   },
   "unsupermute": {
-    "action": "unsupermute",
+    "action": "mod/unsupermute",
     "permissions": "mods",
     "type": "server"
   },
