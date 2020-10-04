@@ -69,11 +69,11 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     if (message.author.id == questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
-    if (response.length + userListString.length > 1900) {
+    if (response.length + userListString.length > 2000) {
       message.reply(response, { split: true });
       message.reply(userListString, { split: true });
     } else {
-      message.reply(response, { split: true });
+      message.reply(response + userListString, { split: true });
     }
   });
 }
