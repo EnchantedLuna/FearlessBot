@@ -1,4 +1,4 @@
-const { isMod } = require("../util");
+const { isMod } = require("../../util");
 
 exports.run = function (message, args, bot, db) {
   const argSet = args.split(" ");
@@ -19,7 +19,10 @@ exports.run = function (message, args, bot, db) {
     return;
   }
   message.mentions.members.forEach(function (member, key, map) {
-    if (isMod(member, message.channel.guild)) {
+    if (
+      isMod(member, message.channel.guild) &&
+      member.id !== message.author.id
+    ) {
       message.channel.send(":smirk:");
     } else {
       member.roles.add(supermute);
