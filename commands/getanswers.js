@@ -42,6 +42,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       questionStatus +
       ")**\n";
     let userList = [];
+    let userIdList = [];
     for (var i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
       let user = bot.users.resolve(rows[i].user);
@@ -50,6 +51,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       response += answerEntry;
       if (user) {
         userList.push(username);
+        userIdList.push("<@!" + user.id + ">");
       }
     }
     let mainServer = bot.guilds.cache.get(config.mainServer);
@@ -59,6 +61,8 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       userList.length > 0
     ) {
       response += "User list for awarding: ```\n" + userList.join(" ") + "```";
+      response +=
+        "User list as IDs for awarding: ```\n" + userIdList.join(" ") + "```";
     }
     if (message.author.id == questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
