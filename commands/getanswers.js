@@ -64,7 +64,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       userListString +=
         "User list for awarding: ```\n" + userList.join(" ") + "```";
       userListString +=
-        "User list as IDs for awarding: ```\n" + userIdList.join(" ") + "```";
+        "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
     }
     if (message.author.id == questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
