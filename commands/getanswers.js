@@ -56,6 +56,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     }
     let mainServer = bot.guilds.cache.get(config.mainServer);
     let userListString = "";
+    let userIdString = "";
     if (
       typeof mainServer !== "undefined" &&
       isMod(message.author.id, mainServer) &&
@@ -63,17 +64,18 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     ) {
       userListString +=
         "User list for awarding: ```\n" + userList.join(" ") + "```";
-      userListString +=
+      userIdString +=
         "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
     }
     if (message.author.id == questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
-    if (response.length + userListString.length > 2000) {
+    if (response.length + userListString.length + userIdString.length > 2000) {
       message.reply(response, { split: true });
       message.reply(userListString, { split: true });
+      message.reply(userIdString, { split: true });
     } else {
-      message.reply(response + userListString, { split: true });
+      message.reply(response + userListString + userIdString, { split: true });
     }
   });
 }
