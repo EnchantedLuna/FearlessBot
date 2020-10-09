@@ -1,4 +1,4 @@
-const { isMod } = require("../util");
+const { isMod } = require("../../util");
 
 exports.run = function (message, userId) {
   if (isMod(userId, message.channel.guild)) {

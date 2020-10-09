@@ -1,6 +1,6 @@
 {
   "fhelp": {
-    "action": "fhelp",
+    "action": "bot/fhelp",
     "permissions": "all",
     "type": "both"
   },
@@ -20,7 +20,7 @@
     "type": "both"
   },
   "fversion": {
-    "action": "version",
+    "action": "bot/version",
     "permissions": "all",
     "type": "both"
   },
@@ -233,7 +233,7 @@
     "type": "server"
   },
   "idban": {
-    "action": "idban",
+    "action": "mod/idban",
     "permissions": "mods",
     "type": "server"
   },
@@ -305,7 +305,7 @@
     "type": "server"
   },
   "fsay": {
-    "action": "fsay",
+    "action": "bot/fsay",
     "permissions": "admin",
     "type": "server"
   },

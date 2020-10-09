@@ -1,4 +1,4 @@
-const package = require("../package.json");
+const package = require("../../package.json");
 
 exports.run = function (message, args, bot, db) {
   message.channel.send("", {
