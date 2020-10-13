@@ -198,7 +198,7 @@
     "type": "server"
   },
   "bowlmute": {
-    "action": "bowlmute",
+    "action": "mod/bowlmute",
     "permissions": "mods",
     "type": "server"
   },
@@ -218,14 +218,28 @@
     "type": "server"
   },
   "ban": {
-    "action": "ban",
+    "action": "mod/ban",
     "permissions": "mods",
-    "type": "server"
+    "type": "server",
+    "extra" : 0
   },
   "exile": {
-    "action": "ban",
+    "action": "mod/ban",
     "permissions": "mods",
-    "type": "server"
+    "type": "server",
+    "extra" : 0
+  },
+  "dban": {
+    "action": "mod/ban",
+    "permissions": "mods",
+    "type": "server",
+    "extra" : 1
+  },
+  "dexile": {
+    "action": "mod/ban",
+    "permissions": "mods",
+    "type": "server",
+    "extra" : 1
   },
   "kick": {
     "action": "mod/kick",

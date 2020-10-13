@@ -1,6 +1,6 @@
-const { isMod, log } = require("../util");
+const { isMod, log } = require("../../util");
 
-exports.run = function (message, args, bot, db) {
+exports.run = function (message, args, bot, db, deleteDays) {
   const argSet = args.split(" ");
   const days = parseInt(argSet[0]);
   message.mentions.members.forEach(function (member, key, map) {
@@ -17,7 +17,7 @@ exports.run = function (message, args, bot, db) {
         return;
       }
       let reason = message.cleanContent.replace("!ban ", "");
-      member.ban(reason);
+      member.ban({days: deleteDays, reason: reason});
       message.channel.send("", {
         embed: {
           description: ":hammer: " + member.user.username + " has been banned.",
