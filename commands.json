@@ -277,7 +277,7 @@
     "type": "server"
   },
   "resetcap": {
-    "action": "resetcap",
+    "action": "lorpoints/resetcap",
     "permissions": "mods",
     "type": "server"
   },
