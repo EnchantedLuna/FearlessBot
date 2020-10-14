@@ -1,4 +1,4 @@
-const { log } = require("../util");
+const { log } = require("../../util");
 const pointsPerEvent = 2;
 const eventCap = 4;
 

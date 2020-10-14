@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../../config.json");
 exports.run = function (message, params, bot, db) {
   db.query("SELECT * FROM trivia_questions WHERE id = ?", [params], function (
     err,

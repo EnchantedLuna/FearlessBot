@@ -125,7 +125,7 @@
     "extra": "lorpoints"
   },
   "lorpoints": {
-    "action": "lorpoints",
+    "action": "lorpoints/lorpoints",
     "permissions": "all",
     "type": "server"
   },
@@ -267,12 +267,12 @@
     "type": "server"
   },
   "alp": {
-    "action": "addlorpoints",
+    "action": "lorpoints/addlorpoints",
     "permissions": "mods",
     "type": "server"
   },
   "acp": {
-    "action": "addcappedpoints",
+    "action": "lorpoints/addcappedpoints",
     "permissions": "mods",
     "type": "server"
   },
@@ -324,17 +324,17 @@
     "type": "server"
   },
   "question": {
-    "action": "question",
+    "action": "question/question",
     "permissions": "all",
     "type": "dm"
   },
   "openquestion": {
-    "action": "openquestion",
+    "action": "question/openquestion",
     "permissions": "all",
     "type": "dm"
   },
   "closequestion": {
-    "action": "closequestion",
+    "action": "question/closequestion",
     "permissions": "all",
     "type": "dm"
   },
@@ -351,19 +351,19 @@
     "extra": 0
   },
   "ga": {
-    "action": "getanswers",
+    "action": "question/getanswers",
     "permissions": "all",
     "type": "dm",
     "extra": false
   },
   "getanswers": {
-    "action": "getanswers",
+    "action": "question/getanswers",
     "permissions": "all",
     "type": "dm",
     "extra": false
   },
   "getnewanswers": {
-    "action": "getanswers",
+    "action": "question/getanswers",
     "permissions": "all",
     "type": "dm",
     "extra": true

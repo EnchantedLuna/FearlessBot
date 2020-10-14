@@ -1,4 +1,4 @@
-const { findMemberID } = require("../util");
+const { findMemberID } = require("../../util");
 
 exports.run = function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);

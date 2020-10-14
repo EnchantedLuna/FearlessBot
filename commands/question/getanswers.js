@@ -1,5 +1,5 @@
-const config = require("../config.json");
-const { isMod } = require("../util");
+const config = require("../../config.json");
+const { isMod } = require("../../util");
 
 exports.run = function (message, args, bot, db, showOnlyNew) {
   db.query("SELECT * FROM trivia_questions WHERE id = ?", [args], function (

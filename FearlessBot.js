@@ -8,12 +8,12 @@ const stats = require("./stats");
 const { runScheduledActions } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
 
-var bot = new Discord.Client({
+const bot = new Discord.Client({
   disableMentions: "everyone",
   fetchAllMembers: true,
 });
 
-var db = mysql.createConnection({
+const db = mysql.createConnection({
   host: config.mysqlHost,
   user: config.mysqlUser,
   password: config.mysqlPass,
@@ -105,3 +105,7 @@ bot.on("messageDelete", function (message) {
 });
 
 bot.login(config.token);
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+});

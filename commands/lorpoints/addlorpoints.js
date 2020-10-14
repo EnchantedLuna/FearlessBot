@@ -1,4 +1,4 @@
-const { log } = require("../util");
+const { log } = require("../../util");
 
 exports.run = function (message, args, bot, db) {
   let pieces = args.split(" ");
