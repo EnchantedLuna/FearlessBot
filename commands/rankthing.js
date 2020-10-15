@@ -8,7 +8,7 @@ function buildEmbed(message, title, entries) {
     .setElementsPerPage(20)
     .setPageIndicator(false)
     .formatField("Users", (e) => e.user)
-    .setDisabledNavigationEmojis(["jump", "delete"]);
+    .setDisabledNavigationEmojis(["jump"]);
   FieldsEmbed.embed.setColor(0xdbe07e).setTitle(title);
   FieldsEmbed.build();
 }
