@@ -25,7 +25,7 @@
     "type": "both"
   },
   "activity": {
-    "action": "activity",
+    "action": "stats/activity",
     "permissions": "all",
     "type": "server"
   },
@@ -93,17 +93,17 @@
     "type": "server"
   },
   "seen": {
-    "action": "seen",
+    "action": "stats/seen",
     "permissions": "all",
     "type": "server"
   },
   "last": {
-    "action": "seen",
+    "action": "stats/seen",
     "permissions": "all",
     "type": "server"
   },
   "totals": {
-    "action": "totals",
+    "action": "stats/totals",
     "permissions": "all",
     "type": "server"
   },

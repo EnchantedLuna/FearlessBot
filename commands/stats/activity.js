@@ -1,5 +1,5 @@
-const config = require("../config.json");
-const { findMember } = require("../util");
+const config = require("../../config.json");
+const { findMember } = require("../../util");
 
 exports.run = function (message, args, bot, db) {
   const member = findMember(message, args, bot);
