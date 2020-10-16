@@ -130,7 +130,7 @@
     "type": "server"
   },
   "words": {
-    "action": "words",
+    "action": "stats/words",
     "permissions": "all",
     "type": "server"
   },
