@@ -1,6 +1,6 @@
 {
   "name": "fearlessbot",
-  "version": "3.7.6",
+  "version": "3.7.7",
   "dependencies": {
     "discord-paginationembed": "^2.1.0",
     "discord.js": "12.*",

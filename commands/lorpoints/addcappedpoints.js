@@ -66,7 +66,7 @@ exports.run = function (message, args, bot, db) {
           title: ":star: Adding Capped Lorpoints",
           description: resultMessage,
           color: 0xdbe07e,
-          footer: { text: 'Number in parentheses indicates events attended this cycle' }
+          footer: { text: 'Number in parentheses indicates events attended this cycle. Current cap is ' + eventCap }
         },
       });
     }
