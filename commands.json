@@ -394,5 +394,10 @@
     "permissions": "mods",
     "type": "server",
     "extra": "question"
+  },
+  "fnick": {
+    "action": "bot/fnick",
+    "permissions": "mods",
+    "type": "server"
   }
 }
