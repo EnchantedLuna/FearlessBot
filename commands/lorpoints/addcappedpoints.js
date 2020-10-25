@@ -1,6 +1,7 @@
 const { log } = require("../../util");
+const config = require("../../config.json");
 const pointsPerEvent = 2;
-const eventCap = 4;
+const eventCap = config.eventCap;
 
 exports.run = function (message, args, bot, db) {
   if (message.mentions.members.size === 0) {

@@ -6,6 +6,7 @@
   "mysqlDB": "",
 
   "prefix": "!",
+  "eventCap": 4,
   "mainServer": "",
   "statCountingChannels": ["", ""],
   "noCommandChannels": [""],
