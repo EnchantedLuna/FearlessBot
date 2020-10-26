@@ -15,7 +15,7 @@ exports.run = function (message, args, bot, db) {
   }
 
   db.query(
-    "UPDATE trivia_questions SET user=? WHERE id=?",
+    "UPDATE trivia_questions SET user=?, watched=0 WHERE id=?",
     [userId, questionId],
     function (err, result) {
       if (err) {

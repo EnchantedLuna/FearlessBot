@@ -12,7 +12,7 @@ exports.run = function (message, params, bot, db) {
       rows[0].user != message.author.id &&
       message.author.id != config.botAdminUserId
     ) {
-      message.reply("You do not have permission to close this question.");
+      message.reply("You do not have permission to open this question.");
       return;
     }
     db.query("UPDATE trivia_questions SET isopen=1 WHERE id = ?", [params]);
