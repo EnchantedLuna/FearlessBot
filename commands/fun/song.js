@@ -166,7 +166,7 @@ const taylorSongsByAlbum = [
     songs: [
       "the 1",
       "cardigan",
-      "the last great american dynasty ",
+      "the last great american dynasty",
       "exile",
       "my tears ricochet",
       "mirrorball",
@@ -181,6 +181,29 @@ const taylorSongsByAlbum = [
       "peace",
       "hoax",
       "the lakes",
+    ],
+  },
+  {
+    title: "evermore",
+    image: "https://i.imgur.com/BiNIOXH.jpg",
+    songs: [
+      "willow", 
+      "champagne problems", 
+      "gold rush",
+      "'tis the damn season", 
+      "tolerate it", 
+      "no body, no crime", 
+      "happiness", 
+      "dorothea", 
+      "coney island",
+      "ivy", 
+      "cowboy like me", 
+      "long story short", 
+      "marjorie", 
+      "closure", 
+      "evermore", 
+      "right where you left me",
+      "it's time to go"
     ],
   },
   {

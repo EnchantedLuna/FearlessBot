@@ -7,6 +7,7 @@ const albums = [
   { title: "reputation", image: "https://i.imgur.com/o2v3b7E.jpg" },
   { title: "Lover", image: "https://i.imgur.com/cNnUR0M.jpg" },
   { title: "folklore", image: "https://i.imgur.com/oZvDEky.jpg" },
+  { title: "evermore", image: "https://i.imgur.com/BiNIOXH.jpg"}
 ];
 
 exports.run = function (message, args, bot, db) {
