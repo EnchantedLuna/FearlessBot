@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const commands = require("./commands.json");
 const util = require("./util");
 const stats = require("./stats");
-const { runScheduledActions } = require("./runScheduledActions");
+const { runScheduledActions, validateMutes } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
 
 const bot = new Discord.Client({
@@ -83,6 +83,10 @@ function handleDirectMessage(message) {
     action.run(message, params, bot, db, commands[commandName].extra);
   }
 }
+
+bot.on("guildMemberAdd", (member) => {
+  validateMutes(member, bot, db);
+});
 
 bot.on("guildMemberRemove", (member) => {
   db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [

@@ -90,3 +90,42 @@ function runScheduledActions(bot, db) {
   );
 }
 exports.runScheduledActions = runScheduledActions;
+
+exports.validateMutes = function(member, bot, db) {
+  db.query("SELECT * FROM scheduled_actions WHERE guild = ? AND user = ? AND effectivetime > NOW() AND completed = 0 AND action IN ('unmute', 'unbowlmute')",
+   [member.guild.id, member.id], function(err, rows) {
+    for (let i = 0; i < rows.length; i++) {
+      let guild = bot.guilds.cache.get(rows[i].guild);
+      switch (rows[i].action) {
+        case "unmute":
+          let supermute = guild.roles.cache.find(
+            (role) => role.name === "supermute"
+          );
+          if (typeof supermute == "undefined") {
+            console.log(
+              "Scheduled actions: Supermute role not found in guild " +
+                rows[i].guild
+            );
+            continue;
+          }
+          member.roles.add(supermute);
+          util.log(guild, member.user.username + " has joined and has an active supermute. Supermute role added.");
+          break;
+        case "unbowlmute":
+          let bowlmute = guild.roles.cache.find(
+            (role) => role.name === "bowlmute"
+          );
+          if (typeof bowlmute == "undefined") {
+            console.log(
+              "Scheduled actions: Bowlmute role not found in guild " +
+                rows[i].guild
+            );
+            continue;
+          }
+          member.roles.add(bowlmute);
+          util.log(guild, member.user.username + " has joined and has an active bowlmute. Bowlmute role added.");
+          break;
+      }
+    }
+   });
+}
