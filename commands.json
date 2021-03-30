@@ -323,6 +323,11 @@
     "permissions": "admin",
     "type": "server"
   },
+  "screate": {
+    "action": "bot/screate",
+    "permissions": "admin",
+    "type": "server"
+  },
   "question": {
     "action": "question/question",
     "permissions": "all",

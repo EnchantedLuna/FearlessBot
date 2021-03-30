@@ -108,6 +108,14 @@ bot.on("messageDelete", function (message) {
   stats.handleMessageDelete(message, db);
 });
 
+bot.ws.on('INTERACTION_CREATE', async interaction => {
+  if (interaction.data.name == 'song') {
+    let action = require("./commands/fun/song");
+    let response = action.interaction(interaction, bot, db);
+    bot.api.interactions(interaction.id, interaction.token).callback.post(response);
+  }
+})
+
 bot.login(config.token);
 
 process.on('unhandledRejection', (reason, promise) => {

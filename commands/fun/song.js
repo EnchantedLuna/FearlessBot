@@ -226,7 +226,6 @@ exports.run = function (message, args, bot, db) {
   let album =
     taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
   let song = album.songs[Math.floor(Math.random() * album.songs.length)];
-  let albumTitle = album.title;
   let embed = new MessageEmbed().setTitle("Random Song");
   let text = "You should listen to " + song;
   text += album.title !== null ? " from " + album.title + "." : ".";
@@ -236,3 +235,27 @@ exports.run = function (message, args, bot, db) {
   }
   message.channel.send("", embed);
 };
+
+exports.interaction = function(interaction, bot, db) {
+  let album = taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
+  let song = album.songs[Math.floor(Math.random() * album.songs.length)];
+  let text = "You should listen to " + song;
+  text += album.title !== null ? " from " + album.title + "." : ".";
+  let songEmbed = {
+    title: 'Random Song',
+    description : text,
+    thumbnail : {}
+  };
+  if (album.image !== null) {
+    songEmbed.thumbnail.url = album.image;
+  }
+  return {
+    data: {
+      type: 4,
+      data: {
+        content : '',
+        embeds : [songEmbed]
+      }
+    }
+  }
+}
