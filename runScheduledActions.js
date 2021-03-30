@@ -18,6 +18,9 @@ function runScheduledActions(bot, db) {
         let member;
         switch (rows[i].action) {
           case "unmute":
+            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
+              rows[i].id,
+            ]);
             let supermute = guild.roles.cache.find(
               (role) => role.name === "supermute"
             );
@@ -43,9 +46,6 @@ function runScheduledActions(bot, db) {
             }
             member.roles.remove(supermute);
             util.log(guild, member.user.username + "'s supermute has expired.");
-            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
-              rows[i].id,
-            ]);
             break;
           case "unbowlmute":
             let bowlmute = guild.roles.cache.find(
