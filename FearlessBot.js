@@ -109,8 +109,9 @@ bot.on("messageDelete", function (message) {
 });
 
 bot.ws.on('INTERACTION_CREATE', async interaction => {
-  if (interaction.data.name == 'song') {
-    let action = require("./commands/fun/song");
+  const commandName = interaction.data.name;
+  if (commandName in commands && commands[commandName].interaction) {
+    let action = require("./commands/" + commands[commandName].action);
     let response = action.interaction(interaction, bot, db);
     bot.api.interactions(interaction.id, interaction.token).callback.post(response);
   }
