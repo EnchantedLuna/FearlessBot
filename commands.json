@@ -7,12 +7,14 @@
   "song": {
     "action": "fun/song",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction" : true
   },
   "album": {
     "action": "fun/album",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction" : true
   },
   "8ball": {
     "action": "fun/8ball",
@@ -320,6 +322,11 @@
   },
   "fsay": {
     "action": "bot/fsay",
+    "permissions": "admin",
+    "type": "server"
+  },
+  "screate": {
+    "action": "bot/screate",
     "permissions": "admin",
     "type": "server"
   },

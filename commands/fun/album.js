@@ -22,3 +22,22 @@ exports.run = function (message, args, bot, db) {
     },
   });
 };
+
+exports.interaction = function() {
+  let answer = albums[Math.floor(Math.random() * albums.length)];
+  return {
+    data: {
+      type: 4,
+      data: {
+        content : '',
+        embeds : [{
+          title: "Random Album",
+          description: "You should listen to " + answer.title + ".",
+          thumbnail: {
+            url: answer.image,
+          },
+        }]
+      }
+    }
+  };
+};

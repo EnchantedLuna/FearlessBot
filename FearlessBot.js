@@ -108,6 +108,15 @@ bot.on("messageDelete", function (message) {
   stats.handleMessageDelete(message, db);
 });
 
+bot.ws.on('INTERACTION_CREATE', async interaction => {
+  const commandName = interaction.data.name;
+  if (commandName in commands && commands[commandName].interaction) {
+    let action = require("./commands/" + commands[commandName].action);
+    let response = action.interaction(interaction, bot, db);
+    bot.api.interactions(interaction.id, interaction.token).callback.post(response);
+  }
+})
+
 bot.login(config.token);
 
 process.on('unhandledRejection', (reason, promise) => {
