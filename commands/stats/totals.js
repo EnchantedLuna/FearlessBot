@@ -36,7 +36,7 @@ exports.interaction = function(interaction, bot, db) {
         data: {
           type: 4,
           data: {
-            content : 'cat',
+            content : '',
             embeds : [{ title: "Messages by channel", description: totalsMessage }]
           }
         }
