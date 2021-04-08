@@ -7,7 +7,7 @@ exports.run = function (message) {
       return console.log(err);
     }
     message.channel.send("", {
-      embed: { title: "FearlessBot Help", description: data },
+      embed: { title: "FearlessBot Help", description: data, footer: {text: 'Commands with (/) also available as slash commands'} },
     });
   });
 };

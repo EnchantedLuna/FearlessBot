@@ -1,5 +1,5 @@
 Basic Commands:
-``!song``, ``!album`` : Picks a random Taylor Swift song or album
+``!song``, ``!album`` (/) : Picks a random Taylor Swift song or album
 ``!8ball`` : Gives a random answer to a yes or no question
 ``!yesno`` : Adds yes, no, maybe react for a simple yes/no poll
 ``!choose [one, two, three]`` : Chooses one of several options randomly
@@ -20,7 +20,7 @@ Saves:
 Stats:
 ``!seen [user]`` : Shows when a member was last active
 ``!activity`` : Gives a link to charts of your server activity stats
-``!totals`` : Shows message stats by channel
+``!totals`` (/) : Shows message stats by channel
 ``!lorpoints [user]``, ``!words [user]`` : View word or lorpoint stats
 ``!awards [user]`` : View awards for user
 ``!rankwords``, ``!ranklorpoints`` : Ranks members by words or lorpoints
