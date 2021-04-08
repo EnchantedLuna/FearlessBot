@@ -23,7 +23,7 @@ const taylorSongsByAlbum = [
   },
   {
     title: "Fearless",
-    image: "https://i.imgur.com/TPL7mge.jpg",
+    image: "https://i.imgur.com/WenkW0I.jpg",
     songs: [
       "Jump Then Fall",
       "Untouchable",
@@ -43,6 +43,12 @@ const taylorSongsByAlbum = [
       "Forever and Always",
       "The Best Day",
       "Change",
+      "Today Was a Fairytale",
+      "You All Over Me",
+      "Mr. Perfectly Fine",
+      "That's When",
+      "Don't You",
+      "Bye Bye Baby"
     ],
   },
   {
@@ -213,7 +219,6 @@ const taylorSongsByAlbum = [
       "I Heart ?",
       "Safe and Sound",
       "Eyes Open",
-      "Today Was a Fairytale",
       "Sweeter Than Fiction",
       "Ronan",
       "Only the Young",

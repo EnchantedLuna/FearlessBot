@@ -1,6 +1,6 @@
 const albums = [
   { title: "Taylor Swift", image: "https://i.imgur.com/w0bksSN.jpg" },
-  { title: "Fearless", image: "https://i.imgur.com/TPL7mge.jpg" },
+  { title: "Fearless", image: "https://i.imgur.com/WenkW0I.jpg" },
   { title: "Speak Now", image: "https://i.imgur.com/TNKbt8Y.jpg" },
   { title: "Red", image: "https://i.imgur.com/as6dlgi.jpg" },
   { title: "1989", image: "https://i.imgur.com/i1QDoZR.jpg" },
