@@ -69,11 +69,6 @@
     "permissions": "all",
     "type": "both"
   },
-  "hm": {
-    "action": "fun/hm",
-    "permissions": "all",
-    "type": "both"
-  },
   "namemix": {
     "action": "namemix",
     "permissions": "all",
