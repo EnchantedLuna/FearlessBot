@@ -254,7 +254,7 @@ exports.interaction = function(interaction, bot, db) {
   if (album.image !== null) {
     songEmbed.thumbnail.url = album.image;
   }
-  return {
+  let response = {
     data: {
       type: 4,
       data: {
@@ -262,5 +262,6 @@ exports.interaction = function(interaction, bot, db) {
         embeds : [songEmbed]
       }
     }
-  }
+  };
+  bot.api.interactions(interaction.id, interaction.token).callback.post(response);
 }

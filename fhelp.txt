@@ -9,7 +9,6 @@ Basic Commands:
 ``!namemix`` : Mixes two parts of server names
 ``!randmember`` : Selects a server member at random who has spoken in the last day.
 ``!shitpost [optional number]`` : Posts a shitpost
-``!setregion [region]`` : Sets region role
 
 Saves:
 ``!rg`` : Gets a saved item at random

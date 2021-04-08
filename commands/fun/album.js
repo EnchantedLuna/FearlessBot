@@ -23,9 +23,9 @@ exports.run = function (message, args, bot, db) {
   });
 };
 
-exports.interaction = function() {
+exports.interaction = function(interaction, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
-  return {
+  let response = {
     data: {
       type: 4,
       data: {
@@ -40,4 +40,5 @@ exports.interaction = function() {
       }
     }
   };
+  bot.api.interactions(interaction.id, interaction.token).callback.post(response);
 };
