@@ -41,6 +41,12 @@
     "permissions": "all",
     "type": "both"
   },
+  "acronym": {
+    "action": "fun/acronym",
+    "permissions": "all",
+    "type": "both",
+    "interaction" : true
+  },
   "b": {
     "action": "fun/b",
     "permissions": "all",
