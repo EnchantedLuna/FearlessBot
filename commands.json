@@ -296,7 +296,7 @@
     "type": "server"
   },
   "getunapproved": {
-    "action": "getunapproved",
+    "action": "saves/getunapproved",
     "permissions": "mods",
     "type": "server"
   },
