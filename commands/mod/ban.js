@@ -20,7 +20,7 @@ exports.run = function (message, args, bot, db, deleteDays) {
       member.ban({days: deleteDays, reason: reason});
       message.channel.send("", {
         embed: {
-          description: ":hammer: " + member.user.username + " has been banned.",
+          description: ":hammer: " + member.user.username + "#" + member.user.discriminator + " (" + member.user.id + ")" + " has been banned.",
         },
       });
       var timeMessage = "indefinitely";
@@ -35,7 +35,7 @@ exports.run = function (message, args, bot, db, deleteDays) {
       }
       log(
         message.channel.guild,
-        member.user.username +
+        member.user.username + "#" + member.user.discriminator + " (" + member.user.id + ")" +
           " has been banned " +
           timeMessage +
           " by " +
