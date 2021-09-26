@@ -48,6 +48,8 @@ exports.hasPermission = function (user, permission) {
       return true;
     case "mods":
       return exports.isMod(user, user.guild);
+    case "modOrRachel":
+      return exports.isMod(user, user.guild) || user.id === '538954976928727060';
     case "mainServerMods":
       return (
         exports.isMod(user, user.guild) && user.guild.id === config.mainServer
