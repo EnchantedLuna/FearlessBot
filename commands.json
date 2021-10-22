@@ -400,7 +400,7 @@
   },
   "questionping": {
     "action": "mod/events",
-    "permissions": "modOrRachel",
+    "permissions": "mods",
     "type": "server",
     "extra": "question"
   },

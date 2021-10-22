@@ -1,4 +1,5 @@
 const { findMemberID } = require("../../util");
+const config = require("../../config.json");
 
 exports.run = function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);
@@ -28,7 +29,7 @@ exports.run = function (message, args, bot, db) {
                   rank +
                   getSuffix(rank) +
                   "\nCapped events this week: " +
-                  rows[0].eventpoints,
+                  rows[0].eventpoints + "/" + config.eventCap
               },
             });
           }
