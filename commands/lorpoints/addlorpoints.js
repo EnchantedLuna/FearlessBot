@@ -44,12 +44,14 @@ exports.run = function (message, args, bot, db) {
     list.push(member.user.username);
   });
   let finalList = list.join(", ");
+  let userCount = list.length;
   let lorpointWord = number !== 1 ? "lorpoints" : "lorpoint";
   message.channel.send("", {
     embed: {
       title: ":star: Adding Lorpoints",
       description:
         number + " " + lorpointWord + " have been added to:\n" + finalList,
+        footer: {text: 'Total users: ' + userCount},
       color: 0xdbe07e,
     },
   });
