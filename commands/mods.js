@@ -22,7 +22,7 @@ exports.run = function (message) {
     return;
   }
 
-  mods.setMentionable(true, "activated by " + message.author.username);
+  mods.setMentionable(true);
   log(
     message.channel.guild,
     "Mods tag activated by " + message.author.username
