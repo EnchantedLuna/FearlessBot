@@ -17,6 +17,11 @@ exports.run = function (message) {
     return;
   }
 
+  if (!mods.editable) {
+    message.reply("Error: I don't have permission to edit the mods role.");
+    return;
+  }
+
   mods.setMentionable(true, "activated by " + message.author.username);
   log(
     message.channel.guild,
