@@ -22,7 +22,7 @@ const taylorSongsByAlbum = [
     ],
   },
   {
-    title: "Fearless",
+    title: "Fearless (Taylor's Version)",
     image: "https://i.imgur.com/WenkW0I.jpg",
     songs: [
       "Jump Then Fall",
@@ -75,8 +75,8 @@ const taylorSongsByAlbum = [
     ],
   },
   {
-    title: "Red",
-    image: "https://i.imgur.com/as6dlgi.jpg",
+    title: "Red (Taylor's Version)",
+    image: "https://i.imgur.com/0nUf20J.jpg",
     songs: [
       "State of Grace",
       "Red",
@@ -97,6 +97,16 @@ const taylorSongsByAlbum = [
       "The Moment I Knew",
       "Come Back... Be Here",
       "Girl At Home",
+      "Ronan",
+      "Better Man",
+      "Nothing New",
+      "Babe",
+      "Message In A Bottle",
+      "I Bet You Think About Me",
+      "Forever Winter",
+      "Run",
+      "The Very First Night",
+      "All Too Well (10 Minute Version)"
     ],
   },
   {
@@ -220,7 +230,6 @@ const taylorSongsByAlbum = [
       "Safe and Sound",
       "Eyes Open",
       "Sweeter Than Fiction",
-      "Ronan",
       "Only the Young",
       "Christmas Tree Farm",
     ],
