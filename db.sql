@@ -37,13 +37,6 @@ CREATE TABLE members
   CONSTRAINT `PRIMARY` PRIMARY KEY (server, id)
 );
 CREATE INDEX idx_username ON members (server, username);
-CREATE TABLE names
-(
-  rank INT(4),
-  name VARCHAR(25),
-  gender CHAR(1),
-  year INT(4)
-);
 
 CREATE TABLE shitposts
 (
