@@ -6,11 +6,11 @@ exports.run = function (message) {
     } else {
       let reason = "Kicked by " + message.author.tag;
       if (!member.kickable) {
-        message.channel.send("", {
-          embed: {
+        message.channel.send({
+          embeds: [{
             description:
               ":warning: I don't have permission to kick that member.",
-          },
+          }],
         });
         return;
       }

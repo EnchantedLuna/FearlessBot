@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 const albums = [
   { title: "Taylor Swift", image: "https://i.imgur.com/w0bksSN.jpg" },
   { title: "Fearless", image: "https://i.imgur.com/WenkW0I.jpg" },
@@ -12,33 +14,24 @@ const albums = [
 
 exports.run = function (message, args, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
-  message.channel.send("", {
-    embed: {
-      title: "Random Album",
-      description: "You should listen to " + answer.title + ".",
-      thumbnail: {
-        url: answer.image,
-      },
-    },
-  });
+  message.channel.send({
+    embeds: [
+      new MessageEmbed()
+          .setTitle("Random Album")
+          .setDescription("You should listen to " + answer.title + ".")
+          .setThumbnail(answer.image),
+    ]
+  })
 };
 
 exports.interaction = function(interaction, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
-  let response = {
-    data: {
-      type: 4,
-      data: {
-        content : '',
-        embeds : [{
-          title: "Random Album",
-          description: "You should listen to " + answer.title + ".",
-          thumbnail: {
-            url: answer.image,
-          },
-        }]
-      }
-    }
-  };
-  bot.api.interactions(interaction.id, interaction.token).callback.post(response);
+  interaction.reply({
+    embeds: [
+        new MessageEmbed()
+            .setTitle("Random Album")
+            .setDescription("You should listen to " + answer.title + ".")
+            .setThumbnail(answer.image),
+    ]
+  })
 };

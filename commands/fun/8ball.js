@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 const responses = [
   "It is certain",
   "It is decidedly so",
@@ -27,7 +29,11 @@ const responses = [
 
 exports.run = function (message, args, bot, db) {
   let answer = responses[Math.floor(Math.random() * responses.length)];
-  message.channel.send("", {
-    embed: { title: ":8ball: 8 Ball", description: answer },
+  return message.channel.send({
+    embeds: [
+        new MessageEmbed()
+            .setTitle(":8ball: 8 Ball")
+            .setDescription(answer.toString()),
+    ]
   });
 };

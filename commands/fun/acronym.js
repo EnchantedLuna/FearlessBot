@@ -13,15 +13,7 @@ exports.run = function(message, args, bot, db) {
 }
 
 exports.interaction = function(interaction, bot, db) {
-    const searchTerm = interaction.data.options[0].value;
+    const searchTerm = interaction.options.getString("term");
     const answer = getAnswer(searchTerm);
-    let response = {
-      data: {
-        type: 4,
-        data: {
-          content : answer
-        }
-      }
-    };
-    bot.api.interactions(interaction.id, interaction.token).callback.post(response);
+    interaction.reply({ content: answer });
 }

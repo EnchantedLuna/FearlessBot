@@ -1,6 +1,6 @@
 exports.run = function (message, params, bot, db) {
-  var number = parseInt(params, 10);
-  if (number > 0) {
+    const number = parseInt(params, 10);
+    if (number > 0) {
     db.query(
       "SELECT id, shitpost FROM shitposts WHERE id=?",
       [number],

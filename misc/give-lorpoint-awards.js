@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const config = require("../config.json");
 
 const db = mysql.createConnection({
@@ -8,19 +8,19 @@ const db = mysql.createConnection({
     database: config.mysqlDB,
     charset: "utf8mb4",
   });
-  
+
   function getSuffix(number) {
     const lastDigit = number % 10;
-    if (lastDigit === 1 && number % 100 != 11) {
+    if (lastDigit === 1 && number % 100 !== 11) {
       return "st";
-    } else if (lastDigit === 2 && number % 100 != 12) {
+    } else if (lastDigit === 2 && number % 100 !== 12) {
       return "nd";
-    } else if (lastDigit === 3 && number % 100 != 13) {
+    } else if (lastDigit === 3 && number % 100 !== 13) {
       return "rd";
     }
     return "th";
   }
-  
+
 
   function giveAwards()
   {

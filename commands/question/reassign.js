@@ -1,4 +1,4 @@
-exports.run = function (message, args, bot, db) {
+exports.run = async function (message, args, bot, db) {
   const arg = args.split(" ");
   const questionId = arg[0];
   const userId = arg[1];
@@ -8,7 +8,7 @@ exports.run = function (message, args, bot, db) {
     return;
   }
 
-  const user = bot.users.resolve(userId);
+  const user = await bot.users.fetch(userId);
   if (!user) {
     message.reply("User not found");
     return;

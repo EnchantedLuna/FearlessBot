@@ -4,3 +4,4 @@ config.json
 config.php
 node_modules
 mystery-answers.json
+.DS_Store

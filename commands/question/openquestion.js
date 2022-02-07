@@ -9,8 +9,8 @@ exports.run = function (message, params, bot, db) {
       return;
     }
     if (
-      rows[0].user != message.author.id &&
-      message.author.id != config.botAdminUserId
+      rows[0].user !== message.author.id &&
+      message.author.id !== config.botAdminUserId
     ) {
       message.reply("You do not have permission to open this question.");
       return;

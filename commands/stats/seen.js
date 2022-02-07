@@ -1,16 +1,17 @@
 exports.run = function (message, params, bot, db) {
+  let member;
   if (message.mentions.members.size > 0) {
     member = message.mentions.members.first().user.username;
   } else {
     member = params;
   }
 
-  if (member == message.author.username) {
-    message.channel.send("", {
-      embed: {
+  if (member === message.author.username) {
+    message.channel.send({
+      embeds: [{
         title: member,
         description: ":thinking: Look in a mirror!",
-      },
+      }],
     });
   } else {
     db.query(
@@ -18,12 +19,12 @@ exports.run = function (message, params, bot, db) {
       [message.channel.guild.id, member],
       function (err, rows) {
         if (rows[0] == null) {
-          message.channel.send("", {
-            embed: {
+          message.channel.send({
+            embeds: [{
               title: member,
               description:
                 ":warning: User not found. Please double check the username.",
-            },
+            }],
           });
         } else {
           let seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
@@ -31,8 +32,8 @@ exports.run = function (message, params, bot, db) {
           let leftServerText = rows[0].active
             ? ""
             : "\nThis user has left the server.";
-          message.channel.send("", {
-            embed: {
+          message.channel.send({
+            embeds: [{
               title: member,
               description:
                 ":clock2: " +
@@ -45,7 +46,7 @@ exports.run = function (message, params, bot, db) {
                 date.toDateString() +
                 ")" +
                 leftServerText,
-            },
+            }],
           });
         }
       }
@@ -54,22 +55,22 @@ exports.run = function (message, params, bot, db) {
 };
 
 function secondsToTime(seconds, short) {
-  var sec = seconds % 60;
-  var minutes = Math.floor(seconds / 60) % 60;
-  var hours = Math.floor(seconds / 3600) % 24;
-  var days = Math.floor(seconds / 86400);
+  const sec = seconds % 60;
+  const minutes = Math.floor(seconds / 60) % 60;
+  const hours = Math.floor(seconds / 3600) % 24;
+  const days = Math.floor(seconds / 86400);
 
-  var result = "";
+  let result = "";
   if (days > 0) {
     result += days + (short ? "d" : " day");
     if (!short) {
-      result += days != 1 ? "s " : " ";
+      result += days !== 1 ? "s " : " ";
     }
   }
   if (hours > 0) {
     result += hours + (short ? "h" : " hour");
     if (!short) {
-      result += hours != 1 ? "s " : " ";
+      result += hours !== 1 ? "s " : " ";
     }
   }
   if (minutes > 0) {
@@ -81,7 +82,7 @@ function secondsToTime(seconds, short) {
   if (sec > 0) {
     result += sec + (short ? "s" : " second");
     if (!short) {
-      result += sec != 1 ? "s " : " ";
+      result += sec !== 1 ? "s " : " ";
     }
   }
   return result;

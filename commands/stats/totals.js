@@ -11,8 +11,8 @@ exports.run = function (message, args, bot, db) {
         total += rows[i].total_messages;
       }
       totalsMessage += "\nTotal messages: " + total.toLocaleString();
-      message.channel.send("", {
-        embed: { title: "Messages by channel", description: totalsMessage },
+      message.channel.send({
+        embeds: [{ title: "Messages by channel", description: totalsMessage }],
       });
     }
   );
@@ -22,7 +22,7 @@ exports.run = function (message, args, bot, db) {
 exports.interaction = function(interaction, bot, db) {
   db.query(
     "SELECT * FROM channel_stats WHERE server = ? AND web=1",
-    [interaction.guild_id],
+    [interaction.guild.id],
     function (err, rows) {
       let totalsMessage = "";
       let total = 0;
@@ -32,16 +32,7 @@ exports.interaction = function(interaction, bot, db) {
         total += rows[i].total_messages;
       }
       totalsMessage += "\nTotal messages: " + total.toLocaleString();
-      let response = {
-        data: {
-          type: 4,
-          data: {
-            content : '',
-            embeds : [{ title: "Messages by channel", description: totalsMessage }]
-          }
-        }
-      };
-      bot.api.interactions(interaction.id, interaction.token).callback.post(response);
+      interaction.reply({ embeds : [{ title: "Messages by channel", description: totalsMessage }] })
     }
   );
 }

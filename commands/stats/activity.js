@@ -1,8 +1,8 @@
 const config = require("../../config.json");
 const { findMember } = require("../../util");
 
-exports.run = function (message, args, bot, db) {
-  const member = findMember(message, args, bot);
+exports.run = async function (message, args, bot, db) {
+  const member = await findMember(message, args, bot);
   const botsString = message.content.includes("bots")
     ? "&includebots=true"
     : "";
@@ -13,10 +13,10 @@ exports.run = function (message, args, bot, db) {
     "&user=" +
     member.id +
     botsString;
-  message.channel.send("", {
-    embed: {
+  message.channel.send({
+    embeds: [{
       title: "Activity Report for " + member.displayName,
       description: url,
-    },
+    }],
   });
 };

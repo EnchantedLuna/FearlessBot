@@ -55,7 +55,7 @@ exports.updateUserStats = function (message, db) {
 
 exports.handleMessageDelete = function (message, db) {
   if (
-    message.channel.type != "text" ||
+    !message.channel.isText() ||
     (message.author.id === config.botAdminUserId &&
       message.content.startsWith("!fsay"))
   ) {

@@ -1,4 +1,4 @@
-const { isMod, log } = require("../util");
+const { isMod, log } = require("../../util");
 
 exports.run = function (message, keyword, bot, db) {
   db.query(

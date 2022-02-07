@@ -9,7 +9,7 @@ exports.run = function (message, params, bot, db, level) {
   if (level >= 2) {
     changed = changed.replaceAll("C", ":b:").replaceAll("c", ":b:");
   }
-  if (level == 3) {
+  if (level === 3) {
     let characters = changed.split("");
     for (let i = 0; i < characters.length; i++) {
       if (characters[i].match("[AD-Zad-z]") && Math.random() < 0.1) {

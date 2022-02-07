@@ -1,5 +1,6 @@
 const { findMemberID } = require("../../util");
 const config = require("../../config.json");
+const {MessageEmbed} = require("discord.js");
 
 exports.run = function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);
@@ -18,20 +19,21 @@ exports.run = function (message, args, bot, db) {
           [message.channel.guild.id, rows[0].lorpoints],
           function (err, totals) {
             const rank = totals[0].higher + 1;
-            message.channel.send("", {
-              embed: {
-                title: ":star: Lorpoints",
-                description:
-                  rows[0].username +
-                  " has " +
-                  rows[0].lorpoints +
-                  " lorpoints.\nCurrent Rank: " +
-                  rank +
-                  getSuffix(rank) +
-                  "\nCapped events this week: " +
-                  rows[0].eventpoints + "/" + config.eventCap
-              },
-            });
+            message.channel.send({
+                embeds: [
+                    new MessageEmbed()
+                        .setTitle(":star: Lorpoints")
+                        .setDescription(rows[0].username +
+                            " has " +
+                            rows[0].lorpoints +
+                            " lorpoints.\nCurrent Rank: " +
+                            rank +
+                            getSuffix(rank) +
+                            "\nCapped events this week: " +
+                            rows[0].eventpoints + "/" + config.eventCap
+                        )
+                ]
+            })
           }
         );
       }
@@ -41,11 +43,11 @@ exports.run = function (message, args, bot, db) {
 
 function getSuffix(number) {
   const lastDigit = number % 10;
-  if (lastDigit === 1 && number % 100 != 11) {
+  if (lastDigit === 1 && number % 100 !== 11) {
     return "st";
-  } else if (lastDigit === 2 && number % 100 != 12) {
+  } else if (lastDigit === 2 && number % 100 !== 12) {
     return "nd";
-  } else if (lastDigit === 3 && number % 100 != 13) {
+  } else if (lastDigit === 3 && number % 100 !== 13) {
     return "rd";
   }
   return "th";

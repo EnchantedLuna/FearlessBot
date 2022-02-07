@@ -24,7 +24,7 @@ CREATE TABLE data_store
 );
 CREATE TABLE members
 (
-  id BIGINT(20) NOT NULL,
+  id VARCHAR(20) NOT NULL,
   username VARCHAR(50),
   lastseen INT(11),
   words INT(11) DEFAULT '0',

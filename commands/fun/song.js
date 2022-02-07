@@ -247,7 +247,7 @@ exports.run = function (message, args, bot, db) {
   if (album.image !== null) {
     embed.setThumbnail(album.image);
   }
-  message.channel.send("", embed);
+  message.channel.send({ embeds: [embed] });
 };
 
 exports.interaction = function(interaction, bot, db) {
@@ -255,22 +255,11 @@ exports.interaction = function(interaction, bot, db) {
   let song = album.songs[Math.floor(Math.random() * album.songs.length)];
   let text = "You should listen to " + song;
   text += album.title !== null ? " from " + album.title + "." : ".";
-  let songEmbed = {
-    title: 'Random Song',
-    description : text,
-    thumbnail : {}
-  };
+  let songEmbed = new MessageEmbed()
+      .setTitle('Random Song')
+      .setDescription(text.toString())
   if (album.image !== null) {
-    songEmbed.thumbnail.url = album.image;
+    songEmbed.setThumbnail(album.image);
   }
-  let response = {
-    data: {
-      type: 4,
-      data: {
-        content : '',
-        embeds : [songEmbed]
-      }
-    }
-  };
-  bot.api.interactions(interaction.id, interaction.token).callback.post(response);
+  interaction.reply({ embeds: [songEmbed] });
 }

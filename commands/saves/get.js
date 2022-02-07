@@ -1,17 +1,17 @@
-const { channelCountsInStatistics } = require("../util");
+const { channelCountsInStatistics } = require("../../util");
 
 exports.run = function (message, args, bot, db, showUnapproved) {
   let arg = args.split(" ");
   let keyword = arg[0];
-  if (keyword == "") return;
+  if (keyword === "") return;
   let author = message.author.tag;
   db.query(
     "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
     [message.channel.guild.id, keyword],
     function (err, rows) {
       if (rows[0] == null) {
-        message.channel.send("", {
-          embed: {
+        message.channel.send({
+          embeds: [{
             author: {
               name: author,
               icon_url: message.author.displayAvatarURL({
@@ -23,11 +23,11 @@ exports.run = function (message, args, bot, db, showUnapproved) {
             title: keyword,
             description:
               ":warning: Nothing is stored for keyword " + keyword + ".",
-          },
+          }],
         });
       } else if (!rows[0].approved && !showUnapproved) {
-        message.channel.send("", {
-          embed: {
+        message.channel.send( {
+          embeds: [{
             author: {
               name: author,
               icon_url: message.author.displayAvatarURL({
@@ -38,7 +38,7 @@ exports.run = function (message, args, bot, db, showUnapproved) {
             },
             title: keyword,
             description: ":warning: This item has not been approved yet.",
-          },
+          }],
         });
       } else {
         let text = rows[0]["value"];
@@ -50,7 +50,7 @@ exports.run = function (message, args, bot, db, showUnapproved) {
             date += "a long time ago";
           }
           message.channel.send("", {
-            embed: {
+            embeds: [{
               author: {
                 name: author,
                 icon_url: message.author.displayAvatarURL({
@@ -62,7 +62,7 @@ exports.run = function (message, args, bot, db, showUnapproved) {
               title: keyword,
               image: { url: text },
               footer: { text: date },
-            },
+            }],
           });
         } else {
           message.reply(text);

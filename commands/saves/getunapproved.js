@@ -3,7 +3,7 @@ exports.run = function (message, args, bot, db) {
     "SELECT * FROM data_store WHERE approved = 0 AND server = ?",
     [message.channel.guild.id],
     function (err, rows) {
-      if (rows.length == 0) {
+      if (rows.length === 0) {
         message.channel.send("no unapproved items.");
         return;
       }

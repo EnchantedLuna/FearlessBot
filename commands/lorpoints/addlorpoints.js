@@ -1,4 +1,5 @@
 const { log } = require("../../util");
+const { MessageEmbed } = require("discord.js");
 
 exports.run = function (message, args, bot, db) {
   let pieces = args.split(" ");
@@ -6,32 +7,34 @@ exports.run = function (message, args, bot, db) {
   let list = [];
 
   if (isNaN(number)) {
-    message.channel.send("", {
-      embed: {
-        description:
-          ":x: You must enter a valid number of lorpoints to add.\nUsage: ``!alp [number] @user1 @user2``",
-        color: 0xff0000,
-      },
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+            .setDescription(":x: You must enter a valid number of lorpoints to add.\nUsage: ``!alp [number] @user1 @user2``")
+            .setColor(0xff0000)
+      ]
     });
     return;
   }
 
   if (number > 1000000 || number < -10000000) {
-    message.channel.send("", {
-      embed: {
-        description: ":x: This amount is too high!",
-        color: 0xff0000,
-      },
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+            .setDescription(":x: This amount is too high!")
+            .setColor(0xff0000)
+      ]
     });
     return;
   }
 
   if (message.mentions.members.size === 0) {
-    message.channel.send("", {
-      embed: {
-        description: ":x: You must mention a member to add lorpoints to.",
-        color: 0xff0000,
-      },
+    message.channel.send({
+      embeds: [
+        new MessageEmbed()
+            .setDescription(":x: You must mention a member to add lorpoints to.")
+            .setColor(0xff0000)
+      ]
     });
     return;
   }
@@ -46,16 +49,16 @@ exports.run = function (message, args, bot, db) {
   let finalList = list.join(", ");
   let userCount = list.length;
   let lorpointWord = number !== 1 ? "lorpoints" : "lorpoint";
-  message.channel.send("", {
-    embed: {
-      title: ":star: Adding Lorpoints",
-      description:
-        number + " " + lorpointWord + " have been added to:\n" + finalList,
-        footer: {text: 'Total users: ' + userCount},
-      color: 0xdbe07e,
-    },
+  message.channel.send({
+    embeds: [
+      new MessageEmbed()
+          .setTitle(":star: Adding Lorpoints")
+          .setDescription(number + " " + lorpointWord + " have been added to:\n" + finalList)
+          .setColor(0xdbe07e)
+          .setFooter({text: 'Total users: ' + userCount})
+    ]
   });
-  if (number != 0) {
+  if (number !== 0) {
     log(
       message.channel.guild,
       number +

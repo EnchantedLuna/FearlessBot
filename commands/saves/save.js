@@ -1,4 +1,4 @@
-const { isMod, log } = require("../util");
+const { isMod, log } = require("../../util");
 
 exports.run = function (message, args, bot, db) {
   let command = message.content.split(" ");
@@ -24,7 +24,7 @@ exports.run = function (message, args, bot, db) {
     function (err, rows) {
       if (
         isMod(message.member, message.channel.guild) &&
-        (rows[0] == null || rows[0]["owner"] == message.author.id)
+        (rows[0] == null || rows[0]["owner"] === message.author.id)
       ) {
         db.query(
           "REPLACE INTO data_store (server, keyword, value, owner, approved, timeadded, approvedby) VALUES (?,?,?,?,1,now(),?)",
@@ -63,7 +63,7 @@ exports.run = function (message, args, bot, db) {
             " - pending approval\nValue: " +
             value
         );
-      } else if (rows[0]["owner"] == message.author.id) {
+      } else if (rows[0]["owner"] === message.author.id) {
         db.query(
           "UPDATE data_store SET value = ?, approved=0, timeadded=now(), approvedby=null WHERE keyword = ? AND server = ?",
           [value, key, message.channel.guild.id]

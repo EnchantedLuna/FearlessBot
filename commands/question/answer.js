@@ -17,7 +17,7 @@ exports.run = function (message, args, bot, db) {
     err,
     questionRow
   ) {
-    if (questionRow[0] == null || questionRow[0].id != question) {
+    if (questionRow[0] == null) {
       message.reply("That question id is invalid. Please try again.");
       return;
     }
@@ -35,7 +35,7 @@ exports.run = function (message, args, bot, db) {
       "SELECT * FROM trivia_answers WHERE user = ? AND questionid = ?",
       [message.author.id, question],
       function (err, rows) {
-        if (rows.length == 0) {
+        if (rows.length === 0) {
           db.query(
             "INSERT INTO trivia_answers (user, questionid, answer, time) VALUES (?,?,?,now())",
             [message.author.id, question, answer]

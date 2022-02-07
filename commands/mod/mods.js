@@ -1,4 +1,4 @@
-const { log } = require("../util");
+const { log } = require("../../util");
 
 exports.run = function (message) {
   let mods = message.channel.guild.roles.cache.find(
@@ -21,8 +21,8 @@ exports.run = function (message) {
     message.reply("Error: I don't have permission to edit the mods role.");
     return;
   }
-
-  mods.setMentionable(true);
+  
+  mods.setMentionable(true, "activated by " + message.author.username);
   log(
     message.channel.guild,
     "Mods tag activated by " + message.author.username

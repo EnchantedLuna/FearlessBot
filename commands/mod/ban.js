@@ -8,22 +8,22 @@ exports.run = function (message, args, bot, db, deleteDays) {
       message.channel.send(":smirk:");
     } else {
       if (!member.bannable) {
-        message.channel.send("", {
-          embed: {
+        message.channel.send({
+          embeds: [{
             description:
               ":warning: I don't have permission to ban that member.",
-          },
+          }],
         });
         return;
       }
       let reason = message.cleanContent.replace("!ban ", "");
       member.ban({days: deleteDays, reason: reason});
-      message.channel.send("", {
-        embed: {
+      message.channel.send({
+        embeds: [{
           description: ":hammer: " + member.user.username + "#" + member.user.discriminator + " (" + member.user.id + ")" + " has been banned.",
-        },
+        }],
       });
-      var timeMessage = "indefinitely";
+      let timeMessage = "indefinitely";
       if (days > 0) {
         db.query(
           "INSERT INTO scheduled_actions (action, guild, user, effectivetime) \
@@ -31,7 +31,7 @@ exports.run = function (message, args, bot, db, deleteDays) {
           [message.channel.guild.id, member.user.id, days]
         );
         timeMessage = "for " + days + " day";
-        timeMessage += days != 1 ? "s" : "";
+        timeMessage += days !== 1 ? "s" : "";
       }
       log(
         message.channel.guild,

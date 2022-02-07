@@ -10,11 +10,11 @@ exports.run = function (message, args, bot, db) {
     (role) => role.name === "active"
   );
   if (!supermute) {
-    message.channel.send("", {
-      embed: {
+    message.channel.send({
+      embeds: [{
         description:
           ":warning: Could not find ``supermute`` role. A role named ``supermute`` is required to use this command.",
-      },
+      }],
     });
     return;
   }
@@ -29,14 +29,14 @@ exports.run = function (message, args, bot, db) {
       if (active) {
         member.roles.remove(active);
       }
-      var timeMessage = "";
+      let timeMessage = "";
       if (hours > 0) {
         db.query(
           "INSERT INTO scheduled_actions (action, guild, user, effectivetime) VALUES ('unmute', ?, ?, NOW() + INTERVAL ? HOUR)",
           [message.channel.guild.id, member.user.id, hours]
         );
         timeMessage = " for " + hours + " hour";
-        timeMessage += hours != 1 ? "s" : "";
+        timeMessage += hours !== 1 ? "s" : "";
       }
       message.channel.send(
         ":mute: " +

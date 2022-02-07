@@ -32,7 +32,7 @@
     "type": "server"
   },
   "yesno": {
-    "action": "yesno",
+    "action": "fun/yesno",
     "permissions": "all",
     "type": "server"
   },
@@ -76,22 +76,22 @@
     "type": "both"
   },
   "namemix": {
-    "action": "namemix",
+    "action": "fun/namemix",
     "permissions": "all",
     "type": "both"
   },
   "randmember": {
-    "action": "randmember",
+    "action": "members/randmember",
     "permissions": "all",
     "type": "server"
   },
   "shitpost": {
-    "action": "shitpost",
+    "action": "fun/shitpost",
     "permissions": "all",
     "type": "both"
   },
   "rg": {
-    "action": "rg",
+    "action": "saves/rg",
     "permissions": "all",
     "type": "server"
   },
@@ -112,18 +112,18 @@
     "interaction" : true
   },
   "getlist": {
-    "action": "getlist",
+    "action": "saves/getlist",
     "permissions": "all",
     "type": "server"
   },
   "rankwords": {
-    "action": "rankthing",
+    "action": "members/rankthing",
     "permissions": "all",
     "type": "server",
     "extra": "words"
   },
   "ranklorpoints": {
-    "action": "rankthing",
+    "action": "members/rankthing",
     "permissions": "all",
     "type": "server",
     "extra": "lorpoints"
@@ -139,65 +139,68 @@
     "type": "server"
   },
   "awards": {
-    "action": "awards",
+    "action": "members/awards",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction" : true,
+    "interactionCreate" : {
+        "name": "awards",
+        "description": "View a member's awards",
+        "options": [
+            {
+                "name": "member",
+                "description": "The member that you want to look up",
+                "required": false,
+                "type": "USER"
+            }
+        ]
+    }
   },
   "g": {
-    "action": "get",
+    "action": "saves/get",
     "permissions": "all",
     "type": "server",
     "extra": false
   },
   "get": {
-    "action": "get",
+    "action": "saves/get",
     "permissions": "all",
     "type": "server",
     "extra": false
   },
   "review": {
-    "action": "get",
+    "action": "saves/get",
     "permissions": "mods",
     "type": "server",
     "extra": true
   },
   "gmeta": {
-    "action": "getmeta",
+    "action": "saves/getmeta",
     "permissions": "all",
     "type": "server"
   },
   "getmeta": {
-    "action": "getmeta",
+    "action": "saves/getmeta",
     "permissions": "all",
     "type": "server"
   },
   "save": {
-    "action": "save",
+    "action": "saves/save",
     "permissions": "all",
     "type": "server"
   },
   "approve": {
-    "action": "approve",
+    "action": "saves/approve",
     "permissions": "mods",
     "type": "server"
   },
   "delete": {
-    "action": "delete",
+    "action": "saves/delete",
     "permissions": "all",
     "type": "server"
   },
   "mods": {
-    "action": "mods",
-    "permissions": "all",
-    "type": "server"
-  },
-  "region": {
-    "action": "region",
-    "permissions": "all",
-    "type": "server"
-  },
-  "setregion": {
-    "action": "region",
+    "action": "mod/mods",
     "permissions": "all",
     "type": "server"
   },
@@ -256,17 +259,12 @@
     "type": "server"
   },
   "addaward": {
-    "action": "addaward",
+    "action": "mod/addaward",
     "permissions": "mods",
     "type": "server"
   },
   "addawards": {
-    "action": "addaward",
-    "permissions": "mods",
-    "type": "server"
-  },
-  "addlorpoints": {
-    "action": "addlorpoints",
+    "action": "mod/addaward",
     "permissions": "mods",
     "type": "server"
   },
@@ -313,12 +311,12 @@
     "extra": 0
   },
   "addshitpost": {
-    "action": "addshitpost",
+    "action": "mod/addshitpost",
     "permissions": "mainServerMods",
     "type": "server"
   },
   "addnamemix": {
-    "action": "addnamemix",
+    "action": "mod/addnamemix",
     "permissions": "mainServerMods",
     "type": "server"
   },
@@ -330,7 +328,14 @@
   "screate": {
     "action": "bot/screate",
     "permissions": "admin",
-    "type": "server"
+    "type": "server",
+    "extra" : false
+  },
+  "gcreate": {
+    "action": "bot/screate",
+    "permissions": "admin",
+    "type": "server",
+    "extra" : true
   },
   "question": {
     "action": "question/question",
@@ -348,13 +353,13 @@
     "type": "dm"
   },
   "watch": {
-    "action": "watch",
+    "action": "question/watch",
     "permissions": "all",
     "type": "dm",
     "extra": 1
   },
   "unwatch": {
-    "action": "watch",
+    "action": "question/watch",
     "permissions": "all",
     "type": "dm",
     "extra": 0
@@ -385,11 +390,6 @@
   "reassign": {
     "action": "question/reassign",
     "permissions": "admin",
-    "type": "dm"
-  },
-  "mystery": {
-    "action": "question/mystery",
-    "permissions": "all",
     "type": "dm"
   },
   "events": {

@@ -1,4 +1,4 @@
-const { log } = require("../util");
+const { log } = require("../../util");
 
 exports.run = function (message, keyword, bot, db) {
   db.query(
@@ -6,14 +6,14 @@ exports.run = function (message, keyword, bot, db) {
     [message.author.id, keyword, message.channel.guild.id],
     function (err, result) {
       if (result.changedRows > 0) {
-        message.channel.send("", {
-          embed: {
+        message.channel.send({
+          embeds: [{
             description:
               ":white_check_mark: Saved item '" +
               keyword +
               "' has been approved.",
             color: 0x00ff00,
-          },
+          }],
         });
         log(
           message.channel.guild,
@@ -23,11 +23,11 @@ exports.run = function (message, keyword, bot, db) {
             message.author.username
         );
       } else {
-        message.channel.send("", {
-          embed: {
+        message.channel.send({
+          embeds: [{
             description: ":warning: Nothing to approve.",
             color: 0xffff00,
-          },
+          }],
         });
       }
     }

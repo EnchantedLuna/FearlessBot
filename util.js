@@ -3,7 +3,7 @@ const config = require("./config.json");
 
 exports.channelCountsInStatistics = function (guild, channel) {
   return (
-    guild != config.mainServer || config.statCountingChannels.includes(channel)
+    guild !== config.mainServer || config.statCountingChannels.includes(channel)
   );
 };
 
@@ -15,7 +15,7 @@ exports.isMod = function (member, guild) {
     return false;
   }
   return (
-    exports.hasRole(member, guild, "mods") || member.id == config.botAdminUserId
+    exports.hasRole(member, guild, "mods") || member.id === config.botAdminUserId
   );
 };
 
@@ -94,16 +94,17 @@ exports.findMemberID = function (message, args, bot) {
  * @param {string} args
  * @param {Client} bot
  */
-exports.findMember = function (message, args, bot) {
+exports.findMember = async function (message, args, bot) {
   let member = message.member;
   if (message.mentions.members.size > 0) {
     return message.mentions.members.first();
   }
-  const idResolve = bot.users.resolve(args);
-  if (idResolve) {
-    const member = message.channel.guild.member(idResolve);
-    if (member) {
-      return member;
+
+  const couldBeId = args.match(/^\d+$/);
+  if (couldBeId) {
+    const idResolve = await message.channel.guild.members.fetch(args);
+    if (idResolve) {
+      return idResolve;
     }
   }
   const guildMember = message.channel.guild.members.cache.find(

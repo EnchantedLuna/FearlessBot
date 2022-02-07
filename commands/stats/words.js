@@ -12,11 +12,11 @@ exports.run = function (message, params, bot, db) {
         return;
       }
       if (rows[0] != null) {
-        var average =
-          rows[0].messages > 0
-            ? Math.round((rows[0].words / rows[0].messages) * 100) / 100
-            : 0;
-        message.channel.send(
+          const average =
+              rows[0].messages > 0
+                  ? Math.round((rows[0].words / rows[0].messages) * 100) / 100
+                  : 0;
+          message.channel.send(
           rows[0].username +
             " has used " +
             rows[0].words +

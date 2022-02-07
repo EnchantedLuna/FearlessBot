@@ -1,16 +1,20 @@
 const config = require("./config.json");
-const Discord = require("discord.js");
-const mysql = require("mysql");
-
+const { Client, Intents } = require("discord.js");
+const mysql = require("mysql2");
 const commands = require("./commands.json");
 const util = require("./util");
 const stats = require("./stats");
 const { runScheduledActions, validateMutes } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
 
-const bot = new Discord.Client({
-  disableMentions: "everyone",
-  fetchAllMembers: true,
+const bot = new Client({
+  allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
+  intents: [
+    Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS,
+    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES
+  ],
+  partials: ["CHANNEL"]
 });
 
 const db = mysql.createConnection({
@@ -22,14 +26,14 @@ const db = mysql.createConnection({
 });
 
 bot.on("ready", () => {
-  console.log("FearlessBot (Platinum Edition) is ready.");
+  console.log("FearlessBot (Taylor's Version) is ready.");
   setInterval(function () {
     runScheduledActions(bot, db);
   }, 60000);
 });
 
-bot.on("message", (message) => {
-  if (message.channel.type != "text") {
+bot.on("messageCreate", (message) => {
+  if (message.channel.type === "DM") {
     handleDirectMessage(message);
     return;
   }
@@ -52,10 +56,9 @@ bot.on("message", (message) => {
     if (
       !util.hasPermission(message.member, commands[commandName].permissions)
     ) {
-      message.channel.send(
-        ":no_entry: You do not have permission to run this command."
-      );
-      return;
+      return message.channel.send({
+        content: ":no_entry: You do not have permission to run this command."
+      });
     }
     let action = require("./commands/" + commands[commandName].action);
     action.run(message, args, bot, db, commands[commandName].extra);
@@ -74,10 +77,9 @@ function handleDirectMessage(message) {
     if (
       !util.hasPermission(message.author, commands[commandName].permissions)
     ) {
-      message.channel.send(
-        ":no_entry: You do not have permission to run this command."
-      );
-      return;
+      return message.channel.send({
+        content: ":no_entry: You do not have permission to run this command."
+      });
     }
     let action = require("./commands/" + commands[commandName].action);
     action.run(message, params, bot, db, commands[commandName].extra);
@@ -98,9 +100,9 @@ bot.on("guildMemberRemove", (member) => {
   let now = new Date();
   let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
   if (joinTime < 300) {
-    member.guild.systemChannel.send(
-      member.user.username + " has already left us. :disappointed:"
-    );
+    member.guild.systemChannel.send({
+      content: `${member.user.username} has already left us. :disappointed:`
+    });
   }
 });
 
@@ -108,8 +110,9 @@ bot.on("messageDelete", function (message) {
   stats.handleMessageDelete(message, db);
 });
 
-bot.ws.on('INTERACTION_CREATE', async interaction => {
-  const commandName = interaction.data.name;
+bot.on("interactionCreate", async interaction => {
+  if (!interaction.isCommand()) return;
+  const commandName = interaction.commandName;
   if (commandName in commands && commands[commandName].interaction) {
     let action = require("./commands/" + commands[commandName].action);
     action.interaction(interaction, bot, db);

@@ -1,14 +1,10 @@
-exports.run = function (message, args, bot, db) {
-    bot.api.applications('346098983543898113').guilds('166329346720661504').commands.post({data: {
-        name: 'acronym',
-        description: 'Look up a Taylor Swift song acronym',
-        options: [
-            {
-                "name" : "term",
-                "description" : "The acronym that you want to look up",
-                "required" : true,
-                "type" : 3
-            }
-        ]
-    }})
+const commands = require('../../commands.json');
+
+exports.run = function (message, args, bot, db, globalScope) {
+    if (args in commands) {
+        const scope = (globalScope) ? bot.application.commands : bot.guilds.cache.get(message.channel.guild.id).commands;
+        if (commands[args].interactionCreate) {
+            void scope.create(commands[args].interactionCreate);
+        }
+    }
 }

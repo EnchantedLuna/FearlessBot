@@ -1,5 +1,5 @@
 exports.run = function (message, params, bot, db) {
-  if (params == "") {
+  if (params === "") {
     message.reply("Please enter a question, e.g. ``!question Is butt legs?``");
     return;
   }

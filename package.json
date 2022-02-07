@@ -1,10 +1,9 @@
 {
   "name": "fearlessbot",
-  "version": "3.10.6",
+  "version": "4.0.0",
   "dependencies": {
-    "discord-paginationembed": "^2.1.0",
-    "discord.js": "12.*",
-    "mysql": "*"
+    "discord.js": "^13.6.0",
+    "mysql2": "^2.3.3"
   },
   "repository": {
     "type": "git",

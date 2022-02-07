@@ -3,7 +3,7 @@ const THREE_HOURS = 10800000;
 
 exports.checkActiveRole = function (message) {
   if (
-    message.channel.guild.id == config.mainServer &&
+    message.channel.guild.id === config.mainServer &&
     !hasRole(message.member, message.channel.guild, "active")
   ) {
     let joinDate = message.member.joinedAt;
@@ -13,7 +13,10 @@ exports.checkActiveRole = function (message) {
       let role = message.channel.guild.roles.cache.find(
         (role) => role.name === "active"
       );
-      message.member.roles.add(role);
+      message.member.roles.add(role)
+          .catch(() =>
+              console.log("Incorrect perms to add active role")
+          );
     }
   }
 };

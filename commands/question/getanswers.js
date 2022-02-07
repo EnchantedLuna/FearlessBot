@@ -11,8 +11,8 @@ exports.run = function (message, args, bot, db, showOnlyNew) {
       return;
     }
     if (
-      rows[0].user != message.author.id &&
-      message.author.id != config.botAdminUserId
+      rows[0].user !== message.author.id &&
+      message.author.id !== config.botAdminUserId
     ) {
       message.reply("You do not have permission to view these answers.");
       return;
@@ -43,7 +43,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       ")**\n";
     let userList = [];
     let userIdList = [];
-    for (var i = 0; i < rows.length; i++) {
+    for (let i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
       let user = bot.users.resolve(rows[i].user);
       let username = user ? "@" + user.tag : "Unknown user " + rows[i].user;
@@ -67,7 +67,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       userIdString +=
         "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
     }
-    if (message.author.id == questionAsker) {
+    if (message.author.id === questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
     if (response.length + userListString.length + userIdString.length > 2000) {

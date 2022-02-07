@@ -7,7 +7,7 @@ exports.run = function (message, args, bot, db, watched) {
       message.reply("Invalid question id");
       return;
     }
-    if (rows[0].user != message.author.id) {
+    if (rows[0].user !== message.author.id) {
       message.reply("You do not have permission to update this.");
       return;
     }

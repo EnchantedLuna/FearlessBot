@@ -7,10 +7,10 @@ exports.run = function (message, userId) {
     message.channel.guild.members
       .ban(userId)
       .then((user) => {
-        message.channel.send("", {
-          embed: {
+        message.channel.send({
+          embeds: [{
             description: `:hammer: Banned ${user.username || user.id || user}.`,
-          },
+          }],
         });
       })
       .catch((error) => {

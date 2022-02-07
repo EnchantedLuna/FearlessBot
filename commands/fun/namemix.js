@@ -4,8 +4,8 @@ exports.run = function (message, args, bot, db) {
       "(SELECT name_piece FROM namemix WHERE part=2 ORDER BY RAND() LIMIT 1)) AS name",
     [],
     function (err, rows) {
-      message.channel.send("", {
-        embed: { title: "Name Mix", description: rows[0].name },
+      message.channel.send({
+        embeds: [{ title: "Name Mix", description: rows[0].name }],
       });
     }
   );
