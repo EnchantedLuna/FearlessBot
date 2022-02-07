@@ -204,11 +204,6 @@
     "permissions": "all",
     "type": "server"
   },
-  "bowlmute": {
-    "action": "mod/bowlmute",
-    "permissions": "mods",
-    "type": "server"
-  },
   "mute": {
     "action": "mod/supermute",
     "permissions": "mods",

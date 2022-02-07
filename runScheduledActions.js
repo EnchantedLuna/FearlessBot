@@ -111,20 +111,6 @@ exports.validateMutes = function(member, bot, db) {
           member.roles.add(supermute);
           util.log(guild, member.user.username + " has joined and has an active supermute. Supermute role added.");
           break;
-        case "unbowlmute":
-          let bowlmute = guild.roles.cache.find(
-            (role) => role.name === "bowlmute"
-          );
-          if (typeof bowlmute == "undefined") {
-            console.log(
-              "Scheduled actions: Bowlmute role not found in guild " +
-                rows[i].guild
-            );
-            continue;
-          }
-          member.roles.add(bowlmute);
-          util.log(guild, member.user.username + " has joined and has an active bowlmute. Bowlmute role added.");
-          break;
       }
     }
    });
