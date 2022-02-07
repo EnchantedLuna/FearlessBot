@@ -8,13 +8,21 @@
     "action": "fun/song",
     "permissions": "all",
     "type": "both",
-    "interaction" : true
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "song",
+      "description": "Pick a random Taylor Swift song"
+    }
   },
   "album": {
     "action": "fun/album",
     "permissions": "all",
     "type": "both",
-    "interaction" : true
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "song",
+      "description": "Pick a random Taylor Swift album"
+    }
   },
   "8ball": {
     "action": "fun/8ball",
@@ -45,7 +53,19 @@
     "action": "fun/acronym",
     "permissions": "all",
     "type": "both",
-    "interaction" : true
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "acronym",
+      "description": "Look up a Taylor Swift song acronym",
+      "options": [
+          {
+              "name": "term",
+              "description": "The acronym that you want to look up",
+              "required": true,
+              "type": "STRING"
+          }
+      ]
+  }
   },
   "b": {
     "action": "fun/b",
@@ -109,7 +129,11 @@
     "action": "stats/totals",
     "permissions": "all",
     "type": "server",
-    "interaction" : true
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "totals",
+      "description": "Get the total message stats for the server"
+    }
   },
   "getlist": {
     "action": "saves/getlist",
