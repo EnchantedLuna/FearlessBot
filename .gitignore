@@ -3,5 +3,4 @@ config.json
 .idea
 config.php
 node_modules
-mystery-answers.json
 .DS_Store
