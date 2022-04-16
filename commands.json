@@ -32,7 +32,20 @@
   "8ball": {
     "action": "fun/8ball",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "8ball",
+      "description": "Get a magic 8 ball answer to a yes or no question",
+      "options": [
+        {
+            "name": "question",
+            "description": "Your question",
+            "required": true,
+            "type": "STRING"
+        }
+    ]
+    }
   },
   "fversion": {
     "action": "bot/version",

@@ -28,7 +28,7 @@ const responses = [
 ];
 
 exports.run = function (message, args, bot, db) {
-  let answer = responses[Math.floor(Math.random() * responses.length)];
+  const answer = responses[Math.floor(Math.random() * responses.length)];
   return message.channel.send({
     embeds: [
         new MessageEmbed()
@@ -37,3 +37,15 @@ exports.run = function (message, args, bot, db) {
     ]
   });
 };
+
+exports.interaction = function(interaction, bot, db) {
+  const question = interaction.options.getString("question");
+  const answer = responses[Math.floor(Math.random() * responses.length)];
+  interaction.reply({
+    embeds: [
+        new MessageEmbed()
+            .setTitle(":8ball: 8 Ball")
+            .setDescription("Question: " + question + "\nAnswer: " + answer.toString()),
+    ]
+  });
+}
