@@ -49,7 +49,7 @@ exports.run = function (message, args, bot, db, showUnapproved) {
           } else {
             date += "a long time ago";
           }
-          message.channel.send("", {
+          message.channel.send({
             embeds: [{
               author: {
                 name: author,
