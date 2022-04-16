@@ -9,3 +9,12 @@ exports.run = function (message, args, bot, db) {
     ]
   });
 };
+
+exports.interaction = function(interaction, bot, db) {
+  interaction.reply({
+    embeds: [
+        new MessageEmbed()
+            .setDescription(":robot: FearlessBot version: " + package.version)
+    ]
+  });
+}

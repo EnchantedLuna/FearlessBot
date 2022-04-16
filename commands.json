@@ -32,7 +32,12 @@
   "fversion": {
     "action": "bot/version",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction": true,
+    "interactionCreate" : {
+      "name": "fversion",
+      "description": "View FearlessBot version info"
+  }
   },
   "activity": {
     "action": "stats/activity",
