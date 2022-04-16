@@ -174,7 +174,12 @@
   "getlist": {
     "action": "saves/getlist",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "getlist",
+      "description": "Gets the link to the list of saved items"
+    }
   },
   "rankwords": {
     "action": "members/rankthing",
