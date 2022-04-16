@@ -70,7 +70,20 @@
   "choose": {
     "action": "fun/choose",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "choose",
+      "description": "Randomly choose one of several choices",
+      "options": [
+          {
+              "name": "choices",
+              "description": "Comma separated list of choices",
+              "required": true,
+              "type": "STRING"
+          }
+      ]
+    }
   },
   "acronym": {
     "action": "fun/acronym",
