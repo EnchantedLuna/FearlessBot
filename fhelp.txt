@@ -35,5 +35,5 @@ Questions (DMs only):
 
 
 Bot Info:
-``!fversion`` : Displays the bot version
-``!fhelp`` : Displays this message.
+``!fversion`` (/) : Displays the bot version
+``!fhelp`` (/) : Displays this message.

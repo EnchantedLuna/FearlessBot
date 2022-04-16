@@ -19,3 +19,22 @@ exports.run = function (message) {
     })
   });
 };
+
+exports.interaction = function(interaction, bot, db) {
+  fs.readFile(path.resolve(__dirname, filePath), "utf8", function (err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    interaction.reply({
+      embeds: [
+          new MessageEmbed()
+              .setTitle("FearlessBot Help")
+              .setDescription(data.toString())
+              .setFooter({
+                text: "Commands with (/) also available as slash commands"
+              })
+      ],
+      ephemeral: true
+    })
+  });
+}

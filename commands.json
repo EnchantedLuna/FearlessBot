@@ -2,7 +2,12 @@
   "fhelp": {
     "action": "bot/fhelp",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction": true,
+    "interactionCreate" : {
+      "name": "fhelp",
+      "description": "Get FearlessBot command help"
+    }
   },
   "song": {
     "action": "fun/song",

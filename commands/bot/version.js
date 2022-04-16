@@ -15,6 +15,7 @@ exports.interaction = function(interaction, bot, db) {
     embeds: [
         new MessageEmbed()
             .setDescription(":robot: FearlessBot version: " + package.version)
-    ]
+    ],
+    ephemeral: true
   });
 }
