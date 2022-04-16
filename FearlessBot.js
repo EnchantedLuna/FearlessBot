@@ -115,6 +115,10 @@ bot.on("interactionCreate", async interaction => {
   if (!interaction.isCommand()) return;
   const commandName = interaction.commandName;
   if (commandName in commands && commands[commandName].interaction) {
+    if (interaction.guild === null && commands[commandName].type === "server") {
+      interaction.reply("This command is not supported in DMs.");
+      return;
+    }
     let action = require("./commands/" + commands[commandName].action);
     action.interaction(interaction, bot, db);
   }
