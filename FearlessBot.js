@@ -26,7 +26,8 @@ const db = mysql.createConnection({
 });
 
 bot.on("ready", () => {
-  console.log("FearlessBot (Taylor's Version) is ready.");
+  const time = new Date().toLocaleString();
+  console.log("FearlessBot (Taylor's Version) is ready - Started " + time);
   setInterval(function () {
     runScheduledActions(bot, db);
   }, 60000);
