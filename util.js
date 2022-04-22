@@ -102,10 +102,12 @@ exports.findMember = async function (message, args, bot) {
 
   const couldBeId = args.match(/^\d+$/);
   if (couldBeId) {
-    const idResolve = await message.channel.guild.members.fetch(args);
-    if (idResolve) {
-      return idResolve;
-    }
+    try {
+      const idResolve = await message.channel.guild.members.fetch(args);
+      if (idResolve) {
+        return idResolve;
+      }
+    } catch(err) {}
   }
   const guildMember = message.channel.guild.members.cache.find(
     (member) =>
