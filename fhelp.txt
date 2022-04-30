@@ -1,8 +1,8 @@
 Basic Commands:
 ``!song``, ``!album`` (/) : Picks a random Taylor Swift song or album
-``!8ball`` : Gives a random answer to a yes or no question
+``!8ball`` (/) : Gives a random answer to a yes or no question
 ``!yesno`` : Adds yes, no, maybe react for a simple yes/no poll
-``!choose [one, two, three]`` : Chooses one of several options randomly
+``!choose [one, two, three]`` (/) : Chooses one of several options randomly
 ``!b``, ``!b2``, ``!b3`` : Adds :b: emojis to a message
 ``!clap`` : Adds clap emojis between words
 ``!ha``: Generates a hahaha message
