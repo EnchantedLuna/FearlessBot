@@ -20,3 +20,18 @@ exports.run = async function (message, args, bot, db) {
     }],
   });
 };
+
+exports.interaction = function(interaction, bot, db) {
+  let member = interaction.options.getMember("member");
+  if (!member) {
+    member = interaction.member;
+  }
+
+  const url = config.baseUrl + "activityreport.php?server=" + interaction.guild.id + "&user=" + member.id;
+  interaction.reply({
+    embeds: [{
+      title: "Activity Report for " + member.displayName,
+      description: url,
+    }],
+  });
+}

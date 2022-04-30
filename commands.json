@@ -60,7 +60,20 @@
   "activity": {
     "action": "stats/activity",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction" : true,
+    "interactionCreate" : {
+        "name": "activity",
+        "description": "View activity stats for a member",
+        "options": [
+            {
+                "name": "member",
+                "description": "The member that you want to look up",
+                "required": false,
+                "type": "USER"
+            }
+        ]
+    }
   },
   "yesno": {
     "action": "fun/yesno",
