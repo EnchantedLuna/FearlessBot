@@ -134,7 +134,12 @@
   "namemix": {
     "action": "fun/namemix",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "namemix",
+      "description": "Create a mix of two name parts"
+    }
   },
   "randmember": {
     "action": "members/randmember",
