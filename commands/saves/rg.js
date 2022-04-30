@@ -11,3 +11,17 @@ exports.run = function (message, args, bot, db) {
     }
   );
 };
+
+exports.interaction = function (interaction, bot, db) {
+  db.query(
+    "SELECT * FROM data_store WHERE server = ? AND approved = 1 ORDER BY RAND() LIMIT 1",
+    [interaction.guild.id],
+    function (err, rows) {
+      if (rows) {
+        interaction.reply(rows[0]["keyword"] + ": " + rows[0]["value"], {
+          allowedMentions: { users: [] },
+        });
+      }
+    }
+  );
+};

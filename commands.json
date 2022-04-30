@@ -167,7 +167,12 @@
   "rg": {
     "action": "saves/rg",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "rg",
+      "description": "Returns a random saved item"
+    }
   },
   "seen": {
     "action": "stats/seen",
