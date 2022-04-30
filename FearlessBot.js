@@ -43,7 +43,8 @@ bot.on("messageCreate", (message) => {
   stats.updateChannelStats(message, db);
   checkActiveRole(message);
 
-  if (message.content.indexOf(config.prefix) !== 0 || message.author.bot) {
+  if (message.content.indexOf(config.prefix) !== 0 || message.author.bot
+   || !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
     return;
   }
   const command = message.content.split(" ");
