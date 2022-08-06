@@ -11,3 +11,16 @@ exports.run = function (message, params, bot, db) {
     }
   );
 };
+
+exports.interaction = function (interaction, bot, db) {
+  const question = interaction.options.getString("question");
+  db.query(
+    "INSERT INTO trivia_questions (user, question, timecreated) VALUES (?, ?, now())",
+    [interaction.user.id, question],
+    function (err, result) {
+      interaction.reply({
+        content: "Question #" + result.insertId + " has been registered."
+      });
+    }
+  );
+};

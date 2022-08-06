@@ -423,7 +423,20 @@
   "question": {
     "action": "question/question",
     "permissions": "all",
-    "type": "dm"
+    "type": "dm",
+    "interaction" : true,
+    "interactionCreate" : {
+      "name": "question",
+      "description": "Register a new question/submission box for answers",
+      "options": [
+        {
+            "name": "question",
+            "description": "Text of the question",
+            "required": true,
+            "type": "STRING"
+        }
+    ]
+    }
   },
   "openquestion": {
     "action": "question/openquestion",
