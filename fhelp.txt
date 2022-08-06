@@ -6,9 +6,9 @@ Basic Commands:
 ``!b``, ``!b2``, ``!b3`` : Adds :b: emojis to a message
 ``!clap`` : Adds clap emojis between words
 ``!ha``: Generates a hahaha message
-``!namemix`` : Mixes two parts of server names
+``!namemix`` (/) : Mixes two parts of server names
 ``!randmember`` : Selects a server member at random who has spoken in the last day.
-``!shitpost [optional number]`` : Posts a shitpost
+``!shitpost [optional number]`` (/) : Posts a shitpost
 ``!acronym`` (/): Looks up a Taylor Swift song acronym
 
 Saves:
@@ -27,7 +27,7 @@ Stats:
 ``!rankwords``, ``!ranklorpoints`` : Ranks members by words or lorpoints
 
 Questions (DMs only):
-``!question [question]`` : Creates a new question
+``!question [question]`` (/) : Creates a new question
 ``!answer [id] [answer]`` : Submits an answer to a question
 ``!getanswers [id]``, ``!getnewanswers [id]`` : View answers to a question you created
 ``!watch [id]``, ``!unwatch [id]`` : Turns on/off notifications for new answers to your question
