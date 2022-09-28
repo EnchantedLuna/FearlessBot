@@ -232,7 +232,20 @@
   "lorpoints": {
     "action": "lorpoints/lorpoints",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "lorpoints",
+      "description": "View a member's lorpoints",
+      "options": [
+        {
+          "name": "member",
+          "description": "The member that you want to look up",
+          "required": false,
+          "type": "USER"
+        }
+      ]
+    }
   },
   "words": {
     "action": "stats/words",

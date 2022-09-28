@@ -1,6 +1,25 @@
 const { findMemberID } = require("../../util");
 const config = require("../../config.json");
-const {MessageEmbed} = require("discord.js");
+const { MessageEmbed } = require("discord.js");
+
+function getEmbed(row, rank) {
+  return [
+    new MessageEmbed()
+      .setTitle(":star: Lorpoints")
+      .setDescription(
+        row.username +
+          " has " +
+          row.lorpoints +
+          " lorpoints.\nCurrent Rank: " +
+          rank +
+          getSuffix(rank) +
+          "\nCapped events this week: " +
+          row.eventpoints +
+          "/" +
+          config.eventCap
+      ),
+  ];
+}
 
 exports.run = function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);
@@ -20,20 +39,38 @@ exports.run = function (message, args, bot, db) {
           function (err, totals) {
             const rank = totals[0].higher + 1;
             message.channel.send({
-                embeds: [
-                    new MessageEmbed()
-                        .setTitle(":star: Lorpoints")
-                        .setDescription(rows[0].username +
-                            " has " +
-                            rows[0].lorpoints +
-                            " lorpoints.\nCurrent Rank: " +
-                            rank +
-                            getSuffix(rank) +
-                            "\nCapped events this week: " +
-                            rows[0].eventpoints + "/" + config.eventCap
-                        )
-                ]
-            })
+              embeds: getEmbed(rows[0], rank),
+            });
+          }
+        );
+      }
+    }
+  );
+};
+
+exports.interaction = function (interaction, bot, db) {
+  let member = interaction.options.getMember("member");
+  if (!member) {
+    member = interaction.member;
+  }
+
+  db.query(
+    "SELECT username, lorpoints, eventpoints FROM members WHERE server = ? AND id = ?",
+    [interaction.guild.id, member.id],
+    function (err, rows) {
+      if (err) {
+        console.error("lorpoint command db error: " + err);
+        return;
+      }
+      if (rows[0] !== null) {
+        db.query(
+          "SELECT COUNT(*) AS higher FROM members WHERE server = ? AND lorpoints > ?",
+          [interaction.guild.id, rows[0].lorpoints],
+          function (err, totals) {
+            const rank = totals[0].higher + 1;
+            interaction.reply({
+              embeds: getEmbed(rows[0], rank),
+            });
           }
         );
       }
