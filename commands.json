@@ -4,7 +4,7 @@
     "permissions": "all",
     "type": "both",
     "interaction": true,
-    "interactionCreate" : {
+    "interactionCreate": {
       "name": "fhelp",
       "description": "Get FearlessBot command help"
     }
@@ -13,8 +13,8 @@
     "action": "fun/song",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "song",
       "description": "Pick a random Taylor Swift song"
     }
@@ -23,8 +23,8 @@
     "action": "fun/album",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "song",
       "description": "Pick a random Taylor Swift album"
     }
@@ -33,18 +33,18 @@
     "action": "fun/8ball",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "8ball",
       "description": "Get a magic 8 ball answer to a yes or no question",
       "options": [
         {
-            "name": "question",
-            "description": "Your question",
-            "required": true,
-            "type": "STRING"
+          "name": "question",
+          "description": "Your question",
+          "required": true,
+          "type": "STRING"
         }
-    ]
+      ]
     }
   },
   "fversion": {
@@ -52,27 +52,27 @@
     "permissions": "all",
     "type": "both",
     "interaction": true,
-    "interactionCreate" : {
+    "interactionCreate": {
       "name": "fversion",
       "description": "View FearlessBot version info"
-  }
+    }
   },
   "activity": {
     "action": "stats/activity",
     "permissions": "all",
     "type": "server",
-    "interaction" : true,
-    "interactionCreate" : {
-        "name": "activity",
-        "description": "View activity stats for a member",
-        "options": [
-            {
-                "name": "member",
-                "description": "The member that you want to look up",
-                "required": false,
-                "type": "USER"
-            }
-        ]
+    "interaction": true,
+    "interactionCreate": {
+      "name": "activity",
+      "description": "View activity stats for a member",
+      "options": [
+        {
+          "name": "member",
+          "description": "The member that you want to look up",
+          "required": false,
+          "type": "USER"
+        }
+      ]
     }
   },
   "yesno": {
@@ -84,17 +84,17 @@
     "action": "fun/choose",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "choose",
       "description": "Randomly choose one of several choices",
       "options": [
-          {
-              "name": "choices",
-              "description": "Comma separated list of choices",
-              "required": true,
-              "type": "STRING"
-          }
+        {
+          "name": "choices",
+          "description": "Comma separated list of choices",
+          "required": true,
+          "type": "STRING"
+        }
       ]
     }
   },
@@ -102,19 +102,19 @@
     "action": "fun/acronym",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "acronym",
       "description": "Look up a Taylor Swift song acronym",
       "options": [
-          {
-              "name": "term",
-              "description": "The acronym that you want to look up",
-              "required": true,
-              "type": "STRING"
-          }
+        {
+          "name": "term",
+          "description": "The acronym that you want to look up",
+          "required": true,
+          "type": "STRING"
+        }
       ]
-  }
+    }
   },
   "b": {
     "action": "fun/b",
@@ -148,8 +148,8 @@
     "action": "fun/namemix",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "namemix",
       "description": "Create a mix of two name parts"
     }
@@ -163,16 +163,16 @@
     "action": "fun/shitpost",
     "permissions": "all",
     "type": "both",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "shitpost",
       "description": "Get a shitpost",
       "options": [
         {
-            "name": "id",
-            "description": "Specific ID number of a shitpost",
-            "required": false,
-            "type": "INTEGER"
+          "name": "id",
+          "description": "Specific ID number of a shitpost",
+          "required": false,
+          "type": "INTEGER"
         }
       ]
     }
@@ -181,8 +181,8 @@
     "action": "saves/rg",
     "permissions": "all",
     "type": "server",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "rg",
       "description": "Returns a random saved item"
     }
@@ -201,8 +201,8 @@
     "action": "stats/totals",
     "permissions": "all",
     "type": "server",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "totals",
       "description": "Get the total message stats for the server"
     }
@@ -211,8 +211,8 @@
     "action": "saves/getlist",
     "permissions": "all",
     "type": "server",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "getlist",
       "description": "Gets the link to the list of saved items"
     }
@@ -243,18 +243,18 @@
     "action": "members/awards",
     "permissions": "all",
     "type": "server",
-    "interaction" : true,
-    "interactionCreate" : {
-        "name": "awards",
-        "description": "View a member's awards",
-        "options": [
-            {
-                "name": "member",
-                "description": "The member that you want to look up",
-                "required": false,
-                "type": "USER"
-            }
-        ]
+    "interaction": true,
+    "interactionCreate": {
+      "name": "awards",
+      "description": "View a member's awards",
+      "options": [
+        {
+          "name": "member",
+          "description": "The member that you want to look up",
+          "required": false,
+          "type": "USER"
+        }
+      ]
     }
   },
   "g": {
@@ -324,25 +324,25 @@
     "action": "mod/ban",
     "permissions": "mods",
     "type": "server",
-    "extra" : 0
+    "extra": 0
   },
   "exile": {
     "action": "mod/ban",
     "permissions": "mods",
     "type": "server",
-    "extra" : 0
+    "extra": 0
   },
   "dban": {
     "action": "mod/ban",
     "permissions": "mods",
     "type": "server",
-    "extra" : 1
+    "extra": 1
   },
   "dexile": {
     "action": "mod/ban",
     "permissions": "mods",
     "type": "server",
-    "extra" : 1
+    "extra": 1
   },
   "kick": {
     "action": "mod/kick",
@@ -425,30 +425,30 @@
     "action": "bot/screate",
     "permissions": "admin",
     "type": "server",
-    "extra" : false
+    "extra": false
   },
   "gcreate": {
     "action": "bot/screate",
     "permissions": "admin",
     "type": "server",
-    "extra" : true
+    "extra": true
   },
   "question": {
     "action": "question/question",
     "permissions": "all",
     "type": "dm",
-    "interaction" : true,
-    "interactionCreate" : {
+    "interaction": true,
+    "interactionCreate": {
       "name": "question",
       "description": "Register a new question/submission box for answers",
       "options": [
         {
-            "name": "question",
-            "description": "Text of the question",
-            "required": true,
-            "type": "STRING"
+          "name": "question",
+          "description": "Text of the question",
+          "required": true,
+          "type": "STRING"
         }
-    ]
+      ]
     }
   },
   "openquestion": {
@@ -494,7 +494,26 @@
   "answer": {
     "action": "question/answer",
     "permissions": "all",
-    "type": "both"
+    "type": "both",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "answer",
+      "description": "Submit an answer to a question",
+      "options": [
+        {
+          "name": "id",
+          "description": "The id of the question to submit",
+          "required": true,
+          "type": "INTEGER"
+        },
+        {
+          "name": "answer",
+          "description": "Your answer",
+          "required": true,
+          "type": "STRING"
+        }
+      ]
+    }
   },
   "reassign": {
     "action": "question/reassign",
