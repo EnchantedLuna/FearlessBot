@@ -139,11 +139,6 @@
     "permissions": "all",
     "type": "both"
   },
-  "ha": {
-    "action": "fun/ha",
-    "permissions": "all",
-    "type": "both"
-  },
   "namemix": {
     "action": "fun/namemix",
     "permissions": "all",
