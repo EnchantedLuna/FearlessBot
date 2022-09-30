@@ -23,7 +23,7 @@ exports.run = async function (message, args, bot, db) {
   message.channel.send(unapproved);
 };
 
-exports.interaction = async function (message, args, bot, db) {
-  const unapproved = await getUnapprovedItems(db, message.channel.guild.id);
+exports.interaction = async function (interaction, bot, db) {
+  const unapproved = await getUnapprovedItems(db, interaction.guild.id);
   interaction.reply(unapproved);
 };

@@ -289,7 +289,21 @@
     "action": "saves/get",
     "permissions": "all",
     "type": "server",
-    "extra": false
+    "extra": false,
+    "interaction": true,
+    "interactionCreate": {
+      "name": "get",
+      "description": "Get a saved item",
+      "options": [
+        {
+          "name": "keyword",
+          "description": "The keyword for the saved item",
+          "required": true,
+          "type": "STRING"
+        }
+      ],
+      "dm_permission": false
+    }
   },
   "review": {
     "action": "saves/get",
@@ -415,6 +429,7 @@
     "action": "saves/getunapproved",
     "permissions": "mods",
     "type": "server",
+    "interaction": true,
     "interactionCreate": {
       "name": "getunapproved",
       "description": "Gets a list of unapproved saved items",

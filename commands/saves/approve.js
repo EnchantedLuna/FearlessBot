@@ -7,13 +7,15 @@ exports.run = function (message, keyword, bot, db) {
     function (err, result) {
       if (result.changedRows > 0) {
         message.channel.send({
-          embeds: [{
-            description:
-              ":white_check_mark: Saved item '" +
-              keyword +
-              "' has been approved.",
-            color: 0x00ff00,
-          }],
+          embeds: [
+            {
+              description:
+                ":white_check_mark: Saved item '" +
+                keyword +
+                "' has been approved.",
+              color: 0x00ff00,
+            },
+          ],
         });
         log(
           message.channel.guild,
@@ -24,10 +26,12 @@ exports.run = function (message, keyword, bot, db) {
         );
       } else {
         message.channel.send({
-          embeds: [{
-            description: ":warning: Nothing to approve.",
-            color: 0xffff00,
-          }],
+          embeds: [
+            {
+              description: ":warning: Nothing to approve.",
+              color: 0xffff00,
+            },
+          ],
         });
       }
     }

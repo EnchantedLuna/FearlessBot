@@ -1,84 +1,90 @@
 const { channelCountsInStatistics } = require("../../util");
 
-exports.run = function (message, args, bot, db, showUnapproved) {
+async function getItem(
+  db,
+  guildId,
+  channelId,
+  keyword,
+  showUnapproved,
+  author
+) {
+  let embed = { title: keyword };
+  if (author) {
+    embed.author = {
+      name: author.tag,
+      icon_url: author.displayAvatarURL({
+        dynamic: true,
+        format: "png",
+        size: 64,
+      }),
+    };
+  }
+  const [rows] = await db
+    .promise()
+    .query("SELECT * FROM data_store WHERE server = ? AND keyword = ?", [
+      guildId,
+      keyword,
+    ]);
+  if (!rows[0]) {
+    embed.description =
+      ":warning: Nothing is stored for keyword " + keyword + ".";
+    return embed;
+  }
+  if (!rows[0].approved && !showUnapproved) {
+    embed.description = ":warning: This item has not been approved yet.";
+    return embed;
+  }
+  addToStats(db, guildId, channelId, keyword);
+  const text = rows[0]["value"];
+  if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$")) {
+    let date = "Created: ";
+    if (rows[0].timeadded !== null) {
+      date += rows[0].timeadded.toDateString();
+    } else {
+      date += "a long time ago";
+    }
+    embed.image = { url: text };
+    embed.footer = { text: date };
+    return embed;
+  }
+
+  embed.description = text;
+  return embed;
+}
+
+function addToStats(db, guildId, channelId, keyword) {
+  if (channelCountsInStatistics(guildId, channelId)) {
+    db.query(
+      "UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
+      [keyword, guildId]
+    );
+  }
+}
+
+exports.run = async function (message, args, bot, db, showUnapproved) {
   let arg = args.split(" ");
   let keyword = arg[0];
   if (keyword === "") return;
-  let author = message.author.tag;
-  db.query(
-    "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
-    [message.channel.guild.id, keyword],
-    function (err, rows) {
-      if (rows[0] == null) {
-        message.channel.send({
-          embeds: [{
-            author: {
-              name: author,
-              icon_url: message.author.displayAvatarURL({
-                dynamic: true,
-                format: "png",
-                size: 64,
-              }),
-            },
-            title: keyword,
-            description:
-              ":warning: Nothing is stored for keyword " + keyword + ".",
-          }],
-        });
-      } else if (!rows[0].approved && !showUnapproved) {
-        message.channel.send( {
-          embeds: [{
-            author: {
-              name: author,
-              icon_url: message.author.displayAvatarURL({
-                dynamic: true,
-                format: "png",
-                size: 64,
-              }),
-            },
-            title: keyword,
-            description: ":warning: This item has not been approved yet.",
-          }],
-        });
-      } else {
-        let text = rows[0]["value"];
-        if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$")) {
-          let date = "Created: ";
-          if (rows[0].timeadded !== null) {
-            date += rows[0].timeadded.toDateString();
-          } else {
-            date += "a long time ago";
-          }
-          message.channel.send({
-            embeds: [{
-              author: {
-                name: author,
-                icon_url: message.author.displayAvatarURL({
-                  dynamic: true,
-                  format: "png",
-                  size: 64,
-                }),
-              },
-              title: keyword,
-              image: { url: text },
-              footer: { text: date },
-            }],
-          });
-        } else {
-          message.reply(text);
-        }
-        if (
-          channelCountsInStatistics(
-            message.channel.guild.id,
-            message.channel.id
-          )
-        ) {
-          db.query(
-            "UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
-            [keyword, message.channel.guild.id]
-          );
-        }
-      }
-    }
+  const embed = await getItem(
+    db,
+    message.channel.guild.id,
+    message.channel.id,
+    keyword,
+    showUnapproved,
+    message.author
   );
+  message.channel.send({ embeds: [embed] });
+};
+
+exports.interaction = async function (interaction, bot, db) {
+  let keyword = interaction.options.getString("keyword");
+  const embed = await getItem(
+    db,
+    interaction.guild.id,
+    interaction.channel.id,
+    keyword,
+    false,
+    null
+  );
+  interaction.reply({ embeds: [embed] });
 };
