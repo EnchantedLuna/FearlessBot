@@ -8,13 +8,17 @@ const { runScheduledActions, validateMutes } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
 
 const bot = new Client({
-  allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
+  allowedMentions: { parse: ["users", "roles"], repliedUser: true },
   intents: [
-    Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS,
-    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_BANS,
+    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    Intents.FLAGS.DIRECT_MESSAGES,
   ],
-  partials: ["CHANNEL"]
+  partials: ["CHANNEL"],
 });
 
 const db = mysql.createConnection({
@@ -43,8 +47,11 @@ bot.on("messageCreate", (message) => {
   stats.updateChannelStats(message, db);
   checkActiveRole(message);
 
-  if (message.content.indexOf(config.prefix) !== 0 || message.author.bot
-   || !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
+  if (
+    message.content.indexOf(config.prefix) !== 0 ||
+    message.author.bot ||
+    !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+  ) {
     return;
   }
   const command = message.content.split(" ");
@@ -59,7 +66,7 @@ bot.on("messageCreate", (message) => {
       !util.hasPermission(message.member, commands[commandName].permissions)
     ) {
       return message.channel.send({
-        content: ":no_entry: You do not have permission to run this command."
+        content: ":no_entry: You do not have permission to run this command.",
       });
     }
     let action = require("./commands/" + commands[commandName].action);
@@ -80,7 +87,7 @@ function handleDirectMessage(message) {
       !util.hasPermission(message.author, commands[commandName].permissions)
     ) {
       return message.channel.send({
-        content: ":no_entry: You do not have permission to run this command."
+        content: ":no_entry: You do not have permission to run this command.",
       });
     }
     let action = require("./commands/" + commands[commandName].action);
@@ -103,7 +110,7 @@ bot.on("guildMemberRemove", (member) => {
   let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
   if (joinTime < 300) {
     member.guild.systemChannel.send({
-      content: `${member.user.username} has already left us. :disappointed:`
+      content: `${member.user.username} has already left us. :disappointed:`,
     });
   }
 });
@@ -112,7 +119,7 @@ bot.on("messageDelete", function (message) {
   stats.handleMessageDelete(message, db);
 });
 
-bot.on("interactionCreate", async interaction => {
+bot.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
   const commandName = interaction.commandName;
   if (commandName in commands && commands[commandName].interaction) {
@@ -123,10 +130,10 @@ bot.on("interactionCreate", async interaction => {
     let action = require("./commands/" + commands[commandName].action);
     action.interaction(interaction, bot, db);
   }
-})
+});
 
 bot.login(config.token);
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection at:", promise, "reason:", reason);
 });

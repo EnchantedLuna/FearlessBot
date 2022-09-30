@@ -1,53 +1,28 @@
-exports.run = function (message, params, bot, db) {
-    const number = parseInt(params, 10);
-    if (number > 0) {
-    db.query(
-      "SELECT id, shitpost FROM shitposts WHERE id=?",
-      [number],
-      function (err, rows) {
-        if (rows[0] != null) {
-          message.channel.send(rows[0].shitpost + " (#" + rows[0].id + ")");
-        } else {
-          message.channel.send(":warning: That shitpost doesn't exist!");
-        }
-      }
-    );
+async function getShitpost(db, id) {
+  let rows;
+  if (id > 0) {
+    [rows] = await db
+      .promise()
+      .query("SELECT id, shitpost FROM shitposts WHERE id=?", [id]);
   } else {
-    db.query(
-      "SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1",
-      [],
-      function (err, rows) {
-        if (rows[0] != null) {
-          message.channel.send(rows[0].shitpost + " (#" + rows[0].id + ")");
-        }
-      }
-    );
+    [rows] = await db
+      .promise()
+      .query("SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1", []);
   }
+  if (!rows[0]) {
+    return ":warning: That shitpost doesn't exist!";
+  }
+
+  return rows[0].shitpost + " (#" + rows[0].id + ")";
+}
+
+exports.run = async function (message, params, bot, db) {
+  const shitpost = await getShitpost(db, parseInt(params, 10));
+  message.channel.send(shitpost);
 };
 
-exports.interaction = function(interaction, bot, db) {
+exports.interaction = async function (interaction, bot, db) {
   const number = interaction.options.getInteger("id") ?? 0;
-  if (number > 0) {
-  db.query(
-    "SELECT id, shitpost FROM shitposts WHERE id=?",
-    [number],
-    function (err, rows) {
-      if (rows[0] != null) {
-        interaction.reply(rows[0].shitpost + " (#" + rows[0].id + ")");
-      } else {
-        interaction.reply(":warning: That shitpost doesn't exist!");
-      }
-    }
-  );
-} else {
-  db.query(
-    "SELECT id, shitpost FROM shitposts ORDER BY RAND() LIMIT 1",
-    [],
-    function (err, rows) {
-      if (rows[0] != null) {
-        interaction.reply(rows[0].shitpost + " (#" + rows[0].id + ")");
-      }
-    }
-  );
-}
-}
+  const shitpost = await getShitpost(db, number);
+  interaction.reply(shitpost);
+};

@@ -6,7 +6,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "fhelp",
-      "description": "Get FearlessBot command help"
+      "description": "Get FearlessBot command help",
+      "dm_permission": true
     }
   },
   "song": {
@@ -16,7 +17,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "song",
-      "description": "Pick a random Taylor Swift song"
+      "description": "Pick a random Taylor Swift song",
+      "dm_permission": true
     }
   },
   "album": {
@@ -26,7 +28,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "song",
-      "description": "Pick a random Taylor Swift album"
+      "description": "Pick a random Taylor Swift album",
+      "dm_permission": true
     }
   },
   "8ball": {
@@ -44,7 +47,8 @@
           "required": true,
           "type": "STRING"
         }
-      ]
+      ],
+      "dm_permission": true
     }
   },
   "fversion": {
@@ -72,7 +76,8 @@
           "required": false,
           "type": "USER"
         }
-      ]
+      ],
+      "dm_permission": false
     }
   },
   "yesno": {
@@ -95,7 +100,8 @@
           "required": true,
           "type": "STRING"
         }
-      ]
+      ],
+      "dm_permission": true
     }
   },
   "acronym": {
@@ -113,7 +119,8 @@
           "required": true,
           "type": "STRING"
         }
-      ]
+      ],
+      "dm_permission": true
     }
   },
   "b": {
@@ -146,7 +153,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "namemix",
-      "description": "Create a mix of two name parts"
+      "description": "Create a mix of two name parts",
+      "dm_permission": true
     }
   },
   "randmember": {
@@ -169,7 +177,8 @@
           "required": false,
           "type": "INTEGER"
         }
-      ]
+      ],
+      "dm_permission": true
     }
   },
   "rg": {
@@ -179,7 +188,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "rg",
-      "description": "Returns a random saved item"
+      "description": "Returns a random saved item",
+      "dm_permission": false
     }
   },
   "seen": {
@@ -199,7 +209,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "totals",
-      "description": "Get the total message stats for the server"
+      "description": "Get the total message stats for the server",
+      "dm_permission": false
     }
   },
   "getlist": {
@@ -209,7 +220,8 @@
     "interaction": true,
     "interactionCreate": {
       "name": "getlist",
-      "description": "Gets the link to the list of saved items"
+      "description": "Gets the link to the list of saved items",
+      "dm_permission": false
     }
   },
   "rankwords": {
@@ -239,7 +251,8 @@
           "required": false,
           "type": "USER"
         }
-      ]
+      ],
+      "dm_permission": false
     }
   },
   "words": {
@@ -262,7 +275,8 @@
           "required": false,
           "type": "USER"
         }
-      ]
+      ],
+      "dm_permission": false
     }
   },
   "g": {
@@ -400,7 +414,13 @@
   "getunapproved": {
     "action": "saves/getunapproved",
     "permissions": "mods",
-    "type": "server"
+    "type": "server",
+    "interactionCreate": {
+      "name": "getunapproved",
+      "description": "Gets a list of unapproved saved items",
+      "dm_permission": false,
+      "default_member_permissions": 8192
+    }
   },
   "showchannel": {
     "action": "mod/setvisibility",
@@ -456,7 +476,8 @@
           "required": true,
           "type": "STRING"
         }
-      ]
+      ],
+      "dm_permission": true
     }
   },
   "openquestion": {
@@ -520,7 +541,8 @@
           "required": true,
           "type": "STRING"
         }
-      ]
+      ],
+      "dm_permission": true
     }
   },
   "reassign": {
