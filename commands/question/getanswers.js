@@ -59,7 +59,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       if (user) {
         userList.push(username);
       }
-      userIdList.push("<@!" + user.id + ">");
+      userIdList.push("<@!" + rows[i].user + ">");
     }
     responseMessages.push(response);
     let userListString = "";
