@@ -1,7 +1,7 @@
 const config = require("../../config.json");
 const { isMod } = require("../../util");
 
-exports.run = function (message, args, bot, db, showOnlyNew) {
+exports.run = async function (message, args, bot, db, showOnlyNew) {
   db.query(
     "SELECT * FROM trivia_questions WHERE id = ?",
     [args],
@@ -22,7 +22,7 @@ exports.run = function (message, args, bot, db, showOnlyNew) {
   );
 };
 
-function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
+async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
   let id = questionRow.id;
   let question = questionRow.question;
   let questionAsker = questionRow.user;
@@ -33,7 +33,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       "SELECT user, answer FROM trivia_answers WHERE questionid = ? AND viewed = 0 ORDER BY id";
   }
   const questionStatus = questionRow.isopen ? "Open" : "Closed";
-  db.query(query, [id], function (err, rows) {
+  db.query(query, [id], async function (err, rows) {
     let responseMessages = [];
     let response =
       "**Answers for question #" +
@@ -47,7 +47,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     let userIdList = [];
     for (let i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
-      let user = bot.users.fetch(rows[i].user);
+      let user = await bot.users.fetch(rows[i].user);
       let username = user ? "@" + user.tag : "Unknown " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
       if (response.length + answerEntry > 4000) {
