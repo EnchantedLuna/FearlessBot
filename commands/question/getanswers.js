@@ -47,8 +47,8 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     let userIdList = [];
     for (let i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
-      let user = bot.users.resolve(rows[i].user);
-      let username = user ? "@" + user.tag : "Unknown user " + rows[i].user;
+      let user = bot.users.fetch(rows[i].user);
+      let username = user ? "@" + user.tag : "Unknown " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
       if (response.length + answerEntry > 4000) {
         responseMessages.push(response);
@@ -64,6 +64,9 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     responseMessages.push(response);
     let userListString = "";
     let userIdString = "";
+    if (userList.length == 0) {
+      userList.push("-");
+    }
     userListString +=
       "User list for awarding: ```\n" + userList.join(" ") + "```";
     userIdString +=
