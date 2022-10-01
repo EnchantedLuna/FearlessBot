@@ -5,7 +5,6 @@ Basic Commands:
 ``!choose [one, two, three]`` (/) : Chooses one of several options randomly
 ``!b``, ``!b2``, ``!b3`` : Adds :b: emojis to a message
 ``!clap`` : Adds clap emojis between words
-``!ha``: Generates a hahaha message
 ``!namemix`` (/) : Mixes two parts of server names
 ``!randmember`` : Selects a server member at random who has spoken in the last day.
 ``!shitpost [optional number]`` (/) : Posts a shitpost
@@ -13,7 +12,7 @@ Basic Commands:
 
 Saves:
 ``!rg`` (/): Gets a saved item at random
-``!g [keyword]``, ``!get [keyword]`` : Retrieves a saved item
+``!g [keyword]``, ``!get [keyword]`` (/) : Retrieves a saved item
 ``!gmeta [keyword]`` : View info about a saved item
 ``!save [keyword] [link/text]`` : Creates a new saved item
 ``!delete [keyword]`` : Deletes an item you saved
@@ -28,10 +27,10 @@ Stats:
 
 Questions (DMs only):
 ``!question [question]`` (/) : Creates a new question
-``!answer [id] [answer]`` : Submits an answer to a question
+``!answer [id] [answer]`` (/) : Submits an answer to a question
 ``!getanswers [id]``, ``!getnewanswers [id]`` : View answers to a question you created
 ``!watch [id]``, ``!unwatch [id]`` : Turns on/off notifications for new answers to your question
-``!closequestion [id]``, ``!openquestion [id]`` : Closes/opens responses to your question
+``!closequestion [id]``, ``!openquestion [id]`` (/) : Closes/opens responses to your question
 
 
 Bot Info:

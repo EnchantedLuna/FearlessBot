@@ -498,12 +498,40 @@
   "openquestion": {
     "action": "question/openquestion",
     "permissions": "all",
-    "type": "dm"
+    "type": "dm",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "openquestion",
+      "description": "Open a question you have created",
+      "options": [
+        {
+          "name": "id",
+          "description": "The id of the question to open",
+          "required": true,
+          "type": "INTEGER"
+        }
+      ],
+      "dm_permission": true
+    }
   },
   "closequestion": {
     "action": "question/closequestion",
     "permissions": "all",
-    "type": "dm"
+    "type": "dm",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "closequestion",
+      "description": "Close a question you have created",
+      "options": [
+        {
+          "name": "id",
+          "description": "The id of the question to close",
+          "required": true,
+          "type": "INTEGER"
+        }
+      ],
+      "dm_permission": true
+    }
   },
   "watch": {
     "action": "question/watch",
