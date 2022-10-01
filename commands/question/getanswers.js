@@ -2,23 +2,24 @@ const config = require("../../config.json");
 const { isMod } = require("../../util");
 
 exports.run = function (message, args, bot, db, showOnlyNew) {
-  db.query("SELECT * FROM trivia_questions WHERE id = ?", [args], function (
-    err,
-    rows
-  ) {
-    if (rows[0] == null) {
-      message.reply("That question does not exist.");
-      return;
+  db.query(
+    "SELECT * FROM trivia_questions WHERE id = ?",
+    [args],
+    function (err, rows) {
+      if (rows[0] == null) {
+        message.reply("That question does not exist.");
+        return;
+      }
+      if (
+        rows[0].user !== message.author.id &&
+        message.author.id !== config.botAdminUserId
+      ) {
+        message.reply("You do not have permission to view these answers.");
+        return;
+      }
+      getAnswerList(message, rows[0], showOnlyNew, bot, db);
     }
-    if (
-      rows[0].user !== message.author.id &&
-      message.author.id !== config.botAdminUserId
-    ) {
-      message.reply("You do not have permission to view these answers.");
-      return;
-    }
-    getAnswerList(message, rows[0], showOnlyNew, bot, db);
-  });
+  );
 };
 
 function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
@@ -33,6 +34,7 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
   }
   const questionStatus = questionRow.isopen ? "Open" : "Closed";
   db.query(query, [id], function (err, rows) {
+    let responseMessages = [];
     let response =
       "**Answers for question #" +
       id +
@@ -48,34 +50,32 @@ function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       let user = bot.users.resolve(rows[i].user);
       let username = user ? "@" + user.tag : "Unknown user " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
+      if (response.length + answerEntry > 4000) {
+        responseMessages.push(response);
+        response = "";
+      }
       response += answerEntry;
+
       if (user) {
         userList.push(username);
         userIdList.push("<@!" + user.id + ">");
       }
     }
-    let mainServer = bot.guilds.cache.get(config.mainServer);
+    responseMessages.push(response);
     let userListString = "";
     let userIdString = "";
-    if (
-      typeof mainServer !== "undefined" &&
-      isMod(message.author.id, mainServer) &&
-      userList.length > 0
-    ) {
-      userListString +=
-        "User list for awarding: ```\n" + userList.join(" ") + "```";
-      userIdString +=
-        "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
-    }
+    userListString +=
+      "User list for awarding: ```\n" + userList.join(" ") + "```";
+    userIdString +=
+      "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
     if (message.author.id === questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
-    if (response.length + userListString.length + userIdString.length > 2000) {
-      message.reply(response, { split: true });
-      message.reply(userListString, { split: true });
-      message.reply(userIdString, { split: true });
-    } else {
-      message.reply(response + userListString + userIdString, { split: true });
+    for (let i = 0; i < responseMessages.length; i++) {
+      message.channel.send({ embeds: [{ description: responseMessages[i] }] });
     }
+    message.channel.send({
+      embeds: [{ description: userListString + userIdString }],
+    });
   });
 }
