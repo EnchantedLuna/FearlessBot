@@ -26,6 +26,7 @@ async function getItem(
       keyword,
     ]);
   if (!rows[0]) {
+    embed.color = 0xff0000;
     embed.description =
       ":warning: Nothing is stored for keyword " + keyword + ".";
     return embed;
@@ -86,5 +87,5 @@ exports.interaction = async function (interaction, bot, db) {
     false,
     null
   );
-  interaction.reply({ embeds: [embed] });
+  interaction.reply({ embeds: [embed], ephemeral: embed.color === 0xff0000 });
 };
