@@ -39,7 +39,7 @@ while ($answer = $result->fetch_assoc()) {
     <div id="shitposts">
         <h1>Question: <?php echo $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
-        <input type="checkbox" id="select-all"> <label for="select-all"> Select All
+        <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
         <ul class="list-group">
         <?php
         foreach ($answers as $answer) {
@@ -51,6 +51,7 @@ while ($answer = $result->fetch_assoc()) {
         }
         ?>
         </ul>
+        <div><textarea rows="6"></textarea></div>
     </div>
 </div>
 <script>
