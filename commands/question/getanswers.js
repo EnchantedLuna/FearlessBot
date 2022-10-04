@@ -65,7 +65,8 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       message.channel.send({
         embeds: [
           {
-            title: "Answers part" + part + "/" + total,
+            title:
+              "Answers part " + part + "/" + total + " (click for award tool)",
             url: url,
             description: responseMessages[i],
           },
