@@ -33,28 +33,7 @@ while ($answer = $result->fetch_assoc()) {
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-</head>
-<body>
-<div class="container">
-    <div id="question-tool">
-        <h1>Question: <?php echo $question['question']; ?></h1>
-        <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
-        <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
-        <ul class="list-group">
-        <?php
-        foreach ($answers as $answer) {
-            $username = $answer['username'] ? $answer['username'] . '#' . $answer['discriminator'] : 'ID ' . $answer['user'];
-            echo "<li class='list-group-item'>";
-            echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
-            echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username}</p><span class='small'>{$answer['answer']}</span></label>";
-            echo "</li>";
-        }
-        ?>
-        </ul>
-        <div class='mt-2'><textarea rows="6" style="width:100%" id="result-box"></textarea></div>
-    </div>
-</div>
-<script>
+    <script>
     $(document).ready(function() {
         $('#select-all').click(function(event) {   
     if(this.checked) {
@@ -78,6 +57,27 @@ while ($answer = $result->fetch_assoc()) {
     });
 }); 
 </script>
+</head>
+<body>
+<div class="container">
+    <div id="question-tool">
+        <h1>Question: <?php echo $question['question']; ?></h1>
+        <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
+        <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
+        <ul class="list-group">
+        <?php
+        foreach ($answers as $answer) {
+            $username = $answer['username'] ? $answer['username'] . '#' . $answer['discriminator'] : 'ID ' . $answer['user'];
+            echo "<li class='list-group-item'>";
+            echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
+            echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username}</p><span class='small'>{$answer['answer']}</span></label>";
+            echo "</li>";
+        }
+        ?>
+        </ul>
+        <div class='mt-2'><textarea rows="6" style="width:100%" id="result-box"></textarea></div>
+    </div>
+</div>
 </body>
 </html>
 
