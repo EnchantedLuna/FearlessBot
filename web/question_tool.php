@@ -32,12 +32,14 @@ while ($answer = $result->fetch_assoc()) {
     <title>Question Tool</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body>
 <div class="container">
     <div id="shitposts">
         <h1>Question: <?php echo $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
+        <input type="checkbox" id="select-all"> <label for="select-all"> Select All
         <ul class="list-group">
         <?php
         foreach ($answers as $answer) {
@@ -51,7 +53,20 @@ while ($answer = $result->fetch_assoc()) {
         </ul>
     </div>
 </div>
-
+<script>
+    $('#select-all').click(function(event) {   
+    if(this.checked) {
+        // Iterate each checkbox
+        $(':checkbox').each(function() {
+            this.checked = true;                        
+        });
+    } else {
+        $(':checkbox').each(function() {
+            this.checked = false;                       
+        });
+    }
+}); 
+</script>
 </body>
 </html>
 
