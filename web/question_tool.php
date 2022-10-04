@@ -51,7 +51,7 @@ while ($answer = $result->fetch_assoc()) {
         }
         ?>
         </ul>
-        <div class='mt-2'><textarea rows="6" style="width:100%"></textarea></div>
+        <div class='mt-2'><textarea rows="6" style="width:100%" id="result-box"></textarea></div>
     </div>
 </div>
 <script>
@@ -66,6 +66,14 @@ while ($answer = $result->fetch_assoc()) {
             this.checked = false;                       
         });
     }
+
+    $('.form-check-input').on('change', function() {
+        let selected = [];
+        $('.form-check-input:checked').each(function() {
+            selected.push("<@" + $(this).val() + ">")
+        })
+        $('#result-box').val(selected.join(" "));
+    })
 }); 
 </script>
 </body>
