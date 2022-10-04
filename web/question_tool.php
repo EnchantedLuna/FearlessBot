@@ -33,28 +33,6 @@ while ($answer = $result->fetch_assoc()) {
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <script>
-        $('#select-all').click(function(event) {   
-    if(this.checked) {
-        // Iterate each checkbox
-        $(':checkbox').each(function() {
-            this.checked = true;                        
-        });
-    } else {
-        $(':checkbox').each(function() {
-            this.checked = false;                       
-        });
-    }
-
-    $('.check-answer, #select-all').click(function() {
-        let selected = [];
-        $('.form-check-input:checked').each(function() {
-            selected.push("<@" + $(this).val() + ">");
-        });
-        $('#result-box').val(selected.join(" "));
-    })
-    });
-</script>
 </head>
 <body>
 <div class="container">
@@ -76,6 +54,28 @@ while ($answer = $result->fetch_assoc()) {
         <div class='mt-2'><textarea rows="6" style="width:100%" id="result-box"></textarea></div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('#select-all').click(function(event) {   
+        if(this.checked) {
+            $(':checkbox').each(function() {
+                this.checked = true;                        
+            });
+        } else {
+            $(':checkbox').each(function() {
+                this.checked = false;                       
+            });
+        }
+    }
+    $('.check-answer, #select-all').click(function() {
+        let selected = [];
+        $('.form-check-input:checked').each(function() {
+            selected.push("<@" + $(this).val() + ">");
+        });
+        $('#result-box').val(selected.join(" "));
+    });
+}); 
+</script>
 </body>
 </html>
 
