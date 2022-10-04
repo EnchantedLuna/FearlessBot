@@ -45,7 +45,7 @@ while ($answer = $result->fetch_assoc()) {
         foreach ($answers as $answer) {
             $username = $answer['username'] ? $answer['username'] . '#' . $answer['discriminator'] : 'ID ' . $answer['user'];
             echo "<li class='list-group-item'>";
-            echo "<input class='form-check-input me-2' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
+            echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
             echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username}</p><span class='small'>{$answer['answer']}</span></label>";
             echo "</li>";
         }
@@ -68,7 +68,7 @@ while ($answer = $result->fetch_assoc()) {
         });
     }
 
-    $('body').on('click', 'input[type=checkbox]', function() {
+    $('.check-answer, #select-all').click(function() {
         let selected = [];
         $('.form-check-input:checked').each(function() {
             selected.push("<@" + $(this).val() + ">");
