@@ -36,7 +36,7 @@ while ($answer = $result->fetch_assoc()) {
 </head>
 <body>
 <div class="container">
-    <div id="shitposts">
+    <div id="question-tool">
         <h1>Question: <?php echo $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
         <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
@@ -55,7 +55,8 @@ while ($answer = $result->fetch_assoc()) {
     </div>
 </div>
 <script>
-    $('#select-all').click(function(event) {   
+    $(document).ready(function() {
+        $('#select-all').click(function(event) {   
     if(this.checked) {
         // Iterate each checkbox
         $(':checkbox').each(function() {
@@ -67,13 +68,14 @@ while ($answer = $result->fetch_assoc()) {
         });
     }
 
-    $('input[type=checkbox]').on('click', function() {
+    $('input[type=checkbox]').click(function() {
         let selected = [];
         $('.form-check-input:checked').each(function() {
-            selected.push("<@" + $(this).val() + ">")
-        })
+            selected.push("<@" + $(this).val() + ">");
+        });
         $('#result-box').val(selected.join(" "));
     })
+    });
 }); 
 </script>
 </body>
