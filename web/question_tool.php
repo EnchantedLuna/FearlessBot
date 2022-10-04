@@ -51,7 +51,7 @@ while ($answer = $result->fetch_assoc()) {
         }
         ?>
         </ul>
-        <div><textarea rows="6"></textarea></div>
+        <div class='mt-2'><textarea rows="6" style="width:100%"></textarea></div>
     </div>
 </div>
 <script>
