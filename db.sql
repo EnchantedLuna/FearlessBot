@@ -93,7 +93,8 @@ CREATE TABLE trivia_questions
   question VARCHAR(400) NOT NULL,
   timecreated DATETIME,
   isopen TINYINT(1) NOT NULL DEFAULT 1,
-  watched TINYINT(1) NOT NULL DEFAULT 0
+  watched TINYINT(1) NOT NULL DEFAULT 0,
+  web_key VARCHAR(255)
 );
 
 CREATE TABLE trivia_answers

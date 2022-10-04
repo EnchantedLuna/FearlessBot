@@ -71,6 +71,9 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       "User list for awarding: ```\n" + userList.join(" ") + "```";
     userIdString +=
       "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
+    const keyString = questionRow.web_key
+      ? "Question key: " + questionRow.web_key
+      : "";
     if (message.author.id === questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
@@ -78,7 +81,12 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       message.channel.send({ embeds: [{ description: responseMessages[i] }] });
     }
     message.channel.send({
-      embeds: [{ description: userListString + userIdString }],
+      embeds: [
+        {
+          description: userListString + userIdString,
+          footer: { text: keyString },
+        },
+      ],
     });
   });
 }
