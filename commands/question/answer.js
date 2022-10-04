@@ -1,7 +1,9 @@
 exports.run = function (message, args, bot, db) {
   console.log(message.channel.type);
   if (message.channel.type !== "DM") {
-    message.reply("answer only in my DMs!");
+    message.channel.send(
+      message.author.toString() + ", answer only in my DMs!"
+    );
     if (message.deletable) {
       message.delete();
     }
