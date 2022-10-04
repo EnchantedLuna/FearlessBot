@@ -41,7 +41,7 @@ while ($answer = $result->fetch_assoc()) {
         <ul class="list-group">
         <?php
         foreach ($answers as $answer) {
-            $username = $answer['username'] ? $answer['username'] + '#' + $answer['discriminator'] : 'ID ' + $answer['user'];
+            $username = $answer['username'] ? $answer['username'] . '#' . $answer['discriminator'] : 'ID ' . $answer['user'];
             echo "<li class='list-group-item'>";
             echo "<input class='form-check-input me-2' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
             echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username}</p><span class='small'>{$answer['answer']}</span></label>";
