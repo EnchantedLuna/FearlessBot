@@ -66,7 +66,7 @@ $(document).ready(function() {
                 this.checked = false;                       
             });
         }
-    }
+    });
     $('.check-answer, #select-all').click(function() {
         let selected = [];
         $('.form-check-input:checked').each(function() {
