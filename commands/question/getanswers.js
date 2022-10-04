@@ -43,8 +43,6 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       " (" +
       questionStatus +
       ")**\n";
-    let userList = [];
-    let userIdList = [];
     for (let i = 0; i < rows.length; i++) {
       let answer = rows[i].answer;
       let user = await bot.users.fetch(rows[i].user);
@@ -55,38 +53,24 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
         response = "";
       }
       response += answerEntry;
-
-      if (user) {
-        userList.push(username);
-      }
-      userIdList.push("<@!" + rows[i].user + ">");
     }
     responseMessages.push(response);
-    let userListString = "";
-    let userIdString = "";
-    if (userList.length == 0) {
-      userList.push("-");
-    }
-    userListString +=
-      "User list for awarding: ```\n" + userList.join(" ") + "```";
-    userIdString +=
-      "User list as IDs for awarding:\n```\n" + userIdList.join(" ") + "```";
-    const keyString = questionRow.web_key
-      ? "Question key: " + questionRow.web_key
-      : "";
+    const url = config.baseUrl + "question_tool.php?key=" + questionRow.web_key;
     if (message.author.id === questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
+    const total = responseMessages.length;
     for (let i = 0; i < responseMessages.length; i++) {
-      message.channel.send({ embeds: [{ description: responseMessages[i] }] });
+      const part = i - 1;
+      message.channel.send({
+        embeds: [
+          {
+            title: "Answers part" + part + "/" + total,
+            url: url,
+            description: responseMessages[i],
+          },
+        ],
+      });
     }
-    message.channel.send({
-      embeds: [
-        {
-          description: userListString + userIdString,
-          footer: { text: keyString },
-        },
-      ],
-    });
   });
 }
