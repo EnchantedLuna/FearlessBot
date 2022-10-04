@@ -34,7 +34,6 @@ while ($answer = $result->fetch_assoc()) {
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script>
-    $(document).ready(function() {
         $('#select-all').click(function(event) {   
     if(this.checked) {
         // Iterate each checkbox
@@ -55,7 +54,6 @@ while ($answer = $result->fetch_assoc()) {
         $('#result-box').val(selected.join(" "));
     })
     });
-}); 
 </script>
 </head>
 <body>
