@@ -61,7 +61,7 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
     }
     const total = responseMessages.length;
     for (let i = 0; i < responseMessages.length; i++) {
-      const part = i - 1;
+      const part = i + 1;
       message.channel.send({
         embeds: [
           {
