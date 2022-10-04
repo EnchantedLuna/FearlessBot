@@ -67,7 +67,7 @@ while ($answer = $result->fetch_assoc()) {
         });
     }
 
-    $('.form-check-input').on('change', function() {
+    $('input[type=checkbox]').on('click', function() {
         let selected = [];
         $('.form-check-input:checked').each(function() {
             selected.push("<@" + $(this).val() + ">")
