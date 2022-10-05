@@ -13,7 +13,15 @@ and as such contains code that is specific to the particular server.
 
 1. Copy config-sample.json to config.json and add in your bot token and other config values
 2. Copy web/config-sample.php to web/config.php (if using the web components). Set PRIMARY_GUILD.
-3. Run docker-compose up
+3. Run `docker-compose up`
 
 If bot is successfully started, FearlessBot will print "FearlessBot (Taylor's Version) is ready" to console.
 Web scripts are on port 8080 by default, e.g. http://localhost:8080/fearlessdata.php for saved items
+
+## Manual setup
+
+1. Copy config-sample.json to config.json and add bot tokens and other config values
+2. Make sure Node.js v16+ is installed
+3. cd to the project directory and `npm install`
+4. `node FearlessBot.js`
+5. (Optional) for PHP scripts, paste the files in the web root of your preferred web server, copy config-sample.php to config.php and set values. The PHP code is very simplistic, so it should work with any modern version of PHP.
