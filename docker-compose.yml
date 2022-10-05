@@ -1,0 +1,41 @@
+version: "3.2"
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/web
+      - ./site.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - mariadb
+    links:
+      - php
+      - mariadb
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile-php
+    volumes:
+      - ./web:/web
+  fearlessbot:
+    build:
+      context: .
+      dockerfile: Dockerfile-node
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    links:
+      - mariadb
+  mariadb:
+    image: mariadb:latest
+    restart: "always"
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MARIADB_DATABASE: fearlessbot
+      MARIADB_ROOT_PASSWORD: taylorswift13
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MARIADB_ROOT_PASSWORD

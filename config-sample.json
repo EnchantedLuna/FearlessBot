@@ -1,9 +1,9 @@
 {
   "token": "",
-  "mysqlHost": "",
-  "mysqlUser": "",
-  "mysqlPass": "",
-  "mysqlDB": "",
+  "mysqlHost": "mariadb",
+  "mysqlUser": "fearlessbot",
+  "mysqlPass": "taylorswift13",
+  "mysqlDB": "fearlessbot",
 
   "prefix": "!",
   "eventCap": 4,
