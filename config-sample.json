@@ -13,5 +13,5 @@
   "botAdminUserId": "",
   "logChannelName": "",
 
-  "baseUrl": ""
+  "baseUrl": "http://localhost:8080/"
 }
