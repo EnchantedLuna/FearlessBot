@@ -14,10 +14,11 @@ if (!$question) {
 }
 
 $guild = PRIMARY_GUILD;
-$query = $db->prepare("SELECT ta.id, ta.user, ta.answer, m.username, m.discriminator FROM trivia_answers ta
-LEFT JOIN members m ON ta.user=m.id AND m.server={$guild}
-WHERE questionid = ?");
-$query->bind_param('i', intval($question['id']));
+$query = $db->prepare("SELECT ta.id, ta.user, ta.answer, ta.time, m.username, m.discriminator FROM trivia_answers ta
+LEFT JOIN members m ON ta.user=m.id AND m.server=?
+WHERE questionid = ?
+ORDER BY ta.id");
+$query->bind_param('si', $guild, $question['id']);
 $query->execute();
 $result = $query->get_result();
 
@@ -37,16 +38,17 @@ while ($answer = $result->fetch_assoc()) {
 <body>
 <div class="container">
     <div id="question-tool">
-        <h1>Question: <?php echo $question['question']; ?></h1>
+        <h1>Question #<?php echo $question['id'] . ": " . $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
         <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
         <ul class="list-group">
         <?php
         foreach ($answers as $answer) {
-            $username = $answer['username'] ? $answer['username'] . '#' . $answer['discriminator'] : 'ID ' . $answer['user'];
+            $username = $answer['username'] ? $answer['username'] . '#' . str_pad($answer['discriminator'], 4, "0", STR_PAD_LEFT) : 'ID ' . $answer['user'];
+            $timestamp = $answer['time'];
             echo "<li class='list-group-item'>";
             echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
-            echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username}</p><span class='small'>{$answer['answer']}</span></label>";
+            echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username} - {$timestamp}</p><span class='small'>{$answer['answer']}</span></label>";
             echo "</li>";
         }
         ?>

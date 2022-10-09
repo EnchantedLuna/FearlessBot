@@ -9,5 +9,8 @@
     "type": "git",
     "url": "https://github.com/EnchantedLuna/FearlessBot.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "node FearlessBot.js"
+  }
 }
