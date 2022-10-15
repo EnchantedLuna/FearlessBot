@@ -40,6 +40,7 @@ while ($answer = $result->fetch_assoc()) {
     <div id="question-tool">
         <h1>Question #<?php echo $question['id'] . ": " . $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
+        <p>Total answers: <?php echo count($answers); ?></p>
         <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
         <ul class="list-group">
         <?php
