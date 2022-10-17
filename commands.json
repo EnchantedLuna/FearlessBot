@@ -258,7 +258,21 @@
   "words": {
     "action": "stats/words",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "words",
+      "description": "View a member's word/message counts",
+      "options": [
+        {
+          "name": "member",
+          "description": "The member that you want to look up",
+          "required": false,
+          "type": "USER"
+        }
+      ],
+      "dm_permission": false
+    }
   },
   "awards": {
     "action": "members/awards",
