@@ -28,7 +28,7 @@ async function getWords(db, guildId, memberId) {
 
 exports.run = async function (message, params, bot, db) {
   const member = findMemberID(message, params, bot);
-  message.channel.send(await getWords(db, message.channel.guild, member));
+  message.channel.send(await getWords(db, message.channel.guild.id, member));
 };
 
 exports.interaction = async function (interaction, bot, db) {
