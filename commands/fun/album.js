@@ -9,7 +9,12 @@ const albums = [
   { title: "reputation", image: "https://i.imgur.com/o2v3b7E.jpg" },
   { title: "Lover", image: "https://i.imgur.com/cNnUR0M.jpg" },
   { title: "folklore", image: "https://i.imgur.com/oZvDEky.jpg" },
-  { title: "evermore", image: "https://i.imgur.com/BiNIOXH.jpg"}
+  { title: "evermore", image: "https://i.imgur.com/BiNIOXH.jpg" },
+  {
+    title: "Midnights",
+    image:
+      "https://upload.wikimedia.org/wikipedia/en/9/9f/Midnights_-_Taylor_Swift.png",
+  },
 ];
 
 exports.run = function (message, args, bot, db) {
@@ -17,21 +22,21 @@ exports.run = function (message, args, bot, db) {
   message.channel.send({
     embeds: [
       new MessageEmbed()
-          .setTitle("Random Album")
-          .setDescription("You should listen to " + answer.title + ".")
-          .setThumbnail(answer.image),
-    ]
-  })
+        .setTitle("Random Album")
+        .setDescription("You should listen to " + answer.title + ".")
+        .setThumbnail(answer.image),
+    ],
+  });
 };
 
-exports.interaction = function(interaction, bot, db) {
+exports.interaction = function (interaction, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
   interaction.reply({
     embeds: [
-        new MessageEmbed()
-            .setTitle("Random Album")
-            .setDescription("You should listen to " + answer.title + ".")
-            .setThumbnail(answer.image),
-    ]
-  })
+      new MessageEmbed()
+        .setTitle("Random Album")
+        .setDescription("You should listen to " + answer.title + ".")
+        .setThumbnail(answer.image),
+    ],
+  });
 };

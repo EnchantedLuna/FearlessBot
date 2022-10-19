@@ -48,7 +48,7 @@ const taylorSongsByAlbum = [
       "Mr. Perfectly Fine",
       "That's When",
       "Don't You",
-      "Bye Bye Baby"
+      "Bye Bye Baby",
     ],
   },
   {
@@ -106,7 +106,7 @@ const taylorSongsByAlbum = [
       "Forever Winter",
       "Run",
       "The Very First Night",
-      "All Too Well (10 Minute Version)"
+      "All Too Well (10 Minute Version)",
     ],
   },
   {
@@ -203,23 +203,43 @@ const taylorSongsByAlbum = [
     title: "evermore",
     image: "https://i.imgur.com/BiNIOXH.jpg",
     songs: [
-      "willow", 
-      "champagne problems", 
+      "willow",
+      "champagne problems",
       "gold rush",
-      "'tis the damn season", 
-      "tolerate it", 
-      "no body, no crime", 
-      "happiness", 
-      "dorothea", 
+      "'tis the damn season",
+      "tolerate it",
+      "no body, no crime",
+      "happiness",
+      "dorothea",
       "coney island",
-      "ivy", 
-      "cowboy like me", 
-      "long story short", 
-      "marjorie", 
-      "closure", 
-      "evermore", 
+      "ivy",
+      "cowboy like me",
+      "long story short",
+      "marjorie",
+      "closure",
+      "evermore",
       "right where you left me",
-      "it's time to go"
+      "it's time to go",
+    ],
+  },
+  {
+    title: "Midnights",
+    image:
+      "https://upload.wikimedia.org/wikipedia/en/9/9f/Midnights_-_Taylor_Swift.png",
+    songs: [
+      "Lavender Haze",
+      "Maroon",
+      "Anti-Hero",
+      "Snow on the Beach",
+      "You're On Your Own, Kid",
+      "Midnight Rain",
+      "Question...?",
+      "Vigilante Shit",
+      "Bejeweled",
+      "Labyrinth",
+      "Karma",
+      "Sweet Nothing",
+      "Mastermind",
     ],
   },
   {
@@ -250,16 +270,17 @@ exports.run = function (message, args, bot, db) {
   message.channel.send({ embeds: [embed] });
 };
 
-exports.interaction = function(interaction, bot, db) {
-  let album = taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
+exports.interaction = function (interaction, bot, db) {
+  let album =
+    taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
   let song = album.songs[Math.floor(Math.random() * album.songs.length)];
   let text = "You should listen to " + song;
   text += album.title !== null ? " from " + album.title + "." : ".";
   let songEmbed = new MessageEmbed()
-      .setTitle('Random Song')
-      .setDescription(text.toString())
+    .setTitle("Random Song")
+    .setDescription(text.toString());
   if (album.image !== null) {
     songEmbed.setThumbnail(album.image);
   }
   interaction.reply({ embeds: [songEmbed] });
-}
+};
