@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 const taylorSongsByAlbum = [
   {
-    title: "Taylor Swift",
+    title: "Taylor Swift (Debut)",
     image: "https://i.imgur.com/w0bksSN.jpg",
     songs: [
       "Tim McGraw",
