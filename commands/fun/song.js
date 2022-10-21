@@ -240,6 +240,13 @@ const taylorSongsByAlbum = [
       "Karma",
       "Sweet Nothing",
       "Mastermind",
+      "Hits Different",
+      "The Great War",
+      "Paris",
+      "High Infidelity",
+      "Glitch",
+      "Would've, Could've, Should've",
+      "Dear Reader",
     ],
   },
   {
