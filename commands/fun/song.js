@@ -278,8 +278,10 @@ exports.run = function (message, args, bot, db) {
 };
 
 exports.interaction = function (interaction, bot, db) {
-  let album =
-    taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
+  const selectedAlbum =
+    interaction.options.getInteger("album") ??
+    Math.floor(Math.random() * taylorSongsByAlbum.length);
+  let album = taylorSongsByAlbum[selectedAlbum];
   let song = album.songs[Math.floor(Math.random() * album.songs.length)];
   let text = "You should listen to " + song;
   text += album.title !== null ? " from " + album.title + "." : ".";

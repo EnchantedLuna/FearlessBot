@@ -18,7 +18,57 @@
     "interactionCreate": {
       "name": "song",
       "description": "Pick a random Taylor Swift song",
-      "dm_permission": true
+      "dm_permission": true,
+      "options": [
+        {
+          "name": "album",
+          "description": "The Taylor Swift album to choose from",
+          "type": "INTEGER",
+          "required": false,
+          "choices": [
+            {
+              "name": "Debut",
+              "value": 0
+            },
+            {
+              "name": "Fearless",
+              "value": 1
+            },
+            {
+              "name": "Speak Now",
+              "value": 2
+            },
+            {
+              "name": "Red",
+              "value": 3
+            },
+            {
+              "name": "1989",
+              "value": 4
+            },
+            {
+              "name": "reputation",
+              "value": 5
+            },
+            {
+              "name": "Lover",
+              "value": 6
+            },
+            {
+              "name": "Folklore",
+              "value": 7
+            },
+            {
+              "name": "Evermore",
+              "value": 8
+            },
+            {
+              "name": "Midnights",
+              "value": 9
+            }
+          ]
+        }
+      ]
     }
   },
   "album": {
