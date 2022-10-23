@@ -429,7 +429,28 @@
   "idban": {
     "action": "mod/idban",
     "permissions": "mods",
-    "type": "server"
+    "type": "server",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "idban",
+      "description": "Ban a member by user ID",
+      "dm_permission": false,
+      "default_member_permissions": 4,
+      "options": [
+        {
+          "name": "id",
+          "description": "The user ID to ban",
+          "required": true,
+          "type": "STRING"
+        },
+        {
+          "name": "days",
+          "description": "Number of days to ban (default indefinite)",
+          "required": false,
+          "type": "INTEGER"
+        }
+      ]
+    }
   },
   "addaward": {
     "action": "mod/addaward",
