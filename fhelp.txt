@@ -3,8 +3,6 @@ Basic Commands:
 ``!8ball`` (/) : Gives a random answer to a yes or no question
 ``!yesno`` : Adds yes, no, maybe react for a simple yes/no poll
 ``!choose [one, two, three]`` (/) : Chooses one of several options randomly
-``!b``, ``!b2``, ``!b3`` : Adds :b: emojis to a message
-``!clap`` : Adds clap emojis between words
 ``!namemix`` (/) : Mixes two parts of server names
 ``!randmember`` : Selects a server member at random who has spoken in the last day.
 ``!shitpost [optional number]`` (/) : Posts a shitpost

@@ -173,29 +173,6 @@
       "dm_permission": true
     }
   },
-  "b": {
-    "action": "fun/b",
-    "permissions": "all",
-    "type": "both",
-    "extra": 1
-  },
-  "b2": {
-    "action": "fun/b",
-    "permissions": "all",
-    "type": "both",
-    "extra": 2
-  },
-  "b3": {
-    "action": "fun/b",
-    "permissions": "all",
-    "type": "both",
-    "extra": 3
-  },
-  "clap": {
-    "action": "fun/clap",
-    "permissions": "all",
-    "type": "both"
-  },
   "namemix": {
     "action": "fun/namemix",
     "permissions": "all",
