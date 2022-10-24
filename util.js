@@ -15,7 +15,8 @@ exports.isMod = function (member, guild) {
     return false;
   }
   return (
-    exports.hasRole(member, guild, "mods") || member.id === config.botAdminUserId
+    exports.hasRole(member, guild, "mods") ||
+    member.id === config.botAdminUserId
   );
 };
 
@@ -48,8 +49,6 @@ exports.hasPermission = function (user, permission) {
       return true;
     case "mods":
       return exports.isMod(user, user.guild);
-    case "modOrRachel":
-      return exports.isMod(user, user.guild) || user.id === '538954976928727060';
     case "mainServerMods":
       return (
         exports.isMod(user, user.guild) && user.guild.id === config.mainServer
@@ -107,7 +106,7 @@ exports.findMember = async function (message, args, bot) {
       if (idResolve) {
         return idResolve;
       }
-    } catch(err) {}
+    } catch (err) {}
   }
   const guildMember = message.channel.guild.members.cache.find(
     (member) =>

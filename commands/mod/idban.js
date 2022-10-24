@@ -26,7 +26,7 @@ exports.run = function (message, userId) {
 };
 
 exports.interaction = function (interaction, bot, db) {
-  const userId = interaction.options.getString("id");
+  const userId = interaction.options.getString("id").trim();
   const days = interaction.options.getInteger("days");
   if (isMod(userId, interaction.guild)) {
     interaction.reply(":smirk:");
@@ -54,9 +54,10 @@ exports.interaction = function (interaction, bot, db) {
         });
       })
       .catch((error) => {
-        message.channel.send(
+        interaction.reply(
           ":no_entry: There was an error executing this operation."
         );
+        console.error(error);
       });
   }
 };
