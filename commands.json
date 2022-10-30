@@ -421,11 +421,6 @@
     "type": "server",
     "extra": 1
   },
-  "kick": {
-    "action": "mod/kick",
-    "permissions": "mods",
-    "type": "server"
-  },
   "idban": {
     "action": "mod/idban",
     "permissions": "mods",
