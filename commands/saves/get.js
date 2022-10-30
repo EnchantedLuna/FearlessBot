@@ -37,15 +37,16 @@ async function getItem(
   }
   addToStats(db, guildId, channelId, keyword);
   const text = rows[0]["value"];
+  let date = "Created: ";
+  if (rows[0].timeadded !== null) {
+    date += rows[0].timeadded.toDateString();
+  } else {
+    date += "a long time ago";
+  }
+  embed.footer = { text: date };
+
   if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$")) {
-    let date = "Created: ";
-    if (rows[0].timeadded !== null) {
-      date += rows[0].timeadded.toDateString();
-    } else {
-      date += "a long time ago";
-    }
     embed.image = { url: text };
-    embed.footer = { text: date };
     return embed;
   }
 

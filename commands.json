@@ -455,7 +455,28 @@
   "addaward": {
     "action": "mod/addaward",
     "permissions": "mods",
-    "type": "server"
+    "type": "server",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "addaward",
+      "description": "Add an award to a member",
+      "options": [
+        {
+          "name": "member",
+          "description": "The member that you want to look up",
+          "required": true,
+          "type": "USER"
+        },
+        {
+          "name": "text",
+          "description": "The text of the award to add",
+          "required": true,
+          "type": "STRING"
+        }
+      ],
+      "dm_permission": false,
+      "default_member_permissions": 268435456
+    }
   },
   "addawards": {
     "action": "mod/addaward",
