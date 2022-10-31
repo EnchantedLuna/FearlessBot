@@ -54,6 +54,7 @@ while ($answer = $result->fetch_assoc()) {
         }
         ?>
         </ul>
+        <p>Number selected: <span id='selected-count'>0</span></p>
         <div class='mt-2'><textarea rows="6" style="width:100%" id="result-box"></textarea></div>
     </div>
 </div>
@@ -75,6 +76,7 @@ $(document).ready(function() {
         $('.form-check-input:checked').each(function() {
             selected.push("<@" + $(this).val() + ">");
         });
+        $('#selected-count').text(selected.length)
         $('#result-box').val(selected.join(" "));
     });
 }); 
