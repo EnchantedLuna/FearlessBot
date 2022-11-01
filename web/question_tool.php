@@ -46,10 +46,12 @@ while ($answer = $result->fetch_assoc()) {
         <?php
         foreach ($answers as $answer) {
             $username = $answer['username'] ? $answer['username'] . '#' . str_pad($answer['discriminator'], 4, "0", STR_PAD_LEFT) : 'ID ' . $answer['user'];
+            $username = htmlspecialchars($username);
             $timestamp = $answer['time'];
             echo "<li class='list-group-item'>";
             echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
-            echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username} - {$timestamp}</p><span class='small'>{$answer['answer']}</span></label>";
+            $escapedAnswer = htmlspecialchars($answer['answer']);
+            echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username} - {$timestamp}</p><span class='small'>{$escapedAnswer}</span></label>";
             echo "</li>";
         }
         ?>
