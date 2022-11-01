@@ -3,6 +3,7 @@ require_once "config.php";
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8mb4");
 
+$hideSelections = isset($_GET['hide']);
 $query = $db->prepare("SELECT * FROM trivia_questions WHERE web_key = ?");
 $query->bind_param('s', $_REQUEST['key']);
 $query->execute();
@@ -41,7 +42,9 @@ while ($answer = $result->fetch_assoc()) {
         <h1>Question #<?php echo $question['id'] . ": " . $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
         <p>Total answers: <?php echo count($answers); ?></p>
+        <?php if (!$hideSelections): ?>
         <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
+        <?php endif; ?>
         <ul class="list-group">
         <?php
         foreach ($answers as $answer) {
@@ -49,15 +52,19 @@ while ($answer = $result->fetch_assoc()) {
             $username = htmlspecialchars($username);
             $timestamp = $answer['time'];
             echo "<li class='list-group-item'>";
-            echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
+            if (!$hideSelections) {
+                echo "<input class='form-check-input me-2 check-answer' type='checkbox' value='{$answer['user']}' id='answer-{$answer['id']}'>";
+            }
             $escapedAnswer = htmlspecialchars($answer['answer']);
             echo "<label class='form-check-label' for='answer-{$answer['id']}'><p class='mb-0'>{$username} - {$timestamp}</p><span class='small'>{$escapedAnswer}</span></label>";
             echo "</li>";
         }
         ?>
         </ul>
+        <?php if (!$hideSelections): ?>
         <p>Number selected: <span id='selected-count'>0</span></p>
         <div class='mt-2'><textarea rows="6" style="width:100%" id="result-box"></textarea></div>
+        <?php endif; ?>
     </div>
 </div>
 <script>
