@@ -34,7 +34,6 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
   }
   const questionStatus = questionRow.isopen ? "Open" : "Closed";
   db.query(query, [id], async function (err, rows) {
-    let responseMessages = [];
     let response =
       "**Answers for question #" +
       id +
@@ -48,7 +47,7 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       let user = await bot.users.fetch(rows[i].user);
       let username = user ? "@" + user.tag : "Unknown " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
-      if (response.length + answerEntry > 4000) {
+      if (response.length + answerEntry.length > 4000) {
         response = "Too many answers, please view the webpage.";
         break;
       }
