@@ -11,7 +11,6 @@ $questions = [];
 while ($question = $result->fetch_assoc()) {
     $questions[] = $question;
 }
-echo count($questions);
 ?>
 <!DOCTYPE html>
 <html>
