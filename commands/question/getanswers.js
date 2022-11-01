@@ -49,29 +49,55 @@ async function getAnswerList(message, questionRow, showOnlyNew, bot, db) {
       let username = user ? "@" + user.tag : "Unknown " + rows[i].user;
       let answerEntry = "**" + username + "**\n" + answer + "\n\n";
       if (response.length + answerEntry > 4000) {
-        responseMessages.push(response);
-        response = "";
+        response = "Too many answers, please view the webpage.";
+        break;
       }
       response += answerEntry;
     }
-    responseMessages.push(response);
     const url = config.baseUrl + "question_tool.php?key=" + questionRow.web_key;
     if (message.author.id === questionAsker) {
       db.query("UPDATE trivia_answers SET viewed=1 WHERE questionid = ?", [id]);
     }
-    const total = responseMessages.length;
-    for (let i = 0; i < responseMessages.length; i++) {
-      const part = i + 1;
-      message.channel.send({
-        embeds: [
-          {
-            title:
-              "Answers part " + part + "/" + total + " (click for award tool)",
-            url: url,
-            description: responseMessages[i],
-          },
-        ],
-      });
-    }
+    message.channel.send({
+      embeds: [
+        {
+          title: "Answers (click for award tool)",
+          url: url,
+          description: response,
+        },
+      ],
+    });
   });
 }
+
+exports.interaction = function (interaction, bot, db) {
+  const id = interaction.options.getInteger("id");
+  db.query(
+    "SELECT * FROM trivia_questions WHERE id = ?",
+    [id],
+    function (err, rows) {
+      if (rows[0] == null) {
+        interaction.reply({
+          content: "That question does not exist.",
+          ephemeral: true,
+        });
+        return;
+      }
+      if (
+        rows[0].user !== interaction.user.id &&
+        interaction.user.id !== config.botAdminUserId
+      ) {
+        interaction.reply({
+          content: "You do not have permission to view these answers.",
+          ephemeral: true,
+        });
+        return;
+      }
+      const url = config.baseUrl + "question_tool.php?key=" + rows[0].web_key;
+      interaction.reply({
+        content: url,
+        ephemeral: true,
+      });
+    }
+  );
+};
