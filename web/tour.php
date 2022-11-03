@@ -8,9 +8,30 @@ $query->execute();
 $result = $query->get_result();
 
 $questions = [];
+$ids = [];
 while ($question = $result->fetch_assoc()) {
+    $ids[] = $question['id'];
     $questions[] = $question;
 }
+
+$users = [];
+if (!empty($ids)) {
+    $guild = PRIMARY_GUILD;
+    $query = $db->prepare("SELECT ta.id, ta.user, ta.answer, ta.time, m.username, m.discriminator FROM trivia_answers ta
+    LEFT JOIN members m ON ta.user=m.id AND m.server=?
+    WHERE questionid IN (" . implode(",",$ids) . ")
+    ORDER BY ta.id");
+    $query->bind_param('s', $guild);
+    $query->execute();
+    $result = $query->get_result();
+    
+    while ($answer = $result->fetch_assoc()) {
+        if ($answer['username']) {
+            $users[$answer['questionid']][] = $answer['username'] . "#" . $answer['discriminator'];
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -30,7 +51,8 @@ while ($question = $result->fetch_assoc()) {
             echo "<li class='list-group-item'>";
             $title = htmlspecialchars($question['question']);
             $key = $question['web_key'];
-            echo "<p class='mb-0'><a href='question_tool.php?key={$key}&amp;hide'>{$question['id']}: {$title}</p>";
+            $userList = htmlspecialchars(implode(", ",$users[$question['id']]));
+            echo "<p class='mb-0'><a href='question_tool.php?key={$key}&amp;hide'>{$question['id']}: {$title}</p><span class='small'>{$users}</span>";
             echo "</li>";
         }
         ?>
