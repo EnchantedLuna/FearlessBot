@@ -52,7 +52,7 @@ if (!empty($ids)) {
             $title = htmlspecialchars($question['question']);
             $key = $question['web_key'];
             $userList = htmlspecialchars(implode(", ",$users[$question['id']]));
-            echo "<p class='mb-0'><a href='question_tool.php?key={$key}&amp;hide'>{$question['id']}: {$title}</p><span class='small'>{$users}</span>";
+            echo "<p class='mb-0'><a href='question_tool.php?key={$key}&amp;hide'>{$question['id']}: {$title}</a></p><span class='small'>{$userList}</span>";
             echo "</li>";
         }
         ?>
