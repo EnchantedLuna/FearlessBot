@@ -17,7 +17,7 @@ while ($question = $result->fetch_assoc()) {
 $users = [];
 if (!empty($ids)) {
     $guild = PRIMARY_GUILD;
-    $query = $db->prepare("SELECT ta.id, ta.user, ta.answer, ta.time, m.username, m.discriminator FROM trivia_answers ta
+    $query = $db->prepare("SELECT ta.id, ta.user, ta.answer, ta.time, m.username, m.discriminator, ta.questionid FROM trivia_answers ta
     LEFT JOIN members m ON ta.user=m.id AND m.server=?
     WHERE questionid IN (" . implode(",",$ids) . ")
     ORDER BY ta.id");
