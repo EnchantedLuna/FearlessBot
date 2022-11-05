@@ -367,6 +367,9 @@
       },
       "random": {
         "action": "saves/rg"
+      },
+      "list": {
+        "action": "saves/getlist"
       }
     },
     "interactionCreate": {
@@ -389,6 +392,11 @@
         {
           "name": "random",
           "description": "Show a random saved item",
+          "type": "SUB_COMMAND"
+        },
+        {
+          "name": "list",
+          "description": "Links to a webpage with the list of the server's saved items",
           "type": "SUB_COMMAND"
         }
       ],

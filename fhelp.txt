@@ -9,7 +9,7 @@ Basic Commands:
 ``!acronym`` (/): Looks up a Taylor Swift song acronym
 
 Saves:
-``!rg`` (/): Gets a saved item at random
+``!rg`` (/save random): Gets a saved item at random
 ``!g [keyword]``, ``!get [keyword]`` (/) : Retrieves a saved item
 ``!gmeta [keyword]`` : View info about a saved item
 ``!save [keyword] [link/text]`` : Creates a new saved item
