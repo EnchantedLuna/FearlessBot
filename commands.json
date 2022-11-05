@@ -585,15 +585,59 @@
     "permissions": "all",
     "type": "dm",
     "interaction": true,
+    "subcommands": {
+      "create": {
+        "action": "question/question"
+      },
+      "open": {
+        "action": "question/openquestion"
+      },
+      "close": {
+        "action": "question/closequestion"
+      }
+    },
     "interactionCreate": {
       "name": "question",
-      "description": "Register a new question/submission box for answers",
+      "description": "Operation for question/submission box for answers",
       "options": [
         {
-          "name": "question",
-          "description": "Text of the question",
-          "required": true,
-          "type": "STRING"
+          "name": "create",
+          "description": "Create a new queston/submission box",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "question",
+              "description": "The text of the question",
+              "type": "STRING",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "open",
+          "description": "Open a question you have created",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "id",
+              "description": "The id of the question to open",
+              "required": true,
+              "type": "INTEGER"
+            }
+          ]
+        },
+        {
+          "name": "close",
+          "description": "Close a question you have created",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "id",
+              "description": "The id of the question to close",
+              "required": true,
+              "type": "INTEGER"
+            }
+          ]
         }
       ],
       "dm_permission": true
