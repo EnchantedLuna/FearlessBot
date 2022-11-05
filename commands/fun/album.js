@@ -2,9 +2,12 @@ const { MessageEmbed } = require("discord.js");
 
 const albums = [
   { title: "Taylor Swift (Debut)", image: "https://i.imgur.com/w0bksSN.jpg" },
-  { title: "Fearless", image: "https://i.imgur.com/WenkW0I.jpg" },
+  {
+    title: "Fearless (Taylor's Version)",
+    image: "https://i.imgur.com/WenkW0I.jpg",
+  },
   { title: "Speak Now", image: "https://i.imgur.com/TNKbt8Y.jpg" },
-  { title: "Red", image: "https://i.imgur.com/0nUf20J.jpg" },
+  { title: "Red (Taylor's Version)", image: "https://i.imgur.com/0nUf20J.jpg" },
   { title: "1989", image: "https://i.imgur.com/i1QDoZR.jpg" },
   { title: "reputation", image: "https://i.imgur.com/o2v3b7E.jpg" },
   { title: "Lover", image: "https://i.imgur.com/cNnUR0M.jpg" },
