@@ -211,13 +211,7 @@
   "rg": {
     "action": "saves/rg",
     "permissions": "all",
-    "type": "server",
-    "interaction": true,
-    "interactionCreate": {
-      "name": "rg",
-      "description": "Returns a random saved item",
-      "dm_permission": false
-    }
+    "type": "server"
   },
   "seen": {
     "action": "stats/seen",
@@ -370,6 +364,9 @@
     "subcommands": {
       "delete": {
         "action": "saves/delete"
+      },
+      "random": {
+        "action": "saves/rg"
       }
     },
     "interactionCreate": {
@@ -388,6 +385,11 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "random",
+          "description": "Show a random saved item",
+          "type": "SUB_COMMAND"
         }
       ],
       "dm_permission": false
