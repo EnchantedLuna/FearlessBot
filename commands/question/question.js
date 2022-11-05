@@ -1,16 +1,8 @@
 const crypto = require("crypto");
 
 exports.run = function (message, params, bot, db) {
-  if (params === "") {
-    message.reply("Please enter a question, e.g. ``!question Is butt legs?``");
-    return;
-  }
-  db.query(
-    "INSERT INTO trivia_questions (user, question, timecreated, web_key) VALUES (?, ?, now(), ?)",
-    [message.author.id, params, crypto.randomUUID()],
-    function (err, result) {
-      message.reply("Question #" + result.insertId + " has been registered.");
-    }
+  message.reply(
+    "The non-slash version of this command has been removed due to people mistaking question for answer. Please use the slash command."
   );
 };
 
