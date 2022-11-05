@@ -24,11 +24,11 @@ Stats:
 ``!rankwords``, ``!ranklorpoints`` : Ranks members by words or lorpoints
 
 Questions (DMs only):
-``!question [question]`` (/) : Creates a new question
+``!question [question]`` (/question create) : Creates a new question
 ``!answer [id] [answer]`` (/) : Submits an answer to a question
-``!getanswers [id]``, ``!getnewanswers [id]`` : View answers to a question you created
+``!getanswers [id]``, ``!getnewanswers [id]`` (/question get-answers): View answers to a question you created
 ``!watch [id]``, ``!unwatch [id]`` : Turns on/off notifications for new answers to your question
-``!closequestion [id]``, ``!openquestion [id]`` (/) : Closes/opens responses to your question
+``!closequestion [id]``, ``!openquestion [id]`` (/question close, /question open) : Closes/opens responses to your question
 
 
 Bot Info:
