@@ -127,7 +127,11 @@ bot.on("interactionCreate", async (interaction) => {
       interaction.reply("This command is not supported in DMs.");
       return;
     }
-    let action = require("./commands/" + commands[commandName].action);
+    const subCommand = interaction.options.getSubcommand(false);
+    const actionPath = subCommand
+      ? commands[commandName]["subcommands"][subCommand].action
+      : commands[commandName].action;
+    let action = require("./commands/" + actionPath);
     action.interaction(interaction, bot, db);
   }
 });

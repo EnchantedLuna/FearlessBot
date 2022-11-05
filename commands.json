@@ -365,7 +365,33 @@
   "save": {
     "action": "saves/save",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction": true,
+    "subcommands": {
+      "delete": {
+        "action": "saves/delete"
+      }
+    },
+    "interactionCreate": {
+      "name": "save",
+      "description": "Options for saved items",
+      "options": [
+        {
+          "name": "delete",
+          "description": "Delete a saved item",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to delete",
+              "type": "STRING",
+              "required": true
+            }
+          ]
+        }
+      ],
+      "dm_permission": false
+    }
   },
   "approve": {
     "action": "saves/approve",
