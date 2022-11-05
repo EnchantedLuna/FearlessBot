@@ -1,6 +1,6 @@
 const { isMod, log } = require("../../util");
 
-exports.run = function (message, args, bot, db, deleteDays) {
+exports.run = function (message, args, bot, db) {
   const argSet = args.split(" ");
   const days = parseInt(argSet[0]);
   message.mentions.members.forEach(function (member, key, map) {
@@ -9,19 +9,31 @@ exports.run = function (message, args, bot, db, deleteDays) {
     } else {
       if (!member.bannable) {
         message.channel.send({
-          embeds: [{
-            description:
-              ":warning: I don't have permission to ban that member.",
-          }],
+          embeds: [
+            {
+              description:
+                ":warning: I don't have permission to ban that member.",
+            },
+          ],
         });
         return;
       }
       let reason = message.cleanContent.replace("!ban ", "");
-      member.ban({days: deleteDays, reason: reason});
+      member.ban({ reason: reason });
       message.channel.send({
-        embeds: [{
-          description: ":hammer: " + member.user.username + "#" + member.user.discriminator + " (" + member.user.id + ")" + " has been banned.",
-        }],
+        embeds: [
+          {
+            description:
+              ":hammer: " +
+              member.user.username +
+              "#" +
+              member.user.discriminator +
+              " (" +
+              member.user.id +
+              ")" +
+              " has been banned.",
+          },
+        ],
       });
       let timeMessage = "indefinitely";
       if (days > 0) {
@@ -35,7 +47,12 @@ exports.run = function (message, args, bot, db, deleteDays) {
       }
       log(
         message.channel.guild,
-        member.user.username + "#" + member.user.discriminator + " (" + member.user.id + ")" +
+        member.user.username +
+          "#" +
+          member.user.discriminator +
+          " (" +
+          member.user.id +
+          ")" +
           " has been banned " +
           timeMessage +
           " by " +

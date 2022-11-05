@@ -445,18 +445,6 @@
     "type": "server",
     "extra": 0
   },
-  "dban": {
-    "action": "mod/ban",
-    "permissions": "mods",
-    "type": "server",
-    "extra": 1
-  },
-  "dexile": {
-    "action": "mod/ban",
-    "permissions": "mods",
-    "type": "server",
-    "extra": 1
-  },
   "idban": {
     "action": "mod/idban",
     "permissions": "mods",
