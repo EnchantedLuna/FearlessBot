@@ -594,6 +594,9 @@
       },
       "close": {
         "action": "question/closequestion"
+      },
+      "get-answers": {
+        "action": "question/getanswers"
       }
     },
     "interactionCreate": {
@@ -638,6 +641,19 @@
               "type": "INTEGER"
             }
           ]
+        },
+        {
+          "name": "get-answers",
+          "description": "View submitted answers to your question",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "id",
+              "description": "The id of the question to view answers for",
+              "required": true,
+              "type": "INTEGER"
+            }
+          ]
         }
       ],
       "dm_permission": true
@@ -647,39 +663,13 @@
     "action": "question/openquestion",
     "permissions": "all",
     "type": "dm",
-    "interaction": true,
-    "interactionCreate": {
-      "name": "openquestion",
-      "description": "Open a question you have created",
-      "options": [
-        {
-          "name": "id",
-          "description": "The id of the question to open",
-          "required": true,
-          "type": "INTEGER"
-        }
-      ],
-      "dm_permission": true
-    }
+    "interaction": false
   },
   "closequestion": {
     "action": "question/closequestion",
     "permissions": "all",
     "type": "dm",
-    "interaction": true,
-    "interactionCreate": {
-      "name": "closequestion",
-      "description": "Close a question you have created",
-      "options": [
-        {
-          "name": "id",
-          "description": "The id of the question to close",
-          "required": true,
-          "type": "INTEGER"
-        }
-      ],
-      "dm_permission": true
-    }
+    "interaction": false
   },
   "watch": {
     "action": "question/watch",

@@ -93,9 +93,11 @@ exports.interaction = function (interaction, bot, db) {
         return;
       }
       const url = config.baseUrl + "question_tool.php?key=" + rows[0].web_key;
+      const responseText =
+        "Question #" + id + ": " + rows[0].question + "\nAnswers: " + url;
       interaction.reply({
-        content: url,
-        ephemeral: true,
+        content: responseText,
+        ephemeral: interaction.guild ? true : false,
       });
     }
   );
