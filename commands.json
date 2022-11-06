@@ -595,6 +595,9 @@
       },
       "get-answers": {
         "action": "question/getanswers"
+      },
+      "watch": {
+        "action": "question/watch"
       }
     },
     "interactionCreate": {
@@ -650,6 +653,29 @@
               "description": "The id of the question to view answers for",
               "required": true,
               "type": "INTEGER"
+            }
+          ]
+        },
+        {
+          "name": "watch",
+          "description": "Watch/unwatch a question",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "id",
+              "description": "The id of the question to watch",
+              "required": true,
+              "type": "INTEGER"
+            },
+            {
+              "name": "status",
+              "description": "The watch status (on/off)",
+              "required": true,
+              "type": "INTEGER",
+              "choices": [
+                { "name": "On", "value": 1 },
+                { "name": "Off", "value": 0 }
+              ]
             }
           ]
         }

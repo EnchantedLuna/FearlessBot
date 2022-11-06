@@ -1,23 +1,33 @@
-exports.run = function (message, args, bot, db, watched) {
-  db.query("SELECT * FROM trivia_questions WHERE id = ?", [args], function (
-    err,
-    rows
-  ) {
-    if (rows[0] == null) {
-      message.reply("Invalid question id");
-      return;
-    }
-    if (rows[0].user !== message.author.id) {
-      message.reply("You do not have permission to update this.");
-      return;
-    }
-    db.query("UPDATE trivia_questions SET watched = ? WHERE id = ?", [
-      watched,
-      args,
+async function setWatched(user, questionId, status, db) {
+  const [rows] = await db
+    .promise()
+    .query("SELECT * FROM trivia_questions WHERE id = ?", [questionId]);
+  if (rows[0] == null) {
+    return "This question id does not exist.";
+  }
+  if (rows[0].user !== user.id) {
+    return "This is not your question.";
+  }
+  await db
+    .promise()
+    .query("UPDATE trivia_questions SET watched = ? WHERE id = ?", [
+      status,
+      questionId,
     ]);
-    let response = watched
-      ? "This question is now watched."
-      : "This question is now unwatched.";
-    message.reply(response);
-  });
+  let response = status
+    ? "This question is now watched."
+    : "This question is now unwatched.";
+  return response;
+}
+
+exports.run = async function (message, args, bot, db, watched) {
+  message.reply(await setWatched(message.author, args, watched, db));
+};
+
+exports.interaction = async function (interaction, bot, db) {
+  const questionId = interaction.options.getInteger("id");
+  const watched = interaction.options.getInteger("status");
+  interaction.reply(
+    await setWatched(interaction.user, questionId, watched, db)
+  );
 };
