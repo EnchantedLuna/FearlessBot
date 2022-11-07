@@ -1,5 +1,5 @@
 const config = require("./config.json");
-const THREE_HOURS = 10800000;
+const ONE_HOUR = 3600000;
 
 exports.checkActiveRole = function (message) {
   if (
@@ -9,14 +9,13 @@ exports.checkActiveRole = function (message) {
     let joinDate = message.member.joinedAt;
     let now = new Date();
     let joinTime = now.getTime() - joinDate.getTime();
-    if (joinTime > THREE_HOURS) {
+    if (joinTime > ONE_HOUR) {
       let role = message.channel.guild.roles.cache.find(
         (role) => role.name === "active"
       );
-      message.member.roles.add(role)
-          .catch(() =>
-              console.log("Incorrect perms to add active role")
-          );
+      message.member.roles
+        .add(role)
+        .catch(() => console.log("Incorrect perms to add active role"));
     }
   }
 };
