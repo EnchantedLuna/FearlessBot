@@ -18,7 +18,7 @@ function getEmbed(row, rank) {
           row.eventpoints +
           "/" +
           config.eventCap +
-          "\n\nLifetime lorpoints: " +
+          "\nLifetime lorpoints: " +
           lifetime
       ),
   ];
