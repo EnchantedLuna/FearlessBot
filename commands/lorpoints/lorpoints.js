@@ -3,6 +3,7 @@ const config = require("../../config.json");
 const { MessageEmbed } = require("discord.js");
 
 function getEmbed(row, rank) {
+  const lifetime = row["lifetime_lorpoints"] + row["lorpoints"];
   return [
     new MessageEmbed()
       .setTitle(":star: Lorpoints")
@@ -16,7 +17,9 @@ function getEmbed(row, rank) {
           "\nCapped events this week: " +
           row.eventpoints +
           "/" +
-          config.eventCap
+          config.eventCap +
+          "\n\nLifetime lorpoints: " +
+          lifetime
       ),
   ];
 }
@@ -25,7 +28,7 @@ exports.run = function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);
 
   db.query(
-    "SELECT username, lorpoints, eventpoints FROM members WHERE server = ? AND id = ?",
+    "SELECT username, lorpoints, eventpoints, lifetime_lorpoints FROM members WHERE server = ? AND id = ?",
     [message.channel.guild.id, member],
     function (err, rows) {
       if (err) {
@@ -55,7 +58,7 @@ exports.interaction = function (interaction, bot, db) {
   }
 
   db.query(
-    "SELECT username, lorpoints, eventpoints FROM members WHERE server = ? AND id = ?",
+    "SELECT username, lorpoints, eventpoints, lifetime_lorpoints FROM members WHERE server = ? AND id = ?",
     [interaction.guild.id, member.id],
     function (err, rows) {
       if (err) {
