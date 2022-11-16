@@ -598,6 +598,9 @@
       },
       "watch": {
         "action": "question/watch"
+      },
+      "delete-answer": {
+        "action": "question/deleteanswer"
       }
     },
     "interactionCreate": {
@@ -676,6 +679,19 @@
                 { "name": "On", "value": 1 },
                 { "name": "Off", "value": 0 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "delete-answer",
+          "description": "Delete your answer to a question",
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "id",
+              "description": "The id of the question you wish to remove your answer from",
+              "required": true,
+              "type": "INTEGER"
             }
           ]
         }
