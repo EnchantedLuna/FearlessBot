@@ -257,6 +257,12 @@
     "type": "server",
     "extra": "lorpoints"
   },
+  "ranklifelorpoints": {
+    "action": "members/rankthing",
+    "permissions": "all",
+    "type": "server",
+    "extra": "lifetime_lorpoints"
+  },
   "lorpoints": {
     "action": "lorpoints/lorpoints",
     "permissions": "all",
