@@ -443,7 +443,34 @@
     "action": "mod/ban",
     "permissions": "mods",
     "type": "server",
-    "extra": 0
+    "extra": 0,
+    "interaction": true,
+    "interactionCreate": {
+      "name": "ban",
+      "description": "Ban a member",
+      "dm_permission": false,
+      "default_member_permissions": 4,
+      "options": [
+        {
+          "name": "member",
+          "description": "The user ID to ban",
+          "required": true,
+          "type": "USER"
+        },
+        {
+          "name": "days",
+          "description": "Number of days to ban (default indefinite)",
+          "required": false,
+          "type": "INTEGER"
+        },
+        {
+          "name": "reason",
+          "description": "The reason for the ban",
+          "required": false,
+          "type": "STRING"
+        }
+      ]
+    }
   },
   "exile": {
     "action": "mod/ban",
