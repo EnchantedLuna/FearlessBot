@@ -60,11 +60,7 @@ exports.interaction = async function (interaction, bot, db) {
   if (!member) {
     member = interaction.member;
   }
-  const cap = await getGuildConfig(
-    message.channel.guild.id,
-    "lorpoint-cap",
-    db
-  );
+  const cap = await getGuildConfig(interaction.guild.id, "lorpoint-cap", db);
 
   db.query(
     "SELECT username, lorpoints, eventpoints, lifetime_lorpoints FROM members WHERE server = ? AND id = ?",
