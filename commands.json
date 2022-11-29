@@ -856,6 +856,10 @@
             {
               "name": "Lorpoint Event Cap",
               "value": "lorpoint-cap"
+            },
+            {
+              "name": "Lorpoints Per Capped Event",
+              "value": "event-lorpoints"
             }
           ]
         },

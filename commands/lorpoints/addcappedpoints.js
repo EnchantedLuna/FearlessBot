@@ -1,7 +1,6 @@
 const { log, getGuildConfig } = require("../../util");
 const config = require("../../config.json");
 const { MessageEmbed } = require("discord.js");
-const pointsPerEvent = 2;
 
 exports.run = async function (message, args, bot, db) {
   const eventCap = await getGuildConfig(
@@ -9,6 +8,12 @@ exports.run = async function (message, args, bot, db) {
     "lorpoint-cap",
     db
   );
+  const pointsPerEvent = await getGuildConfig(
+    message.channel.guild.id,
+    "event-lorpoints",
+    db
+  );
+
   if (message.mentions.members.size === 0) {
     message.channel.send({
       embeds: [
