@@ -1,17 +1,21 @@
-const { log } = require("../../util");
+const { log, getGuildConfig } = require("../../util");
 const config = require("../../config.json");
 const { MessageEmbed } = require("discord.js");
 const pointsPerEvent = 2;
-const eventCap = config.eventCap;
 
-exports.run = function (message, args, bot, db) {
+exports.run = async function (message, args, bot, db) {
+  const eventCap = await getGuildConfig(
+    message.channel.guild.id,
+    "lorpoint-cap",
+    db
+  );
   if (message.mentions.members.size === 0) {
     message.channel.send({
-        embeds: [
-            new MessageEmbed()
-                .setDescription(":x: You must mention a member to add lorpoints to.")
-                .setColor(0xff0000)
-        ]
+      embeds: [
+        new MessageEmbed()
+          .setDescription(":x: You must mention a member to add lorpoints to.")
+          .setColor(0xff0000),
+      ],
     });
     return;
   }
@@ -29,7 +33,6 @@ exports.run = function (message, args, bot, db) {
         return;
       }
       for (let i = 0; i < rows.length; i++) {
-        console.log(rows[i]);
         if (rows[i].eventpoints >= eventCap) {
           cappedList.push(rows[i].username);
         } else {
@@ -66,15 +69,15 @@ exports.run = function (message, args, bot, db) {
           "These members have reached their event limit:\n" + finalCappedList;
       }
       message.channel.send({
-          embeds: [
-              new MessageEmbed()
-                  .setTitle(":star: Adding Capped Lorpoints")
-                  .setDescription(resultMessage.toString())
-                  .setColor(0xdbe07e)
-                  .setFooter({
-                      text: `Number in parentheses indicates events attended this cycle. Current cap is ${eventCap}`
-                  })
-          ]
+        embeds: [
+          new MessageEmbed()
+            .setTitle(":star: Adding Capped Lorpoints")
+            .setDescription(resultMessage.toString())
+            .setColor(0xdbe07e)
+            .setFooter({
+              text: `Number in parentheses indicates events attended this cycle. Current cap is ${eventCap}`,
+            }),
+        ],
       });
     }
   );

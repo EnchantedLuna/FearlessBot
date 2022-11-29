@@ -27,6 +27,7 @@ const db = mysql.createConnection({
   password: config.mysqlPass,
   database: config.mysqlDB,
   charset: "utf8mb4",
+  timezone: "utc",
 });
 
 bot.on("ready", () => {
@@ -37,18 +38,23 @@ bot.on("ready", () => {
   }, 60000);
 });
 
-bot.on("messageCreate", (message) => {
+bot.on("messageCreate", async (message) => {
   if (message.channel.type === "DM") {
     handleDirectMessage(message);
     return;
   }
+  const prefix = await util.getGuildConfig(
+    message.channel.guild.id,
+    "prefix",
+    db
+  );
 
   stats.updateUserStats(message, db);
   stats.updateChannelStats(message, db);
   checkActiveRole(message);
 
   if (
-    message.content.indexOf(config.prefix) !== 0 ||
+    message.content.indexOf(prefix) !== 0 ||
     message.author.bot ||
     !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
   ) {
@@ -56,10 +62,13 @@ bot.on("messageCreate", (message) => {
   }
   const command = message.content.split(" ");
   const args = command.slice(1, command.length).join(" ");
-  const commandName = command[0].toLowerCase().slice(config.prefix.length);
+  const commandName = command[0].toLowerCase().slice(prefix.length);
 
   if (commandName in commands) {
-    if (commands[commandName].type === "dm") {
+    if (
+      commands[commandName].type === "dm" ||
+      commands[commandName].type === "slash"
+    ) {
       return;
     }
     if (
@@ -78,9 +87,12 @@ function handleDirectMessage(message) {
   let command = message.content.split(" ");
   let params = command.slice(1, command.length).join(" ");
 
-  const commandName = command[0].toLowerCase().slice(config.prefix.length);
+  const commandName = command[0].toLowerCase().slice(prefix.length);
   if (commandName in commands) {
-    if (commands[commandName].type === "server") {
+    if (
+      commands[commandName].type === "server" ||
+      commands[commandName].type === "slash"
+    ) {
       return;
     }
     if (

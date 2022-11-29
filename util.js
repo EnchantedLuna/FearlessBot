@@ -1,5 +1,11 @@
 const { Message, Client } = require("discord.js");
 const config = require("./config.json");
+const NodeCache = require("node-cache");
+const cache = new NodeCache();
+const settings = {
+  prefix: { default: "!", type: "string" },
+  "lorpoint-cap": { default: 4, type: "int" },
+};
 
 exports.channelCountsInStatistics = function (guild, channel) {
   return (
@@ -118,4 +124,35 @@ exports.findMember = async function (message, args, bot) {
   }
 
   return member;
+};
+
+exports.getGuildConfig = async function (guild, key, db) {
+  const cacheValue = cache.get(guild + key);
+  if (cacheValue !== undefined) {
+    return cacheValue;
+  }
+  const [result] = await db
+    .promise()
+    .query("SELECT * FROM guild_config WHERE `guild`=? AND `key`=?", [
+      guild,
+      key,
+    ]);
+  if (result[0] && result[0].value !== null) {
+    let value = result[0].value;
+    if (settings[key].type == "int") {
+      value = parseInt(value);
+    }
+    cache.set(guild + key, value);
+    return value;
+  }
+  cache.set(guild + key, settings[key].default);
+  return settings[key].default;
+};
+
+exports.setGuildConfig = function (guild, key, value, db) {
+  db.query(
+    "REPLACE INTO guild_config (`guild`, `key`, `value`) VALUES (?,?,?)",
+    [guild, key, value]
+  );
+  cache.set(guild + key, value);
 };

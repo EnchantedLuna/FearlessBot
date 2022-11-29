@@ -116,3 +116,10 @@ CREATE TABLE `awards` (
   `date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `guild_config` (
+    `guild` varchar(30) NOT NULL,
+    `key` varchar(30) NOT NULL,
+    `value` varchar(255) NULL,
+    PRIMARY KEY (`guild`, `key`)
+);

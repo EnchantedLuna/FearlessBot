@@ -1,8 +1,7 @@
-const { findMemberID } = require("../../util");
-const config = require("../../config.json");
+const { findMemberID, getGuildConfig } = require("../../util");
 const { MessageEmbed } = require("discord.js");
 
-function getEmbed(row, rank) {
+function getEmbed(row, rank, cap) {
   const lifetime = row["lifetime_lorpoints"] + row["lorpoints"];
   return [
     new MessageEmbed()
@@ -17,15 +16,20 @@ function getEmbed(row, rank) {
           "\nCapped events this week: " +
           row.eventpoints +
           "/" +
-          config.eventCap +
+          cap +
           "\nLifetime lorpoints: " +
           lifetime
       ),
   ];
 }
 
-exports.run = function (message, args, bot, db) {
+exports.run = async function (message, args, bot, db) {
   const member = findMemberID(message, args, bot);
+  const cap = await getGuildConfig(
+    message.channel.guild.id,
+    "lorpoint-cap",
+    db
+  );
 
   db.query(
     "SELECT username, lorpoints, eventpoints, lifetime_lorpoints FROM members WHERE server = ? AND id = ?",
@@ -42,7 +46,7 @@ exports.run = function (message, args, bot, db) {
           function (err, totals) {
             const rank = totals[0].higher + 1;
             message.channel.send({
-              embeds: getEmbed(rows[0], rank),
+              embeds: getEmbed(rows[0], rank, cap),
             });
           }
         );
@@ -51,11 +55,16 @@ exports.run = function (message, args, bot, db) {
   );
 };
 
-exports.interaction = function (interaction, bot, db) {
+exports.interaction = async function (interaction, bot, db) {
   let member = interaction.options.getMember("member");
   if (!member) {
     member = interaction.member;
   }
+  const cap = await getGuildConfig(
+    message.channel.guild.id,
+    "lorpoint-cap",
+    db
+  );
 
   db.query(
     "SELECT username, lorpoints, eventpoints, lifetime_lorpoints FROM members WHERE server = ? AND id = ?",
@@ -72,7 +81,7 @@ exports.interaction = function (interaction, bot, db) {
           function (err, totals) {
             const rank = totals[0].higher + 1;
             interaction.reply({
-              embeds: getEmbed(rows[0], rank),
+              embeds: getEmbed(rows[0], rank, cap),
             });
           }
         );

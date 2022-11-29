@@ -504,6 +504,18 @@
       ]
     }
   },
+  "expirations": {
+    "action": "mod/expirations",
+    "permissions": "mods",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "expirations",
+      "description": "View upcoming mute/ban expirations",
+      "dm_permission": false,
+      "default_member_permissions": 4
+    }
+  },
   "addaward": {
     "action": "mod/addaward",
     "permissions": "mods",
@@ -820,5 +832,40 @@
     "action": "bot/fnick",
     "permissions": "mods",
     "type": "server"
+  },
+  "config": {
+    "action": "mod/configset",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "config",
+      "description": "Update bot settings",
+      "dm_permission": false,
+      "default_member_permissions": 32,
+      "options": [
+        {
+          "name": "setting",
+          "description": "The setting to change",
+          "type": "STRING",
+          "required": true,
+          "choices": [
+            {
+              "name": "Prefix",
+              "value": "prefix"
+            },
+            {
+              "name": "Lorpoint Event Cap",
+              "value": "lorpoint-cap"
+            }
+          ]
+        },
+        {
+          "name": "value",
+          "description": "The new value for the setting",
+          "type": "STRING",
+          "required": true
+        }
+      ]
+    }
   }
 }
