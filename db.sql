@@ -57,16 +57,6 @@ CREATE TABLE scheduled_actions
     completed TINYINT(1) NOT NULL DEFAULT 0
 );
 
-CREATE TABLE mod_stats
-(
-    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    time DATETIME,
-    online INT(11),
-    idle INT(11),
-    dnd INT(11),
-    offline INT(11)
-);
-
 CREATE TABLE user_message_stats
 (
   user BIGINT(20) NOT NULL,
