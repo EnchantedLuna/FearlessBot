@@ -5,11 +5,8 @@
   "mysqlPass": "taylorswift13",
   "mysqlDB": "fearlessbot",
 
-  "prefix": "!",
-  "eventCap": 4,
   "mainServer": "",
   "statCountingChannels": ["", ""],
-  "noCommandChannels": [""],
   "botAdminUserId": "",
   "logChannelName": "",
 
