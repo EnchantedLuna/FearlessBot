@@ -453,7 +453,7 @@
       "options": [
         {
           "name": "member",
-          "description": "The user ID to ban",
+          "description": "The user to ban",
           "required": true,
           "type": "USER"
         },
