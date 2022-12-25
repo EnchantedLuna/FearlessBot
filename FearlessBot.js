@@ -6,6 +6,7 @@ const util = require("./util");
 const stats = require("./stats");
 const { runScheduledActions, validateMutes } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
+const directMessagePrefix = "!";
 
 const bot = new Client({
   allowedMentions: { parse: ["users", "roles"], repliedUser: true },
@@ -27,7 +28,7 @@ const db = mysql.createConnection({
   password: config.mysqlPass,
   database: config.mysqlDB,
   charset: "utf8mb4",
-  timezone: "utc",
+  timezone: "Z",
 });
 
 bot.on("ready", () => {
@@ -87,7 +88,9 @@ function handleDirectMessage(message) {
   let command = message.content.split(" ");
   let params = command.slice(1, command.length).join(" ");
 
-  const commandName = command[0].toLowerCase().slice(prefix.length);
+  const commandName = command[0]
+    .toLowerCase()
+    .slice(directMessagePrefix.length);
   if (commandName in commands) {
     if (
       commands[commandName].type === "server" ||
