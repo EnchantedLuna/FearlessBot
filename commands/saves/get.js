@@ -9,6 +9,7 @@ async function getItem(
   author
 ) {
   let embed = { title: keyword };
+  const isUsingSlashCommand = author === null;
   if (author) {
     embed.author = {
       name: author.tag,
@@ -26,9 +27,15 @@ async function getItem(
       keyword,
     ]);
   if (!rows[0]) {
+    const slashCommandTip = isUsingSlashCommand
+      ? ""
+      : "\nTip: Use /get if you are unsure if a save exists. If it does not, no one else will see your command.";
     embed.color = 0xff0000;
     embed.description =
-      ":warning: Nothing is stored for keyword " + keyword + ".";
+      ":warning: Nothing is stored for keyword " +
+      keyword +
+      "." +
+      slashCommandTip;
     return embed;
   }
   if (!rows[0].approved && !showUnapproved) {
