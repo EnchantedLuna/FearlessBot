@@ -833,6 +833,30 @@
     "permissions": "mods",
     "type": "server"
   },
+  "spam": {
+    "action": "mod/spam",
+    "permissions": "all",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "spam",
+      "description": "Set the spam status of the channel",
+      "options": [
+        {
+          "name": "value",
+          "description": "The on/off value",
+          "required": true,
+          "type": "INTEGER",
+          "choices": [
+            { "name": "Yes (Spam)", "value": 1 },
+            { "name": "No (Not Spam)", "value": 0 }
+          ]
+        }
+      ],
+      "dm_permission": false,
+      "default_member_permissions": 16
+    }
+  },
   "config": {
     "action": "mod/configset",
     "type": "slash",

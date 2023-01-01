@@ -170,3 +170,7 @@ exports.setGuildConfig = function (guild, key, value, db) {
   );
   cache.set(guild + key, value);
 };
+
+exports.clearCacheValue = function (key) {
+  cache.del(key);
+};
