@@ -8,7 +8,7 @@ const settings = {
   "event-lorpoints": { default: 2, type: "int" },
 };
 
-exports.channelCountsInStatistics = async function (guildId, channelId) {
+exports.channelCountsInStatistics = async function (guildId, channelId, db) {
   const cachedValue = cache.get("spam-" + channelId);
   if (cachedValue !== undefined) {
     return cachedValue != 1;

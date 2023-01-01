@@ -24,7 +24,8 @@ exports.updateUserStats = async function (message, db) {
   let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
   const countStats = await channelCountsInStatistics(
     message.channel.guild.id,
-    message.channel.id
+    message.channel.id,
+    db
   );
   if (countStats) {
     db.query(

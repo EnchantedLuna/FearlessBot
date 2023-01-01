@@ -62,7 +62,7 @@ async function getItem(
 }
 
 async function addToStats(db, guildId, channelId, keyword) {
-  if (await channelCountsInStatistics(guildId, channelId)) {
+  if (await channelCountsInStatistics(guildId, channelId, db)) {
     db.query(
       "UPDATE data_store SET uses=uses+1, lastused=now() WHERE keyword = ? AND server = ?",
       [keyword, guildId]
