@@ -8,10 +8,23 @@ const settings = {
   "event-lorpoints": { default: 2, type: "int" },
 };
 
-exports.channelCountsInStatistics = function (guild, channel) {
-  return (
-    guild !== config.mainServer || config.statCountingChannels.includes(channel)
-  );
+exports.channelCountsInStatistics = async function (guildId, channelId) {
+  const cachedValue = cache.get("spam-" + channelId);
+  if (cachedValue !== undefined) {
+    return cachedValue != 1;
+  }
+  const [result] = await db
+    .promise()
+    .query(
+      "SELECT is_spam FROM channel_stats WHERE `server`=? AND `channel`=?",
+      [guildId, channelId]
+    );
+  if (result[0]) {
+    cache.set("spam-" + channelId, result[0].is_spam);
+    return result[0].is_spam != 1;
+  }
+  cache.set("spam-" + channelId, 0);
+  return true;
 };
 
 exports.isMod = function (member, guild) {

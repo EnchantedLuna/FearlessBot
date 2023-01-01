@@ -6,6 +6,7 @@ CREATE TABLE channel_stats
   web TINYINT(1) DEFAULT '0',
   server VARCHAR(30) DEFAULT '' NOT NULL,
   startdate INT(11),
+  is_spam TINYINT(1) DEFAULT '0',
   CONSTRAINT `PRIMARY` PRIMARY KEY (server, channel)
 );
 CREATE UNIQUE INDEX idx_channel ON channel_stats (channel);

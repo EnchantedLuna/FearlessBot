@@ -20,9 +20,13 @@ exports.updateChannelStats = function (message, db) {
   );
 };
 
-exports.updateUserStats = function (message, db) {
+exports.updateUserStats = async function (message, db) {
   let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
-  if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
+  const countStats = await channelCountsInStatistics(
+    message.channel.guild.id,
+    message.channel.id
+  );
+  if (countStats) {
     db.query(
       "INSERT INTO members (server, id, username, discriminator, lastseen, words, messages) VALUES (?,?,?,?,UNIX_TIMESTAMP(),?,1)" +
         "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1, active=1",
