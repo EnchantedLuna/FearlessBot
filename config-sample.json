@@ -6,7 +6,6 @@
   "mysqlDB": "fearlessbot",
 
   "mainServer": "",
-  "statCountingChannels": ["", ""],
   "botAdminUserId": "",
   "logChannelName": "",
 
