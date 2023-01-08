@@ -82,6 +82,12 @@ exports.run = async function (message, args, bot, db, showUnapproved) {
     showUnapproved,
     message.author
   );
+  if (embed.description.includes("youtube.com/watch")) {
+    message.reply({
+      content: embed.description + "\n" + embed.footer.text,
+    });
+    return;
+  }
   message.channel.send({ embeds: [embed] });
 };
 
@@ -95,5 +101,11 @@ exports.interaction = async function (interaction, bot, db) {
     false,
     null
   );
+  if (embed.description.includes("youtube.com/watch")) {
+    interaction.reply({
+      content: embed.description + "\n" + embed.footer.text,
+    });
+    return;
+  }
   interaction.reply({ embeds: [embed], ephemeral: embed.color === 0xff0000 });
 };
