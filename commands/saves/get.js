@@ -82,7 +82,7 @@ exports.run = async function (message, args, bot, db, showUnapproved) {
     showUnapproved,
     message.author
   );
-  if (embed.description.includes("youtube.com/watch")) {
+  if (embed.description?.includes("youtube.com/watch")) {
     message.reply({
       content: embed.description + "\n" + embed.footer.text,
     });
@@ -101,7 +101,7 @@ exports.interaction = async function (interaction, bot, db) {
     false,
     null
   );
-  if (embed.description.includes("youtube.com/watch")) {
+  if (embed.description?.includes("youtube.com/watch")) {
     interaction.reply({
       content: embed.description + "\n" + embed.footer.text,
     });
