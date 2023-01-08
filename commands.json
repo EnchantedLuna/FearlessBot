@@ -184,11 +184,6 @@
       "dm_permission": true
     }
   },
-  "randmember": {
-    "action": "members/randmember",
-    "permissions": "all",
-    "type": "server"
-  },
   "shitpost": {
     "action": "fun/shitpost",
     "permissions": "all",

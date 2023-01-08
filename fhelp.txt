@@ -4,7 +4,6 @@ Basic Commands:
 ``!yesno`` : Adds yes, no, maybe react for a simple yes/no poll
 ``!choose [one, two, three]`` (/) : Chooses one of several options randomly
 ``!namemix`` (/) : Mixes two parts of server names
-``!randmember`` : Selects a server member at random who has spoken in the last day.
 ``!shitpost [optional number]`` (/) : Posts a shitpost
 ``!acronym`` (/): Looks up a Taylor Swift song acronym
 
