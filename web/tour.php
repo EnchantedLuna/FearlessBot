@@ -52,7 +52,7 @@ if (!empty($ids)) {
             echo "<li class='list-group-item'>";
             $title = htmlspecialchars($question['question']);
             $key = $question['web_key'];
-            $userList = htmlspecialchars(implode(", ",$users[$question['id']]));
+            $userList = empty($users[$question['id']]) ? '' : htmlspecialchars(implode(", ",$users[$question['id']]));
             echo "<p class='mb-0'><a href='question_tool.php?key={$key}&amp;hide'>{$question['id']}: {$title}</a></p><span class='small'>{$userList}</span>";
             echo "</li>";
         }
