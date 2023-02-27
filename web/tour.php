@@ -3,7 +3,7 @@ require_once "config.php";
 $db = new mysqli(DB_HOST,DB_USERNAME,DB_PASSWORD,DB_NAME);
 $db->set_charset("utf8mb4");
 
-$query = $db->prepare("SELECT * FROM trivia_questions WHERE user='115329261350420487' AND question LIKE 'Eras Tour%'");
+$query = $db->prepare("SELECT * FROM trivia_questions WHERE user='115329261350420487' AND question LIKE 'Eras Tour%' AND isopen=1");
 $query->execute();
 $result = $query->get_result();
 
