@@ -739,7 +739,7 @@
       "dm_permission": true
     }
   },
-  "tour": {
+  "erastour": {
     "action": "question/question",
     "permissions": "all",
     "type": "slash",
@@ -756,7 +756,7 @@
       }
     },
     "interactionCreate": {
-      "name": "tour",
+      "name": "erastour",
       "description": "Operation for question/submission box for answers",
       "options": [
         {
