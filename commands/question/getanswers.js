@@ -84,7 +84,8 @@ exports.interaction = function (interaction, bot, db) {
       }
       if (
         rows[0].user !== interaction.user.id &&
-        interaction.user.id !== config.botAdminUserId
+        interaction.user.id !== config.botAdminUserId &&
+        !rows[0].question.startsWith("Eras Tour")
       ) {
         interaction.reply({
           content: "You do not have permission to view these answers.",

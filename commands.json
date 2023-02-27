@@ -748,7 +748,7 @@
       "register": {
         "action": "question/tour"
       },
-      "get-responses": {
+      "view-responses": {
         "action": "question/getanswers"
       },
       "delete-response": {
