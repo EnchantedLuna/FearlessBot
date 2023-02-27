@@ -98,7 +98,10 @@ exports.interaction = function (interaction, bot, db) {
         "Question #" + id + ": " + rows[0].question + "\nAnswers: " + url;
       interaction.reply({
         content: responseText,
-        ephemeral: interaction.guild ? true : false,
+        ephemeral:
+          interaction.guild && !rows[0].question.startsWith("Eras Tour")
+            ? true
+            : false,
       });
     }
   );
