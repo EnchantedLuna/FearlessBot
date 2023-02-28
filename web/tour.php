@@ -45,7 +45,7 @@ if (!empty($ids)) {
 <div class="container">
     <div id="question-tool">
         <h1>Eras Tour</h1>
-        <p>Click on the date to see what users wrote about their plans! To add yourself, use the /answer command on Discord with the id number listed.</p>
+        <p>Click on the date to see what users wrote about their plans! To add yourself, use the /erastour command on Discord with the city and a message.</p>
         <ul class="list-group">
         <?php
         foreach ($questions as $question) {
