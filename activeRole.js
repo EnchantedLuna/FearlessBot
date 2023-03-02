@@ -2,7 +2,8 @@ const config = require("./config.json");
 const ONE_HOUR = 3600000;
 
 exports.checkActiveRole = function (message) {
-  if (
+  if ( 
+    !message.webhookId &&
     message.channel.guild.id === config.mainServer &&
     !hasRole(message.member, message.channel.guild, "active")
   ) {
