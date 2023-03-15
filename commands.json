@@ -393,7 +393,15 @@
         {
           "name": "random",
           "description": "Show a random saved item",
-          "type": "SUB_COMMAND"
+          "type": "SUB_COMMAND",
+          "options": [
+            {
+              "name": "prefix",
+              "description": "Something you want the random save to begin with (e.g. wtf)",
+              "type": "STRING",
+              "required": false
+            }
+          ]
         },
         {
           "name": "list",
