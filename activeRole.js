@@ -1,16 +1,18 @@
 const config = require("./config.json");
-const ONE_HOUR = 3600000;
+const util = require("./util");
 
-exports.checkActiveRole = function (message) {
-  if ( 
+exports.checkActiveRole = async function (message, guild, db) {
+  if (
     !message.webhookId &&
     message.channel.guild.id === config.mainServer &&
     !hasRole(message.member, message.channel.guild, "active")
   ) {
+    const minutes = await util.getGuildConfig(guild, "active-threshold", db);
+    const threshold = 1000 * 60 * minutes;
     let joinDate = message.member.joinedAt;
     let now = new Date();
     let joinTime = now.getTime() - joinDate.getTime();
-    if (joinTime > ONE_HOUR) {
+    if (joinTime > threshold) {
       let role = message.channel.guild.roles.cache.find(
         (role) => role.name === "active"
       );

@@ -6,6 +6,7 @@ const settings = {
   prefix: { default: "!", type: "string" },
   "lorpoint-cap": { default: 4, type: "int" },
   "event-lorpoints": { default: 2, type: "int" },
+  "active-threshold": { default: 60, type: "int" },
 };
 
 exports.channelCountsInStatistics = async function (guildId, channelId, db) {

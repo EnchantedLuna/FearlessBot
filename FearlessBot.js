@@ -52,7 +52,7 @@ bot.on("messageCreate", async (message) => {
 
   stats.updateUserStats(message, db);
   stats.updateChannelStats(message, db);
-  checkActiveRole(message);
+  checkActiveRole(message, message.channel.guild.id, db);
 
   if (
     message.content.indexOf(prefix) !== 0 ||
