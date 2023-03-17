@@ -120,6 +120,8 @@ bot.on("guildMemberRemove", (member) => {
     member.id,
   ]);
 
+  return; // no leave messages for now
+
   let joinDate = member.joinedAt;
   let now = new Date();
   let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
