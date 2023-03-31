@@ -1175,6 +1175,17 @@
       "default_member_permissions": 16
     }
   },
+  "showconfig": {
+    "action": "mod/showconfig",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "showconfig",
+      "description": "View bot settings",
+      "dm_permission": false,
+      "default_member_permissions": 32
+    }
+  },
   "config": {
     "action": "mod/configset",
     "type": "slash",
@@ -1206,6 +1217,10 @@
             {
               "name": "Active Role Threshold in Minutes",
               "value": "active-threshold"
+            },
+            {
+              "name": "Leave Message Threshold in Minutes (0 to disable)",
+              "value": "leave-threshold"
             }
           ]
         },

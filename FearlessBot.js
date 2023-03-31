@@ -114,18 +114,26 @@ bot.on("guildMemberAdd", (member) => {
   validateMutes(member, bot, db);
 });
 
-bot.on("guildMemberRemove", (member) => {
+bot.on("guildMemberRemove", async (member) => {
   db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [
     member.guild.id,
     member.id,
   ]);
 
-  return; // no leave messages for now
+  const leaveMessageThreshold = await util.getGuildConfig(
+    member.guild.id,
+    "leave-threshold",
+    db
+  );
+
+  if (leaveMessageThreshold < 1) {
+    return;
+  }
 
   let joinDate = member.joinedAt;
   let now = new Date();
   let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
-  if (joinTime < 300) {
+  if (joinTime < leaveMessageThreshold * 60) {
     member.guild.systemChannel.send({
       content: `${member.user.username} has already left us. :disappointed:`,
     });

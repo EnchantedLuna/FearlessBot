@@ -7,6 +7,7 @@ const settings = {
   "lorpoint-cap": { default: 4, type: "int" },
   "event-lorpoints": { default: 2, type: "int" },
   "active-threshold": { default: 60, type: "int" },
+  "leave-threshold": { default: 0, type: "int" },
 };
 
 exports.channelCountsInStatistics = async function (guildId, channelId, db) {
@@ -170,6 +171,14 @@ exports.setGuildConfig = function (guild, key, value, db) {
     [guild, key, value]
   );
   cache.set(guild + key, value);
+};
+
+exports.getAllGuildConfig = async function (guild, db) {
+  const values = {};
+  for (const setting in settings) {
+    values[setting] = await exports.getGuildConfig(guild, setting, db);
+  }
+  return values;
 };
 
 exports.clearCacheValue = function (key) {
