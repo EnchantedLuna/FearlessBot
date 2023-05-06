@@ -3,7 +3,6 @@ const util = require("./util");
 
 exports.checkActiveRole = async function (message, guild, db) {
   if (
-    !message.webhookId &&
     message.member &&
     message.channel.guild.id === config.mainServer &&
     !hasRole(message.member, message.channel.guild, "active")
