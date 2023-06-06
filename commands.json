@@ -779,50 +779,6 @@
               "required": true,
               "choices": [
                 {
-                  "name": "March 17-18 - Glendale",
-                  "value": 552
-                },
-                {
-                  "name": "March 24-25 - Las Vegas",
-                  "value": 553
-                },
-                {
-                  "name": "March 31, April 1-2 - Arlington",
-                  "value": 554
-                },
-                {
-                  "name": "April 13-15 - Tampa",
-                  "value": 555
-                },
-                {
-                  "name": "April 21-23 - Houston",
-                  "value": 556
-                },
-                {
-                  "name": "April 28-30 - Atlanta",
-                  "value": 498
-                },
-                {
-                  "name": "May 5-7 - Nashville",
-                  "value": 524
-                },
-                {
-                  "name": "May 12-14 - Philadelphia",
-                  "value": 502
-                },
-                {
-                  "name": "May 19-21 - Foxborough",
-                  "value": 504
-                },
-                {
-                  "name": "May 26-28 - East Rutherford",
-                  "value": 506
-                },
-                {
-                  "name": "June 2-4 - Chicago",
-                  "value": 508
-                },
-                {
                   "name": "June 9-10 - Detroit",
                   "value": 561
                 },
@@ -857,6 +813,22 @@
                 {
                   "name": "August 3-5, 8-9 - Los Angeles",
                   "value": 529
+                },
+                {
+                  "name": "August 24-26 - Mexico City",
+                  "value": 588
+                },
+                {
+                  "name": "November 9-10 Buenos Aires",
+                  "value": 589
+                },
+                {
+                  "name": "November 18 - Rio de Janeiro",
+                  "value": 590
+                },
+                {
+                  "name": "November 25-26 - Sao Paulo",
+                  "value": 591
                 }
               ]
             },
