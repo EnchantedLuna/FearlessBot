@@ -52,8 +52,8 @@ const taylorSongsByAlbum = [
     ],
   },
   {
-    title: "Speak Now",
-    image: "https://i.imgur.com/TNKbt8Y.jpg",
+    title: "Speak Now (Taylor's Version)",
+    image: "https://i.imgur.com/K8ZVgVV.jpg",
     songs: [
       "Mine",
       "Sparks Fly",
@@ -72,6 +72,12 @@ const taylorSongsByAlbum = [
       "Ours",
       "If This Was A Movie",
       "Superman",
+      "Electric Touch",
+      "When Emma Falls in Love",
+      "I Can See You",
+      "Castles Crumbling",
+      "Foolish One",
+      "Timeless",
     ],
   },
   {
