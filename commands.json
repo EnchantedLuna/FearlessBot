@@ -779,34 +779,6 @@
               "required": true,
               "choices": [
                 {
-                  "name": "June 9-10 - Detroit",
-                  "value": 561
-                },
-                {
-                  "name": "June 16-17 - Pittsburgh",
-                  "value": 562
-                },
-                {
-                  "name": "June 23-24 - Minneapolis",
-                  "value": 581
-                },
-                {
-                  "name": "June 30, July 1 - Cincinnati",
-                  "value": 564
-                },
-                {
-                  "name": "July 7-8 - Kansas City",
-                  "value": 565
-                },
-                {
-                  "name": "July 14-15 - Denver",
-                  "value": 566
-                },
-                {
-                  "name": "July 22-23 - Seattle",
-                  "value": 516
-                },
-                {
                   "name": "July 28-29 - Santa Clara",
                   "value": 580
                 },

@@ -52,7 +52,7 @@ async function getItem(
   }
   embed.footer = { text: date };
 
-  if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)$")) {
+  if (text.match("^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png|jpeg)$")) {
     embed.image = { url: text };
     return embed;
   }
