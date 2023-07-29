@@ -425,7 +425,14 @@
   "mods": {
     "action": "mod/mods",
     "permissions": "all",
-    "type": "server"
+    "type": "server",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "mods",
+      "description": "Ping the mods for an urgent issue",
+      "options": [],
+      "dm_permission": false
+    }
   },
   "mute": {
     "action": "mod/supermute",
