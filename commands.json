@@ -430,7 +430,14 @@
     "interactionCreate": {
       "name": "mods",
       "description": "Ping the mods for an urgent issue",
-      "options": [],
+      "options": [
+        {
+          "name": "reason",
+          "description": "The reason for pinging (be specific)",
+          "type": "STRING",
+          "required": true
+        }
+      ],
       "dm_permission": false
     }
   },

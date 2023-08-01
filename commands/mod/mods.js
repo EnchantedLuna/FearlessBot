@@ -58,9 +58,11 @@ exports.interaction = async function (interaction, bot, db) {
       await interaction.guild.members.fetch();
       const modList = mods.members.map((m) => "<@" + m.id + ">");
       interaction.channel.send(
-        "You have been summoned by " +
+        "Summoned by " +
           interaction.user.username +
-          ".\n" +
+          ": " +
+          interaction.options.getString("reason") +
+          "\n" +
           modList.join(" ")
       );
     } else if (confirmation.customId === "cancel") {
