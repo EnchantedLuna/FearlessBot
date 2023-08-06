@@ -33,7 +33,7 @@ exports.isCommandBlocked = async function (guildId, channelId, db, command) {
   const cachedValue = cache.get("blocked-" + channelId);
   if (cachedValue !== undefined) {
     const blockedList = cachedValue.split(",");
-    return command in blockedList;
+    return blockedList.includes(command);
   }
   const [result] = await db
     .promise()
@@ -45,7 +45,7 @@ exports.isCommandBlocked = async function (guildId, channelId, db, command) {
     const blocked = result[0].blocked_commands;
     const blockedList = blocked.split(",");
     cache.set("blocked-" + channelId, result[0].blocked_commands);
-    return command in blockedList;
+    return blockedList.includes(command);
   }
   cache.set("blocked-" + channelId, "");
   return false;

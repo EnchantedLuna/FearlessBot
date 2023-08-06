@@ -80,7 +80,7 @@ bot.on("messageCreate", async (message) => {
       });
     }
     if (
-      util.isCommandBlocked(
+      await util.isCommandBlocked(
         message.channel.guild.id,
         message.channel.id,
         db,
