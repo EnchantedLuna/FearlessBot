@@ -79,6 +79,18 @@ bot.on("messageCreate", async (message) => {
         content: ":no_entry: You do not have permission to run this command.",
       });
     }
+    if (
+      util.isCommandBlocked(
+        message.channel.guild.id,
+        message.channel.id,
+        db,
+        commandName
+      )
+    ) {
+      return message.channel.send({
+        content: ":no_entry: This command is blocked in this channel.",
+      });
+    }
     let action = require("./commands/" + commands[commandName].action);
     action.run(message, args, bot, db, commands[commandName].extra);
   }

@@ -29,6 +29,28 @@ exports.channelCountsInStatistics = async function (guildId, channelId, db) {
   return true;
 };
 
+exports.isCommandBlocked = async function (guildId, channelId, db, command) {
+  const cachedValue = cache.get("blocked-" + channelId);
+  if (cachedValue !== undefined) {
+    const blockedList = cachedValue.split(",");
+    return command in blockedList;
+  }
+  const [result] = await db
+    .promise()
+    .query(
+      "SELECT blocked_commands FROM channel_stats WHERE `server`=? AND `channel`=?",
+      [guildId, channelId]
+    );
+  if (result[0]) {
+    const blocked = result[0].blocked_commands;
+    const blockedList = blocked.split(",");
+    cache.set("blocked-" + channelId, result[0].blocked_commands);
+    return command in blockedList;
+  }
+  cache.set("blocked-" + channelId, "");
+  return false;
+};
+
 exports.isMod = function (member, guild) {
   if (typeof member === "string") {
     member = guild.members.cache.get(member);
