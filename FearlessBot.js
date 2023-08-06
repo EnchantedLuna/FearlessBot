@@ -57,7 +57,9 @@ bot.on("messageCreate", async (message) => {
   if (
     message.content.indexOf(prefix) !== 0 ||
     message.author.bot ||
-    !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+    !message.channel
+      .permissionsFor(message.guild.members.me)
+      .has("SEND_MESSAGES")
   ) {
     return;
   }

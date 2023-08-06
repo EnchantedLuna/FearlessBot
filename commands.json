@@ -1093,6 +1093,26 @@
       "default_member_permissions": 16
     }
   },
+  "blockcommands": {
+    "action": "mod/blockcommands",
+    "permissions": "all",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "blockcommands",
+      "description": "Block legacy (non-slash) commands in this channel",
+      "options": [
+        {
+          "name": "list",
+          "description": "Comma-separated list of blocked commands without spaces (e.g. song,album,8ball)",
+          "required": true,
+          "type": "STRING"
+        }
+      ],
+      "dm_permission": false,
+      "default_member_permissions": 16
+    }
+  },
   "showconfig": {
     "action": "mod/showconfig",
     "type": "slash",
