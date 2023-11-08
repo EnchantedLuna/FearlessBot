@@ -1,5 +1,7 @@
+const { ChannelType } = require("discord.js");
+
 exports.run = function (message, args, bot, db) {
-  if (message.channel.type !== "DM") {
+  if (message.channel.type !== ChannelType.DM) {
     message.channel.send(
       message.author.toString() + ", answer only in my DMs!"
     );
