@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const taylorSongsByAlbum = [
   {
@@ -273,7 +273,7 @@ exports.run = function (message, args, bot, db) {
   let album =
     taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
   let song = album.songs[Math.floor(Math.random() * album.songs.length)];
-  let embed = new MessageEmbed().setTitle("Random Song");
+  let embed = new EmbedBuilder().setTitle("Random Song");
   let text = "You should listen to " + song;
   text += album.title !== null ? " from " + album.title + "." : ".";
   embed.setDescription(text);
@@ -291,7 +291,7 @@ exports.interaction = function (interaction, bot, db) {
   let song = album.songs[Math.floor(Math.random() * album.songs.length)];
   let text = "You should listen to " + song;
   text += album.title !== null ? " from " + album.title + "." : ".";
-  let songEmbed = new MessageEmbed()
+  let songEmbed = new EmbedBuilder()
     .setTitle("Random Song")
     .setDescription(text.toString());
   if (album.image !== null) {

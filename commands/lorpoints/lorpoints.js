@@ -1,10 +1,10 @@
 const { findMemberID, getGuildConfig } = require("../../util");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 function getEmbed(row, rank, cap) {
   const lifetime = row["lifetime_lorpoints"] + row["lorpoints"];
   return [
-    new MessageEmbed()
+    new EmbedBuilder()
       .setTitle(":star: Lorpoints")
       .setDescription(
         row.username +

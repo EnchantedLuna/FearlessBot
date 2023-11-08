@@ -1,5 +1,10 @@
 const config = require("./config.json");
-const { Client, Intents } = require("discord.js");
+const {
+  Client,
+  GatewayIntentBits,
+  Partials,
+  PermissionsBitField,
+} = require("discord.js");
 const mysql = require("mysql2");
 const commands = require("./commands.json");
 const util = require("./util");
@@ -11,15 +16,16 @@ const directMessagePrefix = "!";
 const bot = new Client({
   allowedMentions: { parse: ["users", "roles"], repliedUser: true },
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_BANS,
-    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Intents.FLAGS.DIRECT_MESSAGES,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildModeration,
+    GatewayIntentBits.GuildEmojisAndStickers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.DirectMessages,
   ],
-  partials: ["CHANNEL"],
+  partials: [Partials.Channel],
 });
 
 const db = mysql.createConnection({
@@ -59,7 +65,7 @@ bot.on("messageCreate", async (message) => {
     message.author.bot ||
     !message.channel
       .permissionsFor(message.guild.members.me)
-      .has("SEND_MESSAGES")
+      .has(PermissionsBitField.Flags.SendMessages)
   ) {
     return;
   }

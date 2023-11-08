@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const responses = [
   "It is certain",
@@ -31,21 +31,23 @@ exports.run = function (message, args, bot, db) {
   const answer = responses[Math.floor(Math.random() * responses.length)];
   return message.channel.send({
     embeds: [
-        new MessageEmbed()
-            .setTitle(":8ball: 8 Ball")
-            .setDescription(answer.toString()),
-    ]
+      new EmbedBuilder()
+        .setTitle(":8ball: 8 Ball")
+        .setDescription(answer.toString()),
+    ],
   });
 };
 
-exports.interaction = function(interaction, bot, db) {
+exports.interaction = function (interaction, bot, db) {
   const question = interaction.options.getString("question");
   const answer = responses[Math.floor(Math.random() * responses.length)];
   interaction.reply({
     embeds: [
-        new MessageEmbed()
-            .setTitle(":8ball: 8 Ball")
-            .setDescription("Question: " + question + "\nAnswer: " + answer.toString()),
-    ]
+      new EmbedBuilder()
+        .setTitle(":8ball: 8 Ball")
+        .setDescription(
+          "Question: " + question + "\nAnswer: " + answer.toString()
+        ),
+    ],
   });
-}
+};

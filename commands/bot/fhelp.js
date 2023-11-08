@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const filePath = "../../fhelp.txt";
 exports.run = function (message) {
   fs.readFile(path.resolve(__dirname, filePath), "utf8", function (err, data) {
@@ -9,32 +9,32 @@ exports.run = function (message) {
     }
     message.channel.send({
       embeds: [
-          new MessageEmbed()
-              .setTitle("FearlessBot Help")
-              .setDescription(data.toString())
-              .setFooter({
-                text: "Commands with (/) also available as slash commands"
-              })
-      ]
-    })
+        new EmbedBuilder()
+          .setTitle("FearlessBot Help")
+          .setDescription(data.toString())
+          .setFooter({
+            text: "Commands with (/) also available as slash commands",
+          }),
+      ],
+    });
   });
 };
 
-exports.interaction = function(interaction, bot, db) {
+exports.interaction = function (interaction, bot, db) {
   fs.readFile(path.resolve(__dirname, filePath), "utf8", function (err, data) {
     if (err) {
       return console.log(err);
     }
     interaction.reply({
       embeds: [
-          new MessageEmbed()
-              .setTitle("FearlessBot Help")
-              .setDescription(data.toString())
-              .setFooter({
-                text: "Commands with (/) also available as slash commands"
-              })
+        new EmbedBuilder()
+          .setTitle("FearlessBot Help")
+          .setDescription(data.toString())
+          .setFooter({
+            text: "Commands with (/) also available as slash commands",
+          }),
       ],
-      ephemeral: true
-    })
+      ephemeral: true,
+    });
   });
-}
+};

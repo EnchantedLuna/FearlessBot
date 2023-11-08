@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, MessageActionRow, MessageButton } = require("discord.js");
 const friendlyNames = {
   lorpoints: "lorpoints",
   words: "words",
@@ -61,7 +61,7 @@ exports.run = function (message, page, bot, db, thing) {
       for (i = 0, p = 1, j = entries.length; i < j; i += chunk, p++) {
         tempArray = entries.slice(i, i + chunk);
         embeds.push(
-          new MessageEmbed()
+          new EmbedBuilder()
             .setTitle(":first_place: Ranking for " + friendlyNames[thing])
             .setDescription(tempArray.join("\n"))
         );

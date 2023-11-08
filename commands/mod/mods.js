@@ -1,15 +1,20 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const {
+  EmbedBuilder,
+  MessageActionRow,
+  MessageButton,
+  ButtonStyle,
+} = require("discord.js");
 const { log } = require("../../util");
 
 const buttons = new MessageActionRow().addComponents(
   new MessageButton()
     .setCustomId("allMods")
     .setLabel("Ping All Mods")
-    .setStyle("PRIMARY"),
+    .setStyle(ButtonStyle.Primary),
   new MessageButton()
     .setCustomId("cancel")
     .setLabel("Cancel")
-    .setStyle("SECONDARY")
+    .setStyle(ButtonStyle.Secondary)
 );
 
 exports.run = function (message) {

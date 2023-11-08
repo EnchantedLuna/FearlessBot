@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const albums = [
   { title: "Taylor Swift (Debut)", image: "https://i.imgur.com/w0bksSN.jpg" },
@@ -27,7 +27,7 @@ exports.run = function (message, args, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
   message.channel.send({
     embeds: [
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle("Random Album")
         .setDescription("You should listen to " + answer.title + ".")
         .setThumbnail(answer.image),
@@ -39,7 +39,7 @@ exports.interaction = function (interaction, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
   interaction.reply({
     embeds: [
-      new MessageEmbed()
+      new EmbedBuilder()
         .setTitle("Random Album")
         .setDescription("You should listen to " + answer.title + ".")
         .setThumbnail(answer.image),

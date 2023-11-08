@@ -1,5 +1,6 @@
 const { channelCountsInStatistics } = require("./util");
 const config = require("./config.json");
+const { ChannelType } = require("discord.js");
 
 exports.updateChannelStats = function (message, db) {
   db.query(
@@ -60,7 +61,7 @@ exports.updateUserStats = async function (message, db) {
 
 exports.handleMessageDelete = function (message, db) {
   if (
-    !message.channel.isText() ||
+    !message.channel.type === ChannelType.GuildText ||
     (message.author.id === config.botAdminUserId &&
       message.content.startsWith("!fsay"))
   ) {
