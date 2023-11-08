@@ -1,6 +1,6 @@
 const { log, getGuildConfig } = require("../../util");
 const config = require("../../config.json");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 exports.run = async function (message, args, bot, db) {
   const eventCap = await getGuildConfig(
@@ -17,7 +17,7 @@ exports.run = async function (message, args, bot, db) {
   if (message.mentions.members.size === 0) {
     message.channel.send({
       embeds: [
-        new MessageEmbed()
+        new EmbedBuilder()
           .setDescription(":x: You must mention a member to add lorpoints to.")
           .setColor(0xff0000),
       ],
@@ -75,7 +75,7 @@ exports.run = async function (message, args, bot, db) {
       }
       message.channel.send({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setTitle(":star: Adding Capped Lorpoints")
             .setDescription(resultMessage.toString())
             .setColor(0xdbe07e)

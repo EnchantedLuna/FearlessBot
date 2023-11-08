@@ -1,5 +1,5 @@
 const util = require("../../util");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 exports.interaction = async function (interaction, bot, db) {
   const allConfig = await util.getAllGuildConfig(interaction.guild.id, db);
@@ -10,7 +10,7 @@ exports.interaction = async function (interaction, bot, db) {
   }
   interaction.reply({
     embeds: [
-      new MessageEmbed().setTitle("Server Config").setDescription(response),
+      new EmbedBuilder().setTitle("Server Config").setDescription(response),
     ],
   });
 };

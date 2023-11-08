@@ -1,4 +1,9 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+} = require("discord.js");
 const friendlyNames = {
   lorpoints: "lorpoints",
   words: "words",
@@ -7,15 +12,15 @@ const friendlyNames = {
 
 exports.run = function (message, page, bot, db, thing) {
   let entries = [];
-  const buttons = new MessageActionRow().addComponents(
-    new MessageButton()
+  const buttons = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
       .setCustomId("previousButton")
       .setLabel("Previous")
-      .setStyle("SECONDARY"),
-    new MessageButton()
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
       .setCustomId("nextButton")
       .setLabel("Next")
-      .setStyle("SECONDARY")
+      .setStyle(ButtonStyle.Secondary)
   );
 
   db.query(
@@ -61,7 +66,7 @@ exports.run = function (message, page, bot, db, thing) {
       for (i = 0, p = 1, j = entries.length; i < j; i += chunk, p++) {
         tempArray = entries.slice(i, i + chunk);
         embeds.push(
-          new MessageEmbed()
+          new EmbedBuilder()
             .setTitle(":first_place: Ranking for " + friendlyNames[thing])
             .setDescription(tempArray.join("\n"))
         );
