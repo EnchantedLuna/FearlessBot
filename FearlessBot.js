@@ -4,6 +4,7 @@ const {
   GatewayIntentBits,
   Partials,
   PermissionsBitField,
+  ChannelType,
 } = require("discord.js");
 const mysql = require("mysql2");
 const commands = require("./commands.json");
@@ -46,7 +47,7 @@ bot.on("ready", () => {
 });
 
 bot.on("messageCreate", async (message) => {
-  if (message.channel.type === "DM") {
+  if (message.channel.type === ChannelType.DM) {
     handleDirectMessage(message);
     return;
   }
