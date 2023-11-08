@@ -11,7 +11,10 @@ const albums = [
     image: "https://i.imgur.com/K8ZVgVV.jpg",
   },
   { title: "Red (Taylor's Version)", image: "https://i.imgur.com/0nUf20J.jpg" },
-  { title: "1989", image: "https://i.imgur.com/i1QDoZR.jpg" },
+  {
+    title: "1989 (Taylor's Version)",
+    image: "https://i.imgur.com/6G6TlkC.png",
+  },
   { title: "reputation", image: "https://i.imgur.com/o2v3b7E.jpg" },
   { title: "Lover", image: "https://i.imgur.com/cNnUR0M.jpg" },
   { title: "folklore", image: "https://i.imgur.com/oZvDEky.jpg" },

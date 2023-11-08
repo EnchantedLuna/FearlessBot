@@ -135,6 +135,12 @@ const taylorSongsByAlbum = [
       "Wonderland",
       "You Are In Love",
       "New Romantics",
+      "Slut!",
+      "Say Don't Go",
+      "Now That We Don't Talk",
+      "Suburban Legends",
+      "Is It Over Now?",
+      "Sweeter Than Fiction",
     ],
   },
   {
@@ -262,9 +268,9 @@ const taylorSongsByAlbum = [
       "I Heart ?",
       "Safe and Sound",
       "Eyes Open",
-      "Sweeter Than Fiction",
       "Only the Young",
       "Christmas Tree Farm",
+      "All of the Girls You Loved Before",
     ],
   },
 ];
