@@ -116,8 +116,8 @@ const taylorSongsByAlbum = [
     ],
   },
   {
-    title: "1989",
-    image: "https://i.imgur.com/i1QDoZR.jpg",
+    title: "1989 (Taylor's Version)",
+    image: "https://i.imgur.com/6G6TlkC.png",
     songs: [
       "Welcome To New York",
       "Blank Space",
