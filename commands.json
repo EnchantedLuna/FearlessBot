@@ -1124,6 +1124,43 @@
       "default_member_permissions": 32
     }
   },
+  "timedrole": {
+    "action": "mod/timedrole",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "timedrole",
+      "description": "Give a member a role for a defined period of time",
+      "dm_permission": false,
+      "default_member_permissions": 268435456,
+      "options": [
+        {
+          "name": "member",
+          "description": "The member to receive the role",
+          "required": true,
+          "type": 6
+        },
+        {
+          "name": "role",
+          "description": "The role to assign",
+          "required": true,
+          "type": 8
+        },
+        {
+          "name": "days",
+          "description": "The number of days to receive the role",
+          "required": false,
+          "type": 4
+        },
+        {
+          "name": "hours",
+          "description": "The number of hours to receive the role",
+          "required": false,
+          "type": 4
+        }
+      ]
+    }
+  },
   "config": {
     "action": "mod/configset",
     "type": "slash",

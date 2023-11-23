@@ -55,6 +55,7 @@ CREATE TABLE scheduled_actions
     action VARCHAR(20),
     guild VARCHAR(20),
     user VARCHAR(20),
+    roleid VARCHAR(20),
     effectivetime DATETIME,
     completed TINYINT(1) NOT NULL DEFAULT 0
 );

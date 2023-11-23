@@ -47,13 +47,15 @@ function runScheduledActions(bot, db) {
             member.roles.remove(supermute);
             util.log(guild, member.user.username + "'s supermute has expired.");
             break;
-          case "unbowlmute":
-            let bowlmute = guild.roles.cache.find(
-              (role) => role.name === "bowlmute"
+          case "removerole":
+            let role = guild.roles.cache.find(
+              (role) => role.id === rows[i].roleid
             );
-            if (typeof bowlmute == "undefined") {
+            if (typeof role == "undefined") {
               console.log(
-                "Scheduled actions: Bowl mute role not found in guild " +
+                "Scheduled actions: Role id " +
+                  rows[i].roleid +
+                  "not found in guild " +
                   rows[i].guild
               );
               continue;
@@ -64,15 +66,20 @@ function runScheduledActions(bot, db) {
                 guild,
                 "Warning: " +
                   rows[i].username +
-                  " was scheduled to be unmuted for bowls, but this member was not found. Have they left?"
+                  " was scheduled to have the " +
+                  role.name +
+                  " role removed, but this member was not found. Have they left?"
               );
               db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
                 rows[i].id,
               ]);
               continue;
             }
-            member.roles.remove(bowlmute);
-            util.log(guild, member.user.username + "'s bowl mute has expired.");
+            member.roles.remove(role);
+            util.log(
+              guild,
+              member.user.username + "'s " + role.name + " role has expired."
+            );
             db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
               rows[i].id,
             ]);
@@ -91,27 +98,56 @@ function runScheduledActions(bot, db) {
 }
 exports.runScheduledActions = runScheduledActions;
 
-exports.validateMutes = function(member, bot, db) {
-  db.query("SELECT * FROM scheduled_actions WHERE guild = ? AND user = ? AND effectivetime > NOW() AND completed = 0 AND action IN ('unmute', 'unbowlmute')",
-   [member.guild.id, member.id], function(err, rows) {
-    for (let i = 0; i < rows.length; i++) {
-      let guild = bot.guilds.cache.get(rows[i].guild);
-      switch (rows[i].action) {
-        case "unmute":
-          let supermute = guild.roles.cache.find(
-            (role) => role.name === "supermute"
-          );
-          if (typeof supermute == "undefined") {
-            console.log(
-              "Scheduled actions: Supermute role not found in guild " +
-                rows[i].guild
+exports.validateMutes = function (member, bot, db) {
+  db.query(
+    "SELECT * FROM scheduled_actions WHERE guild = ? AND user = ? AND effectivetime > NOW() AND completed = 0 AND action IN ('unmute', 'removerole')",
+    [member.guild.id, member.id],
+    function (err, rows) {
+      for (let i = 0; i < rows.length; i++) {
+        let guild = bot.guilds.cache.get(rows[i].guild);
+        switch (rows[i].action) {
+          case "unmute":
+            let supermute = guild.roles.cache.find(
+              (role) => role.name === "supermute"
             );
-            continue;
-          }
-          member.roles.add(supermute);
-          util.log(guild, member.user.username + " has joined and has an active supermute. Supermute role added.");
-          break;
+            if (typeof supermute == "undefined") {
+              console.log(
+                "Scheduled actions: Supermute role not found in guild " +
+                  rows[i].guild
+              );
+              continue;
+            }
+            member.roles.add(supermute);
+            util.log(
+              guild,
+              member.user.username +
+                " has joined and has an active supermute. Supermute role added."
+            );
+            break;
+          case "removerole":
+            let role = guild.roles.cache.find(
+              (role) => role.id === rows[i].roleid
+            );
+            if (typeof role == "undefined") {
+              console.log(
+                "Scheduled actions: " +
+                  rows[i] +
+                  " role not found in guild " +
+                  rows[i].guild
+              );
+              continue;
+            }
+            member.roles.add(role);
+            util.log(
+              guild,
+              member.user.username +
+                " has joined and has an active " +
+                role.name +
+                " role. This role has been re-added."
+            );
+            break;
+        }
       }
     }
-   });
-}
+  );
+};
