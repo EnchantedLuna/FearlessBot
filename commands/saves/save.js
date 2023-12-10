@@ -1,8 +1,3 @@
-const {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-  chatInputApplicationCommandMention,
-} = require("discord.js");
 const { isMod, log } = require("../../util");
 
 exports.run = function (message, args, bot, db) {
