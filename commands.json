@@ -371,6 +371,9 @@
       },
       "list": {
         "action": "saves/getlist"
+      },
+      "create": {
+        "action": "saves/save"
       }
     },
     "interactionCreate": {
@@ -380,12 +383,12 @@
         {
           "name": "delete",
           "description": "Delete a saved item",
-          "type": "SUB_COMMAND",
+          "type": 1,
           "options": [
             {
               "name": "keyword",
               "description": "The keyword of the saved item to delete",
-              "type": "STRING",
+              "type": 3,
               "required": true
             }
           ]
@@ -393,12 +396,12 @@
         {
           "name": "random",
           "description": "Show a random saved item",
-          "type": "SUB_COMMAND",
+          "type": 1,
           "options": [
             {
               "name": "prefix",
               "description": "Something you want the random save to begin with (e.g. wtf)",
-              "type": "STRING",
+              "type": 3,
               "required": false
             }
           ]
@@ -406,7 +409,26 @@
         {
           "name": "list",
           "description": "Links to a webpage with the list of the server's saved items",
-          "type": "SUB_COMMAND"
+          "type": 1
+        },
+        {
+          "name": "create",
+          "description": "Create a new saved item",
+          "type": 1,
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to create",
+              "type": 3,
+              "required": true
+            },
+            {
+              "name": "value",
+              "description": "The content to be saved",
+              "type": 3,
+              "required": true
+            }
+          ]
         }
       ],
       "dm_permission": false
