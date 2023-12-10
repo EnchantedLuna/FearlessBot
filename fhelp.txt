@@ -11,7 +11,7 @@ Saves:
 ``!rg`` (/save random): Gets a saved item at random
 ``!g [keyword]``, ``!get [keyword]`` (/) : Retrieves a saved item
 ``!gmeta [keyword]`` : View info about a saved item
-``!save [keyword] [link/text]`` : Creates a new saved item
+``/save create`` : Creates a new saved item
 ``!delete [keyword]`` (/save delete) : Deletes an item you saved
 
 Stats:
@@ -23,7 +23,7 @@ Stats:
 ``!rankwords``, ``!ranklorpoints`` : Ranks members by words or lorpoints
 
 Questions (DMs only):
-``!question [question]`` (/question create) : Creates a new question
+``/question create``: Creates a new question
 ``!answer [id] [answer]`` (/) : Submits an answer to a question
 ``!getanswers [id]``, ``!getnewanswers [id]`` (/question get-answers): View answers to a question you created
 ``!watch [id]``, ``!unwatch [id]`` : Turns on/off notifications for new answers to your question
