@@ -173,17 +173,6 @@
       "dm_permission": true
     }
   },
-  "namemix": {
-    "action": "fun/namemix",
-    "permissions": "all",
-    "type": "both",
-    "interaction": true,
-    "interactionCreate": {
-      "name": "namemix",
-      "description": "Create a mix of two name parts",
-      "dm_permission": true
-    }
-  },
   "shitpost": {
     "action": "fun/shitpost",
     "permissions": "all",
@@ -637,11 +626,6 @@
   },
   "addshitpost": {
     "action": "mod/addshitpost",
-    "permissions": "mainServerMods",
-    "type": "server"
-  },
-  "addnamemix": {
-    "action": "mod/addnamemix",
     "permissions": "mainServerMods",
     "type": "server"
   },
