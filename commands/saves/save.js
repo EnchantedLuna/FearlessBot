@@ -15,6 +15,16 @@ exports.interaction = function (interaction, bot, db) {
     );
     return;
   }
+  if (key.includes(" ")) {
+    interaction.reply(":warning: Keywords should not contain spaces.");
+    return;
+  }
+  if (value.includes("cdn.discordapp.com")) {
+    interaction.reply(
+      ":warning: Discord file upload links cannot be saved as the links will not be valid long-term."
+    );
+    return;
+  }
 
   db.query(
     "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
