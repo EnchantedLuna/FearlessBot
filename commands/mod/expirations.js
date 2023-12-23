@@ -12,12 +12,14 @@ async function getBans(db, guild) {
     const timestamp = row.effectivetime.getTime() / 1000;
     const timestampString = "<t:" + timestamp + ":R>";
     const type = getType(row.action, row.roleid, guild);
+    let displayUser = row.username;
+    if (row.discriminator != 0) {
+      displayUser = displayUser + "#" + row.discriminator;
+    }
     const line =
       type +
       ": " +
-      row.username +
-      "#" +
-      row.discriminator +
+      displayUser +
       " (" +
       row.id +
       ") - " +
