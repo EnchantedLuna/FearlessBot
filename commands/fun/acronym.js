@@ -25,6 +25,7 @@ exports.interaction = function (interaction, bot, db) {
       content: "I don't have a definition for " + searchTerm + ", sorry!",
       ephemeral: true,
     });
+    return;
   }
   interaction.reply({ content: answer });
 };
