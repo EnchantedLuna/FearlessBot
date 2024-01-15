@@ -93,5 +93,6 @@ exports.interaction = function (interaction, bot, db) {
           " has been timed out.",
       },
     ],
+    ephemeral: true,
   });
 };
