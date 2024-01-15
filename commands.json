@@ -467,6 +467,45 @@
     "permissions": "mods",
     "type": "server"
   },
+  "timeout": {
+    "action": "mod/supermute",
+    "permissions": "mods",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "timeout",
+      "description": "Timeout a member",
+      "type": 1,
+      "dm_permission": false,
+      "default_member_permissions": "1099511627776",
+      "options": [
+        {
+          "name": "member",
+          "description": "The user to timeout",
+          "required": true,
+          "type": 6
+        },
+        {
+          "name": "days",
+          "description": "Number of days",
+          "required": false,
+          "type": 4
+        },
+        {
+          "name": "hours",
+          "description": "Number of hours",
+          "required": false,
+          "type": 4
+        },
+        {
+          "name": "reason",
+          "description": "The reason for the timeout",
+          "required": false,
+          "type": 3
+        }
+      ]
+    }
+  },
   "ban": {
     "action": "mod/ban",
     "permissions": "mods",
