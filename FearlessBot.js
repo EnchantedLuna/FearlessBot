@@ -182,6 +182,22 @@ bot.on("interactionCreate", async (interaction) => {
   }
 });
 
+bot.on("guildAuditLogEntryCreate", async (auditLog) => {
+  if (auditLog.action !== 24) return;
+  const targetId = auditLog.targetId;
+  for (const change of auditLog.changes) {
+    if (change.key == "communication_disabled_until") {
+      if (change.new !== undefined) {
+        const timeoutLength = Math.round(
+          (Date.parse(change.new) - Date.now()) / 60000
+        );
+        db.query("UPDATE ");
+        console.log(timeoutLength);
+      }
+    }
+  }
+});
+
 bot.login(config.token);
 
 process.on("unhandledRejection", (reason, promise) => {
