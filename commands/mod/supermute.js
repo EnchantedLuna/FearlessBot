@@ -75,7 +75,9 @@ exports.interaction = function (interaction, bot, db) {
     return;
   }
   if (
-    member.roles.highest.position >= interaction.member.roles.highest.position
+    member.roles.highest.position >=
+      interaction.member.roles.highest.position &&
+    member.user.id !== interaction.user.id
   ) {
     interaction.reply("You do not have permission to timeout that member.");
     return;
