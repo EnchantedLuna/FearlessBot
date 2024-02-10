@@ -60,7 +60,7 @@ exports.isMod = function (member, guild) {
   }
   return (
     exports.hasRole(member, guild, "mods") ||
-    member.id === config.botAdminUserId
+    exports.hasRole(member, guild, "founder")
   );
 };
 
