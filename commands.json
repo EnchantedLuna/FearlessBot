@@ -173,25 +173,6 @@
       "dm_permission": true
     }
   },
-  "shitpost": {
-    "action": "fun/shitpost",
-    "permissions": "all",
-    "type": "both",
-    "interaction": true,
-    "interactionCreate": {
-      "name": "shitpost",
-      "description": "Get a shitpost",
-      "options": [
-        {
-          "name": "id",
-          "description": "Specific ID number of a shitpost",
-          "required": false,
-          "type": "INTEGER"
-        }
-      ],
-      "dm_permission": true
-    }
-  },
   "rg": {
     "action": "saves/rg",
     "permissions": "all",
@@ -662,11 +643,6 @@
     "permissions": "mods",
     "type": "server",
     "extra": 0
-  },
-  "addshitpost": {
-    "action": "mod/addshitpost",
-    "permissions": "mainServerMods",
-    "type": "server"
   },
   "fsay": {
     "action": "bot/fsay",

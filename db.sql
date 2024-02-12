@@ -41,14 +41,6 @@ CREATE TABLE members
 );
 CREATE INDEX idx_username ON members (server, username);
 
-CREATE TABLE shitposts
-(
-  id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  shitpost VARCHAR(500),
-  addedby BIGINT(20),
-  addedon DATETIME
-);
-
 CREATE TABLE scheduled_actions
 (
     id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
