@@ -60,29 +60,37 @@ function runScheduledActions(bot, db) {
               );
               continue;
             }
-            member = guild.members.cache.get(rows[i].user);
-            if (typeof member == "undefined") {
-              util.log(
-                guild,
-                "Warning: " +
-                  rows[i].username +
-                  " was scheduled to have the " +
-                  role.name +
-                  " role removed, but this member was not found. Have they left?"
-              );
-              db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
-                rows[i].id,
-              ]);
-              continue;
-            }
-            member.roles.remove(role);
-            util.log(
-              guild,
-              member.user.username + "'s " + role.name + " role has expired."
-            );
-            db.query("UPDATE scheduled_actions SET completed=1 WHERE id=?", [
-              rows[i].id,
-            ]);
+            guild.members
+              .fetch(rows[i].user)
+              .then((member) => {
+                member.roles.remove(role);
+                util.log(
+                  guild,
+                  member.user.username +
+                    "'s " +
+                    role.name +
+                    " role has expired."
+                );
+                db.query(
+                  "UPDATE scheduled_actions SET completed=1 WHERE id=?",
+                  [rows[i].id]
+                );
+              })
+              .catch(() => {
+                util.log(
+                  guild,
+                  "Warning: " +
+                    rows[i].username +
+                    " was scheduled to have the " +
+                    role.name +
+                    " role removed, but this member was not found. Have they left?"
+                );
+                db.query(
+                  "UPDATE scheduled_actions SET completed=1 WHERE id=?",
+                  [rows[i].id]
+                );
+              });
+
             break;
           case "unban":
             guild.members.unban(rows[i].user);
