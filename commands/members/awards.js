@@ -1,4 +1,4 @@
-const { findMember } = require("../../util");
+const { findMember, escapeText } = require("../../util");
 
 async function getAwards(db, guildId, memberId) {
   const [rows] = await db
@@ -19,14 +19,14 @@ function getEmbed(member, rows) {
     }
     return [
       {
-        title: ":trophy: Awards for " + member.displayName,
+        title: ":trophy: Awards for " + escapeText(member.displayName),
         description: awardsText,
       },
     ];
   } else {
     return [
       {
-        title: "Awards for " + member.displayName,
+        title: "Awards for " + escapeText(member.displayName),
         description: "none :frowning: ",
       },
     ];

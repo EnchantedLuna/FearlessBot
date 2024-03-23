@@ -1,3 +1,5 @@
+const { escapeText } = require("../../util");
+
 async function getBans(db, guild) {
   const [rows] = await db.promise().query(
     "SELECT m.id, m.username, m.discriminator, sa.action, sa.effectivetime, sa.roleid FROM scheduled_actions sa JOIN members m ON sa.guild=m.server AND sa.user=m.id \
@@ -19,7 +21,7 @@ async function getBans(db, guild) {
     const line =
       type +
       ": " +
-      displayUser +
+      escapeText(displayUser) +
       " (" +
       row.id +
       ") - " +

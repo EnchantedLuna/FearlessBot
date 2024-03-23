@@ -206,3 +206,9 @@ exports.getAllGuildConfig = async function (guild, db) {
 exports.clearCacheValue = function (key) {
   cache.del(key);
 };
+
+exports.escapeText = function (text) {
+  text = text.replaceAll("*", "\\*");
+  text = text.replaceAll("_", "\\_");
+  return text;
+};
