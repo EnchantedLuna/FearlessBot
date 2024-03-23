@@ -60,7 +60,7 @@ exports.isMod = function (member, guild) {
   }
   return (
     exports.hasRole(member, guild, "mods") ||
-    exports.hasRole(member, guild, "founder")
+    exports.hasRole(member, guild, "trial mods")
   );
 };
 
