@@ -866,6 +866,32 @@
     "type": "server",
     "extra": "question"
   },
+  "roleping": {
+    "action": "mod/events",
+    "permissions": "mods",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "roleping",
+      "description": "Ping a role",
+      "options": [
+        {
+          "name": "role",
+          "description": "The role to ping",
+          "required": true,
+          "type": 8
+        },
+        {
+          "name": "message",
+          "description": "The message to include",
+          "required": true,
+          "type": 3
+        }
+      ],
+      "dm_permission": true,
+      "default_member_permissions": 268443648
+    }
+  },
   "fnick": {
     "action": "bot/fnick",
     "permissions": "mods",
