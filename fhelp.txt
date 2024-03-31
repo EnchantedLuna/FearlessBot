@@ -6,7 +6,7 @@ Basic Commands:
 ``/acronym``: Looks up a Taylor Swift song acronym
 
 Saves:
-``!save random``: Gets a saved item at random
+``/save random``: Gets a saved item at random
 ``!g [keyword]``, ``/get`` : Retrieves a saved item
 ``!gmeta [keyword]`` : View info about a saved item
 ``/save create`` : Creates a new saved item

@@ -654,7 +654,21 @@
   "fsay": {
     "action": "bot/fsay",
     "permissions": "admin",
-    "type": "server"
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "fsay",
+      "description": "Speak (Bot Admin only)",
+      "dm_permission": false,
+      "options": [
+        {
+          "name": "message",
+          "description": "Message to speak",
+          "required": true,
+          "type": 3
+        }
+      ]
+    }
   },
   "screate": {
     "action": "bot/screate",
