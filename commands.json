@@ -433,21 +433,6 @@
       "dm_permission": false
     }
   },
-  "mute": {
-    "action": "mod/supermute",
-    "permissions": "mods",
-    "type": "server"
-  },
-  "supermute": {
-    "action": "mod/supermute",
-    "permissions": "mods",
-    "type": "server"
-  },
-  "hush": {
-    "action": "mod/supermute",
-    "permissions": "mods",
-    "type": "server"
-  },
   "timeout": {
     "action": "mod/supermute",
     "permissions": "mods",
@@ -623,16 +608,6 @@
       "dm_permission": false,
       "default_member_permissions": 32
     }
-  },
-  "unsupermute": {
-    "action": "mod/unsupermute",
-    "permissions": "mods",
-    "type": "server"
-  },
-  "unmute": {
-    "action": "mod/unsupermute",
-    "permissions": "mods",
-    "type": "server"
   },
   "getunapproved": {
     "action": "saves/getunapproved",
