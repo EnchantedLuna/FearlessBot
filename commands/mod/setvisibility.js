@@ -1,8 +1,9 @@
-exports.run = function (message, args, bot, db, value) {
+exports.interaction = function (interaction, bot, db) {
+  const value = interaction.options.getInteger("value");
   db.query("UPDATE channel_stats SET web=? WHERE server = ? AND channel = ?", [
     value,
-    message.channel.guild.id,
-    message.channel.id,
+    interaction.guild.id,
+    interaction.channel.id,
   ]);
-  message.channel.send(":eye: Channel stats visibility has been updated.");
+  interaction.reply(":eye: Channel stats visibility has been updated.");
 };

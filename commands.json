@@ -632,17 +632,29 @@
       "default_member_permissions": 8192
     }
   },
-  "showchannel": {
+  "visibility": {
     "action": "mod/setvisibility",
-    "permissions": "mods",
-    "type": "server",
-    "extra": 1
-  },
-  "hidechannel": {
-    "action": "mod/setvisibility",
-    "permissions": "mods",
-    "type": "server",
-    "extra": 0
+    "permissions": "all",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "visibility",
+      "description": "Set the channel visibility status of the current channel",
+      "options": [
+        {
+          "name": "value",
+          "description": "The on/off value",
+          "required": true,
+          "type": 4,
+          "choices": [
+            { "name": "Visible (Appears in totals/user stats)", "value": 1 },
+            { "name": "Hidden", "value": 0 }
+          ]
+        }
+      ],
+      "dm_permission": false,
+      "default_member_permissions": 16
+    }
   },
   "fsay": {
     "action": "bot/fsay",
