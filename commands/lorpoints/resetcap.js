@@ -1,6 +1,6 @@
-exports.run = function (message, args, bot, db) {
+exports.interaction = function (interaction, bot, db) {
   db.query("UPDATE members SET eventpoints=0 WHERE server=?", [
-    message.channel.guild.id,
+    interaction.guild.id,
   ]);
-  message.channel.send("Event caps have been reset.");
+  interaction.reply("Event caps have been reset.");
 };

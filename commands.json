@@ -600,10 +600,29 @@
     "permissions": "mods",
     "type": "server"
   },
-  "resetcap": {
-    "action": "lorpoints/resetcap",
-    "permissions": "mods",
-    "type": "server"
+  "modlorpoints": {
+    "action": "",
+    "permissions": "all",
+    "type": "server",
+    "interaction": true,
+    "subcommands": {
+      "reset-cap": {
+        "action": "lorpoints/resetcap"
+      }
+    },
+    "interactionCreate": {
+      "name": "modlorpoints",
+      "description": "Options for managing lorpoints",
+      "options": [
+        {
+          "name": "reset-cap",
+          "description": "Reset the event caps",
+          "type": 1
+        }
+      ],
+      "dm_permission": false,
+      "default_member_permissions": 32
+    }
   },
   "unsupermute": {
     "action": "mod/unsupermute",
