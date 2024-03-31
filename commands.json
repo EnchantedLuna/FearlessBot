@@ -794,48 +794,6 @@
       "dm_permission": true
     }
   },
-  "openquestion": {
-    "action": "question/openquestion",
-    "permissions": "all",
-    "type": "dm",
-    "interaction": false
-  },
-  "closequestion": {
-    "action": "question/closequestion",
-    "permissions": "all",
-    "type": "dm",
-    "interaction": false
-  },
-  "watch": {
-    "action": "question/watch",
-    "permissions": "all",
-    "type": "dm",
-    "extra": 1
-  },
-  "unwatch": {
-    "action": "question/watch",
-    "permissions": "all",
-    "type": "dm",
-    "extra": 0
-  },
-  "ga": {
-    "action": "question/getanswers",
-    "permissions": "all",
-    "type": "dm",
-    "extra": false
-  },
-  "getanswers": {
-    "action": "question/getanswers",
-    "permissions": "all",
-    "type": "dm",
-    "extra": false
-  },
-  "getnewanswers": {
-    "action": "question/getanswers",
-    "permissions": "all",
-    "type": "dm",
-    "extra": true
-  },
   "answer": {
     "action": "question/answer",
     "permissions": "all",

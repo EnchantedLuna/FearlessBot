@@ -17,11 +17,6 @@ async function openQuestion(db, userId, questionNumber) {
   return "Question #" + questionNumber + " has been opened.";
 }
 
-exports.run = async function (message, params, bot, db) {
-  const result = await openQuestion(db, message.author.id, params);
-  message.reply(result);
-};
-
 exports.interaction = async function (interaction, bot, db) {
   const id = interaction.options.getInteger("id");
   const result = await openQuestion(db, interaction.user.id, id);

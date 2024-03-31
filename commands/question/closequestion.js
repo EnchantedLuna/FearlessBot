@@ -17,11 +17,6 @@ async function closeQuestion(db, userId, questionNumber) {
   return "Question #" + questionNumber + " has been closed.";
 }
 
-exports.run = async function (message, params, bot, db) {
-  const result = await closeQuestion(db, message.author.id, params);
-  message.reply(result);
-};
-
 exports.interaction = async function (interaction, bot, db) {
   const id = interaction.options.getInteger("id");
   const result = await closeQuestion(db, interaction.user.id, id);

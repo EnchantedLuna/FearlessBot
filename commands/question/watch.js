@@ -20,10 +20,6 @@ async function setWatched(user, questionId, status, db) {
   return response;
 }
 
-exports.run = async function (message, args, bot, db, watched) {
-  message.reply(await setWatched(message.author, args, watched, db));
-};
-
 exports.interaction = async function (interaction, bot, db) {
   const questionId = interaction.options.getInteger("id");
   const watched = interaction.options.getInteger("status");

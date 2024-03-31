@@ -23,12 +23,12 @@ Stats:
 
 Questions (DMs only):
 ``/question create``: Creates a new question
-``!answer [id] [answer]`` (/) : Submits an answer to a question
-``!getanswers [id]``, ``!getnewanswers [id]`` (/question get-answers): View answers to a question you created
-``!watch [id]``, ``!unwatch [id]`` : Turns on/off notifications for new answers to your question
-``!closequestion [id]``, ``!openquestion [id]`` (/question close, /question open) : Closes/opens responses to your question
+``/question get-answers``: View answers to a question you created
+``/answer``: Submits an answer to a question
+``/watch`` : Turns on/off notifications for new answers to your question
+``/question open``, ``/question close``: Closes/opens responses to your question
 
 
 Bot Info:
-``!fversion`` (/) : Displays the bot version
-``!fhelp`` (/) : Displays this message.
+``/fversion`` : Displays the bot version
+``/fhelp`` : Displays this message.
