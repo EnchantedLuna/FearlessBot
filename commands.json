@@ -822,11 +822,6 @@
       "dm_permission": true
     }
   },
-  "reassign": {
-    "action": "question/reassign",
-    "permissions": "admin",
-    "type": "dm"
-  },
   "events": {
     "action": "mod/events",
     "permissions": "mods",
