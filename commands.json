@@ -590,11 +590,6 @@
       "default_member_permissions": 268435456
     }
   },
-  "addawards": {
-    "action": "mod/addaward",
-    "permissions": "mods",
-    "type": "server"
-  },
   "alp": {
     "action": "lorpoints/addlorpoints",
     "permissions": "mods",
