@@ -27,15 +27,13 @@ async function getItem(
       keyword,
     ]);
   if (!rows[0]) {
-    const slashCommandTip = isUsingSlashCommand
-      ? ""
-      : "\nTip: Use /get if you are unsure if a save exists. If it does not, no one else will see your command.";
+    if (!isUsingSlashCommand) {
+      embed.description = "not found";
+      return embed;
+    }
     embed.color = 0xff0000;
     embed.description =
-      ":warning: Nothing is stored for keyword " +
-      keyword +
-      "." +
-      slashCommandTip;
+      ":warning: Nothing is stored for keyword " + keyword + ".";
     return embed;
   }
   if (!rows[0].approved && !showUnapproved) {
@@ -82,6 +80,11 @@ exports.run = async function (message, args, bot, db, showUnapproved) {
     showUnapproved,
     message.author
   );
+  if (embed.description == "not found") {
+    await sleep(250);
+    message.react("❌");
+    return;
+  }
   if (embed.description?.includes("youtube.com/watch")) {
     message.reply({
       content: embed.description + "\n" + embed.footer.text,
@@ -109,3 +112,9 @@ exports.interaction = async function (interaction, bot, db) {
   }
   interaction.reply({ embeds: [embed], ephemeral: embed.color === 0xff0000 });
 };
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
