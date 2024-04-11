@@ -860,11 +860,6 @@
       "default_member_permissions": 268443648
     }
   },
-  "fnick": {
-    "action": "bot/fnick",
-    "permissions": "mods",
-    "type": "server"
-  },
   "spam": {
     "action": "mod/spam",
     "permissions": "all",
