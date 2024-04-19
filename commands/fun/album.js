@@ -24,6 +24,11 @@ const albums = [
     image:
       "https://upload.wikimedia.org/wikipedia/en/9/9f/Midnights_-_Taylor_Swift.png",
   },
+  {
+    title: "The Tortured Poets Department",
+    image:
+      "https://upload.wikimedia.org/wikipedia/en/6/6e/Taylor_Swift_%E2%80%93_The_Tortured_Poets_Department_%28album_cover%29.png",
+  },
 ];
 
 exports.run = function (message, args, bot, db) {
