@@ -3,7 +3,7 @@
   "version": "4.15.11",
   "dependencies": {
     "discord.js": "^14.14.1",
-    "mysql2": "^2.3.3",
+    "mysql2": "^3.9.4",
     "node-cache": "^5.1.2"
   },
   "repository": {
