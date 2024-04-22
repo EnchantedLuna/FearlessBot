@@ -419,6 +419,9 @@
       },
       "approve": {
         "action": "saves/approve"
+      },
+      "getunapproved": {
+        "action": "saves/getunapproved"
       }
     },
     "interactionCreate": {
@@ -450,6 +453,12 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "getunapproved",
+          "description": "Gets a list of unapproved saved items",
+          "type": 1,
+          "default_member_permissions": 8192
         }
       ],
       "dm_permission": false,

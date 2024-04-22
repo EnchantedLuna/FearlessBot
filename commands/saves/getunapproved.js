@@ -19,8 +19,7 @@ async function getUnapprovedItems(db, guildId) {
 }
 
 exports.run = async function (message, args, bot, db) {
-  const unapproved = await getUnapprovedItems(db, message.channel.guild.id);
-  message.channel.send(unapproved);
+  message.reply("This command has been moved to /modsave getunapproved");
 };
 
 exports.interaction = async function (interaction, bot, db) {
