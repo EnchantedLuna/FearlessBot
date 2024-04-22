@@ -408,6 +408,54 @@
       "dm_permission": false
     }
   },
+  "modsave": {
+    "action": "saves/save",
+    "permissions": "mods",
+    "type": "slash",
+    "interaction": true,
+    "subcommands": {
+      "delete": {
+        "action": "saves/delete"
+      },
+      "approve": {
+        "action": "saves/approve"
+      }
+    },
+    "interactionCreate": {
+      "name": "modsave",
+      "description": "Options for saved items",
+      "options": [
+        {
+          "name": "delete",
+          "description": "Delete a saved item",
+          "type": 1,
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to delete",
+              "type": 3,
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "approve",
+          "description": "Approve a saved item",
+          "type": 1,
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to approve",
+              "type": 3,
+              "required": true
+            }
+          ]
+        }
+      ],
+      "dm_permission": false,
+      "default_member_permissions": 8192
+    }
+  },
   "approve": {
     "action": "saves/approve",
     "permissions": "mods",
