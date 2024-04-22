@@ -1,4 +1,4 @@
-const { channelCountsInStatistics } = require("../../util");
+const { channelCountsInStatistics, isMod } = require("../../util");
 
 async function getItem(
   db,
@@ -96,12 +96,13 @@ exports.run = async function (message, args, bot, db, showUnapproved) {
 
 exports.interaction = async function (interaction, bot, db) {
   let keyword = interaction.options.getString("keyword");
+  let isModReview = interaction.commandName == "modsave";
   const embed = await getItem(
     db,
     interaction.guild.id,
     interaction.channel.id,
     keyword,
-    false,
+    isModReview,
     null
   );
   if (embed.description?.includes("youtube.com/watch")) {

@@ -177,11 +177,6 @@
       "dm_permission": true
     }
   },
-  "rg": {
-    "action": "saves/rg",
-    "permissions": "all",
-    "type": "server"
-  },
   "seen": {
     "action": "stats/seen",
     "permissions": "all",
@@ -422,6 +417,9 @@
       },
       "getunapproved": {
         "action": "saves/getunapproved"
+      },
+      "review": {
+        "action": "saves/get"
       }
     },
     "interactionCreate": {
@@ -459,6 +457,19 @@
           "description": "Gets a list of unapproved saved items",
           "type": 1,
           "default_member_permissions": 8192
+        },
+        {
+          "name": "review",
+          "description": "Show a saved item (including unapproved)",
+          "type": 1,
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to get",
+              "type": 3,
+              "required": true
+            }
+          ]
         }
       ],
       "dm_permission": false,
