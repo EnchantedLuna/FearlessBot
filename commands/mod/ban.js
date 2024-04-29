@@ -27,8 +27,6 @@ exports.run = function (message, args, bot, db) {
           description:
             ":hammer: " +
             member.user.username +
-            "#" +
-            member.user.discriminator +
             " (" +
             member.user.id +
             ")" +
@@ -89,8 +87,6 @@ exports.interaction = function (interaction, bot, db) {
         description:
           ":hammer: " +
           member.user.username +
-          "#" +
-          member.user.discriminator +
           " (" +
           member.user.id +
           ")" +
