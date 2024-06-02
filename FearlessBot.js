@@ -166,6 +166,10 @@ bot.on("messageDelete", function (message) {
 });
 
 bot.on("interactionCreate", async (interaction) => {
+  if (interaction.isModalSubmit()) {
+    let action = require("./commands/saves/save-modal"); // the only modal action for now
+    action.handleModalResponse(interaction, bot, db);
+  }
   if (!interaction.isCommand()) return;
   const commandName = interaction.commandName;
   if (commandName in commands && commands[commandName].interaction) {

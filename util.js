@@ -58,10 +58,7 @@ exports.isMod = function (member, guild) {
   if (typeof member === "undefined") {
     return false;
   }
-  return (
-    exports.hasRole(member, guild, "mods") ||
-    exports.hasRole(member, guild, "trial mods")
-  );
+  return exports.hasRole(member, guild, "mods");
 };
 
 exports.hasRole = function (member, guild, roleName) {
@@ -73,6 +70,15 @@ exports.hasRole = function (member, guild, roleName) {
   }
 
   return member.roles.cache.some((memberRole) => memberRole.id === role.id);
+};
+
+exports.hasRoleId = function (member, guild, roleId) {
+  const role = guild.roles.cache.find((role) => role.id == roleId);
+  if (!role) {
+    return false;
+  }
+
+  return member.roles.cache.some((memberRole) => memberRole.id == role.id);
 };
 
 exports.log = function (guild, message) {

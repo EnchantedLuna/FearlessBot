@@ -343,6 +343,9 @@
       },
       "create": {
         "action": "saves/save"
+      },
+      "create-modal": {
+        "action": "saves/save-modal"
       }
     },
     "interactionCreate": {
@@ -398,6 +401,11 @@
               "required": true
             }
           ]
+        },
+        {
+          "name": "create-modal",
+          "description": "Create a new saved item (large text)",
+          "type": 1
         }
       ],
       "dm_permission": false
