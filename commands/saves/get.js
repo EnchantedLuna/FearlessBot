@@ -1,4 +1,16 @@
-const { channelCountsInStatistics, isMod } = require("../../util");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { channelCountsInStatistics, isMod, log } = require("../../util");
+
+const buttons = new ActionRowBuilder().addComponents(
+  new ButtonBuilder()
+    .setCustomId("approve")
+    .setLabel("Approve")
+    .setStyle(ButtonStyle.Success),
+  new ButtonBuilder()
+    .setCustomId("delete")
+    .setLabel("Delete")
+    .setStyle(ButtonStyle.Danger)
+);
 
 async function getItem(
   db,
@@ -39,6 +51,8 @@ async function getItem(
   if (!rows[0].approved && !showUnapproved) {
     embed.description = ":warning: This item has not been approved yet.";
     return embed;
+  } else if (rows[0].approved && showUnapproved) {
+    embed.color = 0x00ff00;
   }
   addToStats(db, guildId, channelId, keyword);
   const text = rows[0]["value"];
@@ -105,13 +119,74 @@ exports.interaction = async function (interaction, bot, db) {
     isModReview,
     null
   );
+  const isNotFound = embed.color === 0xff0000;
+  const isAlreadyApproved = embed.color === 0x00ff00;
   if (embed.description?.includes("youtube.com/watch")) {
     interaction.reply({
       content: embed.description + "\n" + embed.footer.text,
     });
     return;
   }
-  interaction.reply({ embeds: [embed], ephemeral: embed.color === 0xff0000 });
+  if (isModReview && !isNotFound && !isAlreadyApproved) {
+    const response = await interaction.reply({
+      embeds: [embed],
+      components: [buttons],
+      fetchReply: true,
+    });
+    const opFilter = (i) => i.user.id === interaction.user.id;
+    try {
+      const confirmation = await response.awaitMessageComponent({
+        filter: opFilter,
+        time: 30_000,
+      });
+      if (confirmation.customId === "approve") {
+        await db
+          .promise()
+          .query(
+            "UPDATE data_store SET approved=1, approvedby=? WHERE keyword = ? AND server = ? AND approvedby is null",
+            [interaction.user.id, keyword, interaction.guild.id]
+          );
+        await confirmation.update({
+          content: ":white_check_mark: Approved item " + keyword,
+          embeds: [embed],
+          components: [],
+        });
+        log(
+          interaction.guild,
+          "Saved item " +
+            keyword +
+            " has been approved by " +
+            interaction.user.username
+        );
+      } else if (confirmation.customId === "delete") {
+        await db
+          .promise()
+          .query("DELETE FROM data_store WHERE server = ? AND keyword = ?", [
+            interaction.guild.id,
+            keyword,
+          ]);
+        log(
+          interaction.guild,
+          "Saved item " +
+            keyword +
+            " has been deleted by " +
+            interaction.user.username
+        );
+        await confirmation.update({
+          content: ":x: Deleted item " + keyword,
+          //embeds: [embed],
+          components: [],
+        });
+      }
+    } catch (e) {
+      await response.update({
+        embeds: [embed],
+        components: [],
+      });
+    }
+  } else {
+    interaction.reply({ embeds: [embed], ephemeral: isNotFound });
+  }
 };
 
 function sleep(ms) {
