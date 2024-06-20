@@ -105,7 +105,14 @@ exports.run = async function (message, args, bot, db, showUnapproved) {
     });
     return;
   }
-  message.channel.send({ embeds: [embed] });
+  if (showUnapproved) {
+    message.channel.send({
+      content: "Use /modsave review to use the new review interface!",
+      embeds: [embed],
+    });
+  } else {
+    message.channel.send({ embeds: [embed] });
+  }
 };
 
 exports.interaction = async function (interaction, bot, db) {
