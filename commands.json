@@ -182,11 +182,6 @@
     "permissions": "all",
     "type": "server"
   },
-  "last": {
-    "action": "stats/seen",
-    "permissions": "all",
-    "type": "server"
-  },
   "totals": {
     "action": "stats/totals",
     "permissions": "all",
@@ -584,12 +579,6 @@
         }
       ]
     }
-  },
-  "exile": {
-    "action": "mod/ban",
-    "permissions": "mods",
-    "type": "server",
-    "extra": 0
   },
   "idban": {
     "action": "mod/idban",
