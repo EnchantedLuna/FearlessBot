@@ -621,7 +621,7 @@
   "addaward": {
     "action": "mod/addaward",
     "permissions": "mods",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "addaward",
@@ -657,7 +657,7 @@
   "modlorpoints": {
     "action": "",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "subcommands": {
       "reset-cap": {
