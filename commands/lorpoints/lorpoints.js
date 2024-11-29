@@ -13,7 +13,7 @@ function getEmbed(row, rank, cap) {
           " lorpoints.\nCurrent Rank: " +
           rank +
           getSuffix(rank) +
-          "\nCapped events this week: " +
+          "\nCapped events this period: " +
           row.eventpoints +
           "/" +
           cap +
