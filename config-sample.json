@@ -9,5 +9,7 @@
   "botAdminUserId": "",
   "logChannelName": "",
 
+  "firstMessageId": "",
+  "firstMessageReplyAllowedUsers": [""],
   "baseUrl": "http://localhost:8080/"
 }

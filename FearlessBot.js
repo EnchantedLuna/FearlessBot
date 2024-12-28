@@ -61,6 +61,30 @@ bot.on("messageCreate", async (message) => {
   stats.updateChannelStats(message, db);
   checkActiveRole(message, message.channel.guild.id, db);
 
+  // This section is for dealing with ping replies to the first message in the Taylor server ("Taylor is pretty cool I guess")
+  // This is definitely not needed if you're using this for another server.
+  if (message.reference?.messageId == config.firstMessageId) {
+    const hasPingOn = message.mentions.has(config.botAdminUserId);
+    if (hasPingOn) {
+      if (config.firstMessageReplyAllowedUsers.includes(message.member.id)) {
+        message.reply("Hi Julia! Love you! -Rachel");
+      } else {
+        message.reply(
+          'Did you read the part in that message that says "Do not ping reply to this message" in all caps? Now go stand in the corner and think about what you did.'
+        );
+        try {
+          const timeoutInterval = 4380 * 1000; // 1 hour 13 minutes
+          message.member.timeout(
+            timeoutInterval,
+            "Ping replying to the first message"
+          );
+        } catch (e) {
+          console.log("Failed to punish for pinging first message");
+        }
+      }
+    }
+  }
+
   if (
     message.content.indexOf(prefix) !== 0 ||
     message.author.bot ||
