@@ -1,7 +1,10 @@
 const { EmbedBuilder } = require("discord.js");
 
 const albums = [
-  { title: "Taylor Swift (Debut)", image: "https://i.imgur.com/w0bksSN.jpg" },
+  {
+    title: "Taylor Swift (Debut)",
+    image: "https://tay.rocks/albums/debut.png",
+  },
   {
     title: "Fearless (Taylor's Version)",
     image: "https://i.imgur.com/WenkW0I.jpg",
@@ -15,9 +18,9 @@ const albums = [
     title: "1989 (Taylor's Version)",
     image: "https://i.imgur.com/6G6TlkC.png",
   },
-  { title: "reputation", image: "https://i.imgur.com/o2v3b7E.jpg" },
-  { title: "Lover", image: "https://i.imgur.com/cNnUR0M.jpg" },
-  { title: "folklore", image: "https://i.imgur.com/oZvDEky.jpg" },
+  { title: "reputation", image: "https://tay.rocks/albums/reputation.png" },
+  { title: "Lover", image: "https://tay.rocks/albums/lover.png" },
+  { title: "folklore", image: "https://tay.rocks/albums/folklore.png" },
   { title: "evermore", image: "https://i.imgur.com/BiNIOXH.jpg" },
   {
     title: "Midnights",

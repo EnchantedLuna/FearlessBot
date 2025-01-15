@@ -3,7 +3,7 @@ const { EmbedBuilder } = require("discord.js");
 const taylorSongsByAlbum = [
   {
     title: "Taylor Swift (Debut)",
-    image: "https://i.imgur.com/w0bksSN.jpg",
+    image: "https://tay.rocks/albums/debut.png",
     songs: [
       "Tim McGraw",
       "Picture to Burn",
@@ -145,7 +145,7 @@ const taylorSongsByAlbum = [
   },
   {
     title: "reputation",
-    image: "https://i.imgur.com/o2v3b7E.jpg",
+    image: "https://tay.rocks/albums/reputation.png",
     songs: [
       "...Ready For It?",
       "End Game",
@@ -166,7 +166,7 @@ const taylorSongsByAlbum = [
   },
   {
     title: "Lover",
-    image: "https://i.imgur.com/cNnUR0M.jpg",
+    image: "https://tay.rocks/albums/lover.png",
     songs: [
       "I Forgot That You Existed",
       "Cruel Summer",
@@ -190,7 +190,7 @@ const taylorSongsByAlbum = [
   },
   {
     title: "folklore",
-    image: "https://i.imgur.com/oZvDEky.jpg",
+    image: "https://tay.rocks/albums/folklore.png",
     songs: [
       "the 1",
       "cardigan",
