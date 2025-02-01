@@ -903,6 +903,39 @@
     "type": "server",
     "extra": "question"
   },
+  "leaderboard": {
+    "action": "members/rankthing",
+    "permissions": "all",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "leaderboard",
+      "description": "Show FearlessBot leaderboards",
+      "dm_permission": false,
+      "options": [
+        {
+          "name": "type",
+          "description": "The type of thing to be ranked",
+          "type": 3,
+          "required": false,
+          "choices": [
+            {
+              "name": "Words",
+              "value": "words"
+            },
+            {
+              "name": "Lorpoints (current)",
+              "value": "lorpoints"
+            },
+            {
+              "name": "Lorpoints (Lifetime)",
+              "value": "lifelorpoints"
+            }
+          ]
+        }
+      ]
+    }
+  },
   "roleping": {
     "action": "mod/events",
     "permissions": "mods",

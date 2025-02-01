@@ -18,7 +18,7 @@ Stats:
 ``/totals``: Shows message stats by channel
 ``/lorpoints``, ``/words``: View word or lorpoint stats
 ``/awards``: View awards for user
-``!rankwords``, ``!ranklorpoints`` : Ranks members by words or lorpoints
+``/leaderboard`` : Ranks members by words, lorpoints, or lifetime lorpoints
 
 Questions (DMs only):
 ``/question create``: Creates a new question
