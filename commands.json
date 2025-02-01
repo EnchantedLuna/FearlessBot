@@ -662,6 +662,9 @@
     "subcommands": {
       "reset-cap": {
         "action": "lorpoints/resetcap"
+      },
+      "award-lorpoints": {
+        "action": "lorpoints/addlorpoints"
       }
     },
     "interactionCreate": {
@@ -672,6 +675,25 @@
           "name": "reset-cap",
           "description": "Reset the event caps",
           "type": 1
+        },
+        {
+          "name": "award-lorpoints",
+          "description": "Add (or subtract) lorpoints from user(s)",
+          "type": 1,
+          "options": [
+            {
+              "name": "amount",
+              "description": "Amount of lorpoints to add, as an integer",
+              "required": true,
+              "type": 4
+            },
+            {
+              "name": "users",
+              "description": "User(s) to award the lorpoints to, as one or more mentions",
+              "required": true,
+              "type": 3
+            }
+          ]
         }
       ],
       "dm_permission": false,

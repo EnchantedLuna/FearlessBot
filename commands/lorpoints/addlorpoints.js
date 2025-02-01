@@ -78,7 +78,8 @@ exports.run = function (message, args, bot, db) {
 
 exports.interaction = function (interaction, bot, db) {
   const amount = interaction.options.getInteger("amount");
-  const users = interaction.options.getString("users");
+  const users = interaction.options.resolved.members;
+  const list = [];
 
   if (amount > 1000000 || amount < -10000000) {
     interaction.reply({
@@ -91,7 +92,7 @@ exports.interaction = function (interaction, bot, db) {
     return;
   }
 
-  if (users.mentions.members.size === 0) {
+  if (users.size === 0) {
     message.channel.send({
       embeds: [
         new EmbedBuilder()
@@ -102,37 +103,37 @@ exports.interaction = function (interaction, bot, db) {
     return;
   }
 
-  message.mentions.members.forEach(function (member, key, map) {
+  users.forEach(function (member, key, map) {
     db.query(
       "UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?",
-      [number, message.channel.guild.id, member.id]
+      [amount, interaction.guild.id, member.id]
     );
     list.push(member.user.username);
   });
   let finalList = list.join(", ");
   let userCount = list.length;
-  let lorpointWord = number !== 1 ? "lorpoints" : "lorpoint";
-  message.channel.send({
+  let lorpointWord = amount !== 1 ? "lorpoints" : "lorpoint";
+  interaction.reply({
     embeds: [
       new EmbedBuilder()
         .setTitle(":star: Adding Lorpoints")
         .setDescription(
-          number + " " + lorpointWord + " have been added to:\n" + finalList
+          amount + " " + lorpointWord + " have been added to:\n" + finalList
         )
         .setColor(0xdbe07e)
         .setFooter({ text: "Total users: " + userCount }),
     ],
   });
-  if (number !== 0) {
+  if (amount !== 0) {
     log(
-      message.channel.guild,
-      number +
+      interaction.guild,
+      amount +
         " " +
         lorpointWord +
         " have been awarded to: " +
         finalList +
         " by " +
-        message.author.username
+        interaction.user.username
     );
   }
 };
