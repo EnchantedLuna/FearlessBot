@@ -171,11 +171,15 @@ exports.interaction = function (interaction, bot, db) {
         chunk = 20;
       for (i = 0, p = 1, j = entries.length; i < j; i += chunk, p++) {
         tempArray = entries.slice(i, i + chunk);
-        embeds.push(
-          new EmbedBuilder()
-            .setTitle(":first_place: Ranking for " + friendlyNames[thing])
-            .setDescription(tempArray.join("\n"))
-        );
+        const thisEmbed = new EmbedBuilder()
+          .setTitle(":first_place: Ranking for " + friendlyNames[thing])
+          .setDescription(tempArray.join("\n"));
+        if (thing == "lifetime_lorpoints") {
+          thisEmbed.setFooter({
+            text: "Note: This only reflects points earned in completed seasons.",
+          });
+        }
+        embeds.push(thisEmbed);
       }
 
       if (embeds.length === 1) {
