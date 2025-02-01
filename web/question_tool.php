@@ -15,10 +15,11 @@ if (!$question) {
 }
 
 $guild = PRIMARY_GUILD;
+$sort = $_REQUEST['sort_key'] == 'time' ? 'ta.time' : 'ta.id'; 
 $query = $db->prepare("SELECT ta.id, ta.user, ta.answer, ta.time, m.username, m.discriminator FROM trivia_answers ta
 LEFT JOIN members m ON ta.user=m.id AND m.server=?
 WHERE questionid = ?
-ORDER BY ta.id");
+ORDER BY $sort");
 $query->bind_param('si', $guild, $question['id']);
 $query->execute();
 $result = $query->get_result();
@@ -41,6 +42,13 @@ while ($answer = $result->fetch_assoc()) {
     <div id="question-tool">
         <h1>Question #<?php echo $question['id'] . ": " . $question['question']; ?></h1>
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
+        <?php
+        if ($sort == 'ta.time') {
+            echo "<p><a href='question_tool.php?key=".urlencode($_REQUEST['key'])."'>Sort by original submission time?</a></p>";
+        } else {
+            echo "<p><a href='question_tool.php?key=".urlencode($_REQUEST['key'])."&amp;sort_key=time'>Sort by last modified time?</a></p>";
+        }
+        ?>
         <p>Total answers: <?php echo count($answers); ?></p>
         <?php if (!$hideSelections): ?>
         <p><input type="checkbox" id="select-all"> <label for="select-all"> Select All</p>
@@ -48,7 +56,7 @@ while ($answer = $result->fetch_assoc()) {
         <ul class="list-group">
         <?php
         foreach ($answers as $answer) {
-            $username = $answer['username'] ? $answer['username'] . '#' . str_pad($answer['discriminator'], 4, "0", STR_PAD_LEFT) : 'ID ' . $answer['user'];
+            $username = $answer['username'] ? $answer['username'] : 'ID ' . $answer['user'];
             $username = htmlspecialchars($username);
             $timestamp = $answer['time'];
             echo "<li class='list-group-item'>";
