@@ -93,7 +93,7 @@ exports.interaction = function (interaction, bot, db) {
   }
 
   if (users.size === 0) {
-    message.channel.send({
+    interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setDescription(":x: You must mention a member to add lorpoints to.")
