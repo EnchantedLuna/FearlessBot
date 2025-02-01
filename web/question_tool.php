@@ -44,8 +44,10 @@ while ($answer = $result->fetch_assoc()) {
         <p>Status: <?php echo $question['isopen'] ? 'Open' : 'Closed' ?></p>
         <?php
         if ($sort == 'ta.time') {
+            echo "<p>Currently sorted by <b>last modified time</b>.";
             echo "<p><a href='question_tool.php?key=".urlencode($_REQUEST['key'])."'>Sort by original submission time?</a></p>";
         } else {
+            echo "<p>Currently sorted by <b>original submission time</b>.";
             echo "<p><a href='question_tool.php?key=".urlencode($_REQUEST['key'])."&amp;sort_key=time'>Sort by last modified time?</a></p>";
         }
         ?>
