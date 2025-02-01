@@ -10,7 +10,7 @@ Saves:
 ``!g [keyword]``, ``/get`` : Retrieves a saved item
 ``!gmeta [keyword]`` : View info about a saved item
 ``/save create`` : Creates a new saved item
-``!delete [keyword]`` (/save delete) : Deletes an item you saved
+``/save delete`` : Deletes an item you saved
 
 Stats:
 ``!seen [user]`` : Shows when a member was last active
