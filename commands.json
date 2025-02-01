@@ -929,7 +929,7 @@
             },
             {
               "name": "Lorpoints (Lifetime)",
-              "value": "lifelorpoints"
+              "value": "lifetime_lorpoints"
             }
           ]
         }
