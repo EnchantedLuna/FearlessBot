@@ -8,10 +8,12 @@ exports.run = function (message, params, bot, db) {
 
   if (member === message.author.username) {
     message.channel.send({
-      embeds: [{
-        title: member,
-        description: ":thinking: Look in a mirror!",
-      }],
+      embeds: [
+        {
+          title: member,
+          description: ":thinking: Look in a mirror!",
+        },
+      ],
     });
   } else {
     db.query(
@@ -20,11 +22,13 @@ exports.run = function (message, params, bot, db) {
       function (err, rows) {
         if (rows[0] == null) {
           message.channel.send({
-            embeds: [{
-              title: member,
-              description:
-                ":warning: User not found. Please double check the username.",
-            }],
+            embeds: [
+              {
+                title: member,
+                description:
+                  ":warning: User not found. Please double check the username.",
+              },
+            ],
           });
         } else {
           let seconds = Math.floor(new Date() / 1000) - rows[0].lastseen;
@@ -33,20 +37,20 @@ exports.run = function (message, params, bot, db) {
             ? ""
             : "\nThis user has left the server.";
           message.channel.send({
-            embeds: [{
-              title: member,
-              description:
-                ":clock2: " +
-                rows[0].username +
-                "#" +
-                rows[0].discriminator +
-                " was last seen " +
-                secondsToTime(seconds, false) +
-                "ago. (" +
-                date.toDateString() +
-                ")" +
-                leftServerText,
-            }],
+            embeds: [
+              {
+                title: member,
+                description:
+                  ":clock2: " +
+                  rows[0].username +
+                  " was last seen " +
+                  secondsToTime(seconds, false) +
+                  "ago. (" +
+                  date.toDateString() +
+                  ")" +
+                  leftServerText,
+              },
+            ],
           });
         }
       }

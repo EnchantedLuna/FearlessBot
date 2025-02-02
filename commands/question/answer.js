@@ -100,8 +100,7 @@ exports.interaction = function (interaction, bot, db) {
   const questionId = interaction.options.getInteger("id");
   const answer = interaction.options.getString("answer");
   const userId = interaction.user.id;
-  const userTag =
-    interaction.user.username + "#" + interaction.user.discriminator;
+  const userTag = interaction.user.username;
   db.query(
     "SELECT * FROM trivia_questions WHERE id = ?",
     [questionId],

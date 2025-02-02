@@ -47,8 +47,6 @@ exports.run = function (message, args, bot, db) {
     log(
       message.channel.guild,
       member.user.username +
-        "#" +
-        member.user.discriminator +
         " (" +
         member.user.id +
         ")" +
@@ -107,8 +105,6 @@ exports.interaction = function (interaction, bot, db) {
   log(
     interaction.guild,
     member.user.username +
-      "#" +
-      member.user.discriminator +
       " (" +
       member.user.id +
       ")" +
