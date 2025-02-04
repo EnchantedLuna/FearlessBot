@@ -2,7 +2,7 @@
   "name": "fearlessbot",
   "version": "4.20",
   "dependencies": {
-    "discord.js": "^14.15.2",
+    "discord.js": "^14.17.3",
     "mysql2": "^3.9.8",
     "node-cache": "^5.1.2"
   },
