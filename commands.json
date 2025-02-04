@@ -508,6 +508,43 @@
       "dm_permission": false
     }
   },
+  "muteme": {
+    "action": "members/muteme",
+    "permissions": "all",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "muteme",
+      "description": "Need a break? Give yourself a timeout.",
+      "dm_permission": false,
+      "options": [
+        {
+          "name": "length",
+          "description": "The amount of time you want to be timed out",
+          "type": 4,
+          "required": true,
+          "choices": [
+            {
+              "name": "30 minutes",
+              "value": 30
+            },
+            {
+              "name": "1 hour",
+              "value": 60
+            },
+            {
+              "name": "2 hours",
+              "value": 120
+            },
+            {
+              "name": "4 hours",
+              "value": 240
+            }
+          ]
+        }
+      ]
+    }
+  },
   "timeout": {
     "action": "mod/supermute",
     "permissions": "mods",
