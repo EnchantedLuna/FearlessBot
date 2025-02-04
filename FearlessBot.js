@@ -68,7 +68,7 @@ bot.on("messageCreate", async (message) => {
     if (hasPingOn) {
       if (config.firstMessageReplyAllowedUsers.includes(message.member.id)) {
         message.reply(
-          "Hi Julia! You're the only person allowed to ping that message because you're special. I love you! -Rachel :purple_heart:"
+          "Julia, how does it feel to be the only one allowed to ping that? I love you so much :purple_heart: -Rachel"
         );
       } else {
         message.reply(
