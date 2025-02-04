@@ -10,7 +10,7 @@ const buttons = new ActionRowBuilder().addComponents(
   new ButtonBuilder()
     .setCustomId("muteMe")
     .setLabel("Mute Me!")
-    .setStyle(ButtonStyle.Primary),
+    .setStyle(ButtonStyle.Danger),
   new ButtonBuilder()
     .setCustomId("cancel")
     .setLabel("Never mind")
@@ -23,7 +23,7 @@ exports.interaction = async function (interaction, bot, db) {
     content:
       "This command will give yourself a timeout, in case you need a break. You have selected a timeout for **" +
       minutes +
-      " minutes**. Are you sure?",
+      " minutes**. Are you sure?\n\nPlease do not message moderators to remove your timeout.",
     components: [buttons],
     fetchReply: true,
   });
@@ -42,7 +42,7 @@ exports.interaction = async function (interaction, bot, db) {
         .timeout(interval, "Self-requested by /muteme command")
         .then(() => {
           confirmation.update({
-            content: `Okay, see you later!`,
+            content: "Okay, see you in " + minutes + " minutes!",
             components: [],
           });
         })
