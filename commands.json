@@ -273,7 +273,26 @@
           "name": "member",
           "description": "The member that you want to look up",
           "required": false,
-          "type": "USER"
+          "type": 6
+        }
+      ],
+      "dm_permission": false
+    }
+  },
+  "lorpointlog": {
+    "action": "lorpoints/lorpointlog",
+    "permissions": "all",
+    "type": "slash",
+    "interaction": true,
+    "interactionCreate": {
+      "name": "lorpointlog",
+      "description": "View recent lorpoint transactions",
+      "options": [
+        {
+          "name": "member",
+          "description": "The member that you want to look up",
+          "required": false,
+          "type": 6
         }
       ],
       "dm_permission": false
@@ -702,6 +721,9 @@
       },
       "award-lorpoints": {
         "action": "lorpoints/addlorpoints"
+      },
+      "award-capped-lorpoints": {
+        "action": "lorpoints/addcappedpoints"
       }
     },
     "interactionCreate": {
@@ -727,6 +749,31 @@
             {
               "name": "users",
               "description": "User(s) to award the lorpoints to, as one or more mentions",
+              "required": true,
+              "type": 3
+            },
+            {
+              "name": "description",
+              "description": "Description of this lorpoint transaction",
+              "required": true,
+              "type": 3
+            }
+          ]
+        },
+        {
+          "name": "award-capped-lorpoints",
+          "description": "Add (or subtract) lorpoints from user(s) subject to caps",
+          "type": 1,
+          "options": [
+            {
+              "name": "users",
+              "description": "User(s) to award the lorpoints to, as one or more mentions",
+              "required": true,
+              "type": 3
+            },
+            {
+              "name": "description",
+              "description": "Description of this lorpoint transaction",
               "required": true,
               "type": 3
             }

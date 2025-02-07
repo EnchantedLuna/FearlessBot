@@ -46,6 +46,10 @@ exports.run = function (message, args, bot, db) {
       "UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?",
       [number, message.channel.guild.id, member.id]
     );
+    db.query(
+      "INSERT INTO lorpoint_log (guild, user, amount, time, description) VALUES (?, ?, ?, now(), null)",
+      [message.channel.guild.id, member.id, number]
+    );
     list.push(member.user.username);
   });
   let finalList = list.join(", ");
@@ -79,6 +83,7 @@ exports.run = function (message, args, bot, db) {
 exports.interaction = function (interaction, bot, db) {
   const amount = interaction.options.getInteger("amount");
   const users = interaction.options.resolved.members;
+  const description = interaction.options.getString("description");
   const list = [];
 
   if (amount > 1000000 || amount < -10000000) {
@@ -107,6 +112,10 @@ exports.interaction = function (interaction, bot, db) {
     db.query(
       "UPDATE members SET lorpoints=lorpoints+? WHERE server = ? AND id = ?",
       [amount, interaction.guild.id, member.id]
+    );
+    db.query(
+      "INSERT INTO lorpoint_log (guild, user, amount, time, description) VALUES (?, ?, ?, now(), ?)",
+      [interaction.guild.id, member.id, amount, description]
     );
     list.push(member.user.username);
   });

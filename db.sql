@@ -99,3 +99,13 @@ CREATE TABLE `guild_config` (
     `value` varchar(255) NULL,
     PRIMARY KEY (`guild`, `key`)
 );
+
+CREATE TABLE lorpoint_log (
+  `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `guild` VARCHAR(20) NOT NULL,
+  `user` VARCHAR(20) NOT NULL,
+  `amount` INT NOT NULL,
+  `time` DATETIME,
+  `description` VARCHAR(255) NULL,
+  `is_capped` TINYINT(1) NOT NULL DEFAULT 0
+)
