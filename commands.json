@@ -1023,7 +1023,7 @@
           "name": "type",
           "description": "The type of thing to be ranked",
           "type": 3,
-          "required": false,
+          "required": true,
           "choices": [
             {
               "name": "Words",
