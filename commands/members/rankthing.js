@@ -47,10 +47,11 @@ exports.run = function (message, page, bot, db, thing) {
         count++;
         rank = member.thing === previousThing ? rank : count;
         previousThing = member.thing;
+        const escapedName = escapeText(member.username);
         entries.push(
           rank +
             ": " +
-            member.username +
+            escapedName +
             " - " +
             member.thing +
             " " +
