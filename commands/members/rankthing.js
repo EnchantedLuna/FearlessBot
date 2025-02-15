@@ -4,6 +4,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
 } = require("discord.js");
+const { escapeText } = require("../../util");
 const friendlyNames = {
   lorpoints: "lorpoints",
   words: "words",
@@ -152,10 +153,11 @@ exports.interaction = function (interaction, bot, db) {
         count++;
         rank = member.thing === previousThing ? rank : count;
         previousThing = member.thing;
+        const escapedName = escapeText(member.username);
         entries.push(
           rank +
             ": " +
-            member.username +
+            escapedName +
             " - " +
             member.thing +
             " " +
