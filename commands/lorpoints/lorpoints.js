@@ -3,6 +3,16 @@ const { EmbedBuilder } = require("discord.js");
 
 function getEmbed(row, rank, cap) {
   const lifetime = row["lifetime_lorpoints"] + row["lorpoints"];
+  let eligibleAwards = "";
+  if (lifetime >= 400 && row["lifetime_lorpoints"] < 400) {
+    eligibleAwards += "\n:trophy: Eliglble for 400 Lorpoint Award";
+  }
+  if (lifetime >= 200 && row["lifetime_lorpoints"] < 200) {
+    eligibleAwards += "\n:trophy: Eliglble for 200 Lorpoint Award";
+  }
+  if (lifetime >= 100 && row["lifetime_lorpoints"] < 100) {
+    eligibleAwards += "\n:trophy: Eliglble for 100 Lorpoint Award";
+  }
   return [
     new EmbedBuilder()
       .setTitle(":star: Lorpoints")
@@ -18,7 +28,8 @@ function getEmbed(row, rank, cap) {
           "/" +
           cap +
           "\nLifetime lorpoints: " +
-          lifetime
+          lifetime +
+          eligibleAwards
       ),
   ];
 }
