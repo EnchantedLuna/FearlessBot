@@ -1,4 +1,4 @@
-const { log, getGuildConfig } = require("../../util");
+const { log, getGuildConfig, escapeText } = require("../../util");
 const config = require("../../config.json");
 const { EmbedBuilder } = require("discord.js");
 
@@ -39,7 +39,7 @@ exports.run = async function (message, args, bot, db) {
       }
       for (let i = 0; i < rows.length; i++) {
         if (rows[i].eventpoints >= eventCap) {
-          cappedList.push(rows[i].username);
+          cappedList.push(escapeText(rows[i].username));
         } else {
           let count = rows[i].eventpoints + 1;
           db.query(
@@ -50,7 +50,7 @@ exports.run = async function (message, args, bot, db) {
             "INSERT INTO lorpoint_log (guild, user, amount, time, description, is_capped) VALUES (?, ?, ?, now(), null, 1)",
             [message.channel.guild.id, member.id, number]
           );
-          list.push(rows[i].username + " (" + count + ")");
+          list.push(escapeText(rows[i].username) + " (" + count + ")");
         }
       }
 
@@ -136,7 +136,7 @@ exports.interaction = async function (interaction, bot, db) {
             "INSERT INTO lorpoint_log (guild, user, amount, time, description, is_capped) VALUES (?, ?, ?, now(), ?, 1)",
             [interaction.guild.id, rows[i].id, 0, description]
           );
-          cappedList.push(rows[i].username);
+          cappedList.push(escapeText(rows[i].username));
         } else {
           let count = rows[i].eventpoints + 1;
           db.query(
@@ -147,7 +147,7 @@ exports.interaction = async function (interaction, bot, db) {
             "INSERT INTO lorpoint_log (guild, user, amount, time, description, is_capped) VALUES (?, ?, ?, now(), ?, 1)",
             [interaction.guild.id, rows[i].id, pointsPerEvent, description]
           );
-          list.push(rows[i].username + " (" + count + ")");
+          list.push(escapeText(rows[i].username) + " (" + count + ")");
         }
       }
 

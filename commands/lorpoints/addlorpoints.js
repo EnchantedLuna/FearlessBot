@@ -1,4 +1,4 @@
-const { log } = require("../../util");
+const { log, escapeText } = require("../../util");
 const { EmbedBuilder } = require("discord.js");
 
 exports.run = function (message, args, bot, db) {
@@ -50,7 +50,7 @@ exports.run = function (message, args, bot, db) {
       "INSERT INTO lorpoint_log (guild, user, amount, time, description) VALUES (?, ?, ?, now(), null)",
       [message.channel.guild.id, member.id, number]
     );
-    list.push(member.user.username);
+    list.push(escapeText(member.user.username));
   });
   let finalList = list.join(", ");
   let userCount = list.length;
@@ -117,7 +117,7 @@ exports.interaction = function (interaction, bot, db) {
       "INSERT INTO lorpoint_log (guild, user, amount, time, description) VALUES (?, ?, ?, now(), ?)",
       [interaction.guild.id, member.id, amount, description]
     );
-    list.push(member.user.username);
+    list.push(escapeText(member.user.username));
   });
   let finalList = list.join(", ");
   let userCount = list.length;
