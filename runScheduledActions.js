@@ -55,7 +55,7 @@ function runScheduledActions(bot, db) {
               console.log(
                 "Scheduled actions: Role id " +
                   rows[i].roleid +
-                  "not found in guild " +
+                  " not found in guild " +
                   rows[i].guild
               );
               continue;

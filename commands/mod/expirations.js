@@ -40,6 +40,9 @@ function getType(action, roleid, guild) {
       return "Mute";
     case "removerole":
       const role = guild.roles.cache.find((role) => role.id === roleid);
+      if (!role) {
+        return "(deleted role)";
+      }
       return "Role " + role.name;
     default:
       return "Unknown Type";
