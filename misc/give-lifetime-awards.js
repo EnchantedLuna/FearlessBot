@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 const config = require("../config.json");
-const thresholds = [100, 200, 400];
+const thresholds = [100, 200, 400, 500];
 
 const db = mysql.createConnection({
   host: config.mysqlHost,
