@@ -67,9 +67,7 @@ bot.on("messageCreate", async (message) => {
     const hasPingOn = message.mentions.has(config.botAdminUserId);
     if (hasPingOn) {
       if (config.firstMessageReplyAllowedUsers.includes(message.member.id)) {
-        message.reply(
-          "Julia, how does it feel to be the only one allowed to ping that? I love you so much :purple_heart: -Rachel"
-        );
+        message.reply(config.juliaMessage);
       } else {
         message.reply(
           'Did you read the part in that message that says "Do not ping reply to this message" in all caps? Now go stand in the corner and think about what you did.'
