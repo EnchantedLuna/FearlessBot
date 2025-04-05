@@ -820,6 +820,11 @@
       "default_member_permissions": 16
     }
   },
+  "fnick": {
+    "action": "bot/fnick",
+    "permissions": "admin",
+    "type": "server"
+  },
   "fsay": {
     "action": "bot/fsay",
     "permissions": "admin",
