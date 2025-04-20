@@ -700,16 +700,6 @@
       "default_member_permissions": 268435456
     }
   },
-  "alp": {
-    "action": "lorpoints/addlorpoints",
-    "permissions": "mods",
-    "type": "server"
-  },
-  "acp": {
-    "action": "lorpoints/addcappedpoints",
-    "permissions": "mods",
-    "type": "server"
-  },
   "modlorpoints": {
     "action": "",
     "permissions": "all",
