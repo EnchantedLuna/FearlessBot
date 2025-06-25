@@ -558,6 +558,10 @@
             {
               "name": "4 hours",
               "value": 240
+            },
+            {
+              "name": "6 hours",
+              "value": 360
             }
           ]
         }
