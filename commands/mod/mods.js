@@ -5,6 +5,8 @@ const {
   ButtonStyle,
 } = require("discord.js");
 const { log } = require("../../util");
+const modsConfirmationMessage =
+  "Are you sure you want to ping mods? Please only use this command if there is an **urgent issue** which needs attention, and no mods are currently active. You may be **warned or striked** for misusing this; only use when absolutely necessary";
 
 const buttons = new ActionRowBuilder().addComponents(
   new ButtonBuilder()
@@ -41,8 +43,7 @@ exports.interaction = async function (interaction, bot, db) {
   }
 
   const response = await interaction.reply({
-    content:
-      "Are you sure you want to ping mods? Please only do this if there is an issue that needs attention and there are no mods currently active.",
+    content: modsConfirmationMessage,
     components: [buttons],
     fetchReply: true,
   });
