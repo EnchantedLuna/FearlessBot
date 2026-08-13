@@ -50,6 +50,12 @@ exports.handleModalResponse = async function (interaction, bot, db) {
     );
     return;
   }
+  if (value.length > 1750) {
+    interaction.reply(
+      ":warning: The text you are storing is too long. Please shorten it to under 1750 characters."
+    );
+    return;
+  }
 
   db.query(
     "SELECT * FROM data_store WHERE server = ? AND keyword = ?",
