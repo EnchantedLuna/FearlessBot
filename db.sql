@@ -14,7 +14,7 @@ CREATE UNIQUE INDEX idx_channel ON channel_stats (channel);
 CREATE TABLE data_store
 (
   keyword VARCHAR(50) DEFAULT '' NOT NULL,
-  value VARCHAR(1000),
+  value VARCHAR(1750),
   owner VARCHAR(50),
   approved TINYINT(1) DEFAULT '0',
   uses INT(11) DEFAULT '0',
