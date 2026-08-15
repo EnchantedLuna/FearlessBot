@@ -29,7 +29,7 @@ exports.updateUserStats = async function (message, db) {
   );
   if (countStats) {
     db.query(
-      "INSERT INTO members (server, id, username, lastseen, messages) VALUES (?,?,?,?,UNIX_TIMESTAMP(),1)" +
+      "INSERT INTO members (server, id, username, lastseen, messages) VALUES (?,?,?,UNIX_TIMESTAMP(),1)" +
         "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), messages=messages+1, active=1",
       [
         message.channel.guild.id,
@@ -40,7 +40,7 @@ exports.updateUserStats = async function (message, db) {
     );
   } else {
     db.query(
-      "INSERT INTO members (server, id, username, lastseen) VALUES (?,?,?,?,UNIX_TIMESTAMP())" +
+      "INSERT INTO members (server, id, username, lastseen) VALUES (?,?,?,UNIX_TIMESTAMP())" +
         "ON DUPLICATE KEY UPDATE username=?, lastseen=UNIX_TIMESTAMP(), active=1",
       [
         message.channel.guild.id,
