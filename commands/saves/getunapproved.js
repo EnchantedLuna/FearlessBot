@@ -18,10 +18,6 @@ async function getUnapprovedItems(db, guildId) {
   return "Unapproved:\n" + list;
 }
 
-exports.run = async function (message, args, bot, db) {
-  message.reply("This command has been moved to /modsave getunapproved");
-};
-
 exports.interaction = async function (interaction, bot, db) {
   const unapproved = await getUnapprovedItems(db, interaction.guild.id);
   interaction.reply(unapproved);

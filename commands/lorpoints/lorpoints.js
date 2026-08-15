@@ -34,38 +34,6 @@ function getEmbed(row, rank, cap) {
   ];
 }
 
-exports.run = async function (message, args, bot, db) {
-  const member = findMemberID(message, args, bot);
-  const cap = await getGuildConfig(
-    message.channel.guild.id,
-    "lorpoint-cap",
-    db
-  );
-
-  db.query(
-    "SELECT username, lorpoints, eventpoints, lifetime_lorpoints FROM members WHERE server = ? AND id = ?",
-    [message.channel.guild.id, member],
-    function (err, rows) {
-      if (err) {
-        console.error("lorpoint command db error: " + err);
-        return;
-      }
-      if (rows[0] !== null) {
-        db.query(
-          "SELECT COUNT(*) AS higher FROM members WHERE server = ? AND lorpoints > ?",
-          [message.channel.guild.id, rows[0].lorpoints],
-          function (err, totals) {
-            const rank = totals[0].higher + 1;
-            message.channel.send({
-              embeds: getEmbed(rows[0], rank, cap),
-            });
-          }
-        );
-      }
-    }
-  );
-};
-
 exports.interaction = async function (interaction, bot, db) {
   let member = interaction.options.getMember("member");
   if (!member) {

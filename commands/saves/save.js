@@ -1,11 +1,5 @@
 const { isMod, log } = require("../../util");
 
-exports.run = function (message, args, bot, db) {
-  message.reply(
-    ":warning: This command now requires the use of the slash command `/save create`"
-  );
-};
-
 exports.interaction = function (interaction, bot, db) {
   const key = interaction.options.getString("keyword");
   const value = interaction.options.getString("value");

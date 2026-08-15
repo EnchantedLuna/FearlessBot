@@ -2,7 +2,7 @@
   "fhelp": {
     "action": "bot/fhelp",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "fhelp",
@@ -13,7 +13,7 @@
   "song": {
     "action": "fun/song",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "song",
@@ -78,7 +78,7 @@
   "album": {
     "action": "fun/album",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "song",
@@ -89,7 +89,7 @@
   "8ball": {
     "action": "fun/8ball",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "8ball",
@@ -108,7 +108,7 @@
   "fversion": {
     "action": "bot/version",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "fversion",
@@ -118,7 +118,7 @@
   "activity": {
     "action": "stats/activity",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "activity",
@@ -134,15 +134,10 @@
       "dm_permission": false
     }
   },
-  "yesno": {
-    "action": "fun/yesno",
-    "permissions": "all",
-    "type": "server"
-  },
   "choose": {
     "action": "fun/choose",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "choose",
@@ -161,7 +156,7 @@
   "acronym": {
     "action": "fun/acronym",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "acronym",
@@ -177,15 +172,10 @@
       "dm_permission": true
     }
   },
-  "seen": {
-    "action": "stats/seen",
-    "permissions": "all",
-    "type": "server"
-  },
   "totals": {
     "action": "stats/totals",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "totals",
@@ -196,7 +186,7 @@
   "getlist": {
     "action": "saves/getlist",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "getlist",
@@ -204,28 +194,10 @@
       "dm_permission": false
     }
   },
-  "rankwords": {
-    "action": "members/rankthing",
-    "permissions": "all",
-    "type": "server",
-    "extra": "words"
-  },
-  "ranklorpoints": {
-    "action": "members/rankthing",
-    "permissions": "all",
-    "type": "server",
-    "extra": "lorpoints"
-  },
-  "ranklifelorpoints": {
-    "action": "members/rankthing",
-    "permissions": "all",
-    "type": "server",
-    "extra": "lifetime_lorpoints"
-  },
   "lorpoints": {
     "action": "lorpoints/lorpoints",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "lorpoints",
@@ -244,7 +216,7 @@
   "words": {
     "action": "stats/words",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "words",
@@ -263,7 +235,7 @@
   "awards": {
     "action": "members/awards",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "awards",
@@ -324,12 +296,6 @@
       "dm_permission": false
     }
   },
-  "review": {
-    "action": "saves/get",
-    "permissions": "mods",
-    "type": "server",
-    "extra": true
-  },
   "gmeta": {
     "action": "saves/getmeta",
     "permissions": "all",
@@ -343,7 +309,7 @@
   "save": {
     "action": "saves/save",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "subcommands": {
       "delete": {
@@ -498,20 +464,10 @@
       "default_member_permissions": 8192
     }
   },
-  "approve": {
-    "action": "saves/approve",
-    "permissions": "mods",
-    "type": "server"
-  },
-  "delete": {
-    "action": "saves/delete",
-    "permissions": "all",
-    "type": "server"
-  },
   "mods": {
     "action": "mod/mods",
     "permissions": "all",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "mods",
@@ -610,7 +566,7 @@
   "ban": {
     "action": "mod/ban",
     "permissions": "mods",
-    "type": "server",
+    "type": "slash",
     "extra": 0,
     "interaction": true,
     "interactionCreate": {
@@ -643,7 +599,7 @@
   "idban": {
     "action": "mod/idban",
     "permissions": "mods",
-    "type": "server",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "idban",
@@ -778,18 +734,6 @@
       "default_member_permissions": 32
     }
   },
-  "getunapproved": {
-    "action": "saves/getunapproved",
-    "permissions": "mods",
-    "type": "server",
-    "interaction": true,
-    "interactionCreate": {
-      "name": "getunapproved",
-      "description": "Gets a list of unapproved saved items",
-      "dm_permission": false,
-      "default_member_permissions": 8192
-    }
-  },
   "visibility": {
     "action": "mod/setvisibility",
     "permissions": "all",
@@ -813,11 +757,6 @@
       "dm_permission": false,
       "default_member_permissions": 16
     }
-  },
-  "fnick": {
-    "action": "bot/fnick",
-    "permissions": "admin",
-    "type": "server"
   },
   "fsay": {
     "action": "bot/fsay",
@@ -853,7 +792,7 @@
   "question": {
     "action": "question/question",
     "permissions": "all",
-    "type": "dm",
+    "type": "slash",
     "interaction": true,
     "subcommands": {
       "create": {
@@ -995,18 +934,6 @@
       ],
       "dm_permission": true
     }
-  },
-  "events": {
-    "action": "mod/events",
-    "permissions": "mods",
-    "type": "server",
-    "extra": "events"
-  },
-  "questionping": {
-    "action": "mod/events",
-    "permissions": "mods",
-    "type": "server",
-    "extra": "question"
   },
   "leaderboard": {
     "action": "members/rankthing",

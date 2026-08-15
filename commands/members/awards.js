@@ -33,12 +33,6 @@ function getEmbed(member, rows) {
   }
 }
 
-exports.run = async function (message, args, bot, db) {
-  const member = await findMember(message, args, bot);
-  const awards = await getAwards(db, message.channel.guild.id, member.id);
-  message.channel.send({ embeds: getEmbed(member, awards) });
-};
-
 exports.interaction = async function (interaction, bot, db) {
   let member = interaction.options.getMember("member");
   if (!member) {

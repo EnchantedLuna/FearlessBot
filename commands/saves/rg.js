@@ -15,13 +15,6 @@ async function getItem(db, guildId, prefix) {
   return rows[0]["keyword"] + ": " + rows[0]["value"];
 }
 
-exports.run = async function (message, args, bot, db) {
-  const item = await getItem(db, message.channel.guild.id);
-  message.reply(item, db, {
-    allowedMentions: { users: [] },
-  });
-};
-
 exports.interaction = async function (interaction, bot, db) {
   const prefix = interaction.options.getString("prefix");
   const item = await getItem(db, interaction.guild.id, prefix);

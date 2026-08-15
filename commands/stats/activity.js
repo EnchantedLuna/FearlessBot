@@ -2,14 +2,12 @@ const config = require("../../config.json");
 const { findMember } = require("../../util");
 
 async function getStats(db, guild, member) {
-  const [rows] = await db
-    .promise()
-    .query(
-      "SELECT name, SUM(message_count) AS count FROM user_message_stats ums \
+  const [rows] = await db.promise().query(
+    "SELECT name, SUM(message_count) AS count FROM user_message_stats ums \
   JOIN channel_stats cs ON ums.guild=cs.server AND ums.channel=cs.channel \
   WHERE ums.guild = ? AND user = ? AND web=1 GROUP BY name ORDER BY count DESC",
-      [guild, member]
-    );
+    [guild, member]
+  );
   let stats = "Messages by channel:\n";
   if (rows.length === 0) {
     stats += "(none)\n";
@@ -28,19 +26,6 @@ function getStatsLink(guild, member) {
     config.baseUrl + "activityreport.php?server=" + guild + "&user=" + member
   );
 }
-
-exports.run = async function (message, args, bot, db) {
-  const member = await findMember(message, args, bot);
-  const description = await getStats(db, message.channel.guild.id, member.id);
-  message.channel.send({
-    embeds: [
-      {
-        title: "Activity Report for " + member.displayName,
-        description: description,
-      },
-    ],
-  });
-};
 
 exports.interaction = async function (interaction, bot, db) {
   let member = interaction.options.getMember("member");

@@ -34,18 +34,6 @@ const albums = [
   },
 ];
 
-exports.run = function (message, args, bot, db) {
-  let answer = albums[Math.floor(Math.random() * albums.length)];
-  message.channel.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle("Random Album")
-        .setDescription("You should listen to " + answer.title + ".")
-        .setThumbnail(answer.image),
-    ],
-  });
-};
-
 exports.interaction = function (interaction, bot, db) {
   let answer = albums[Math.floor(Math.random() * albums.length)];
   interaction.reply({

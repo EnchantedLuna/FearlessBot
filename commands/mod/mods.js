@@ -19,10 +19,6 @@ const buttons = new ActionRowBuilder().addComponents(
     .setStyle(ButtonStyle.Secondary)
 );
 
-exports.run = function (message) {
-  message.reply("Please use the /mods slash command instead.");
-};
-
 exports.interaction = async function (interaction, bot, db) {
   let mods = interaction.channel.guild.roles.cache.find(
     (role) => role.name === "mods"

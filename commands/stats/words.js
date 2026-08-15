@@ -22,14 +22,9 @@ async function getWords(db, guildId, memberId) {
     rows[0].messages +
     " messages, an average of " +
     average +
-    " words per message."
+    " words per message.\nPlease note: This feature is deprecated and will be removed soon."
   );
 }
-
-exports.run = async function (message, params, bot, db) {
-  const member = findMemberID(message, params, bot);
-  message.channel.send(await getWords(db, message.channel.guild.id, member));
-};
 
 exports.interaction = async function (interaction, bot, db) {
   let member = interaction.options.getMember("member");

@@ -8,15 +8,6 @@ function getAnswer(searchTerm) {
   return "";
 }
 
-exports.run = function (message, args, bot, db) {
-  let answer = getAnswer(args);
-  if (answer == "") {
-    message.reply("I don't have an answer for that, sorry!");
-    return;
-  }
-  message.reply(getAnswer(args));
-};
-
 exports.interaction = function (interaction, bot, db) {
   const searchTerm = interaction.options.getString("term");
   const answer = getAnswer(searchTerm);

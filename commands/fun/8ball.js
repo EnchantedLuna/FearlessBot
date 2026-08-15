@@ -27,17 +27,6 @@ const responses = [
   "Only if you're a clown :clown:",
 ];
 
-exports.run = function (message, args, bot, db) {
-  const answer = responses[Math.floor(Math.random() * responses.length)];
-  return message.channel.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle(":8ball: 8 Ball")
-        .setDescription(answer.toString()),
-    ],
-  });
-};
-
 exports.interaction = function (interaction, bot, db) {
   const question = interaction.options.getString("question");
   const answer = responses[Math.floor(Math.random() * responses.length)];

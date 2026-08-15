@@ -313,20 +313,6 @@ const taylorSongsByAlbum = [
   },
 ];
 
-exports.run = function (message, args, bot, db) {
-  let album =
-    taylorSongsByAlbum[Math.floor(Math.random() * taylorSongsByAlbum.length)];
-  let song = album.songs[Math.floor(Math.random() * album.songs.length)];
-  let embed = new EmbedBuilder().setTitle("Random Song");
-  let text = "You should listen to " + song;
-  text += album.title !== null ? " from " + album.title + "." : ".";
-  embed.setDescription(text);
-  if (album.image !== null) {
-    embed.setThumbnail(album.image);
-  }
-  message.channel.send({ embeds: [embed] });
-};
-
 exports.interaction = function (interaction, bot, db) {
   const selectedAlbum =
     interaction.options.getInteger("album") ??

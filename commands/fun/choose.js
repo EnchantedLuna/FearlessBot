@@ -23,11 +23,6 @@ function choose(choices, user) {
   }
 }
 
-exports.run = function (message, args, bot, db) {
-  const choices = args.split(",");
-  message.channel.send(choose(choices, message.author.tag));
-};
-
 exports.interaction = function (interaction, bot, db) {
   const choices = interaction.options.getString("choices").split(",");
   interaction.reply(choose(choices, interaction.user.tag));
