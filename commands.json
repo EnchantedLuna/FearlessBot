@@ -296,16 +296,6 @@
       "dm_permission": false
     }
   },
-  "gmeta": {
-    "action": "saves/getmeta",
-    "permissions": "all",
-    "type": "server"
-  },
-  "getmeta": {
-    "action": "saves/getmeta",
-    "permissions": "all",
-    "type": "server"
-  },
   "save": {
     "action": "saves/save",
     "permissions": "all",
