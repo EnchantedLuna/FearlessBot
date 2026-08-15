@@ -164,25 +164,6 @@ bot.on("guildMemberRemove", async (member) => {
     member.guild.id,
     member.id,
   ]);
-
-  const leaveMessageThreshold = await util.getGuildConfig(
-    member.guild.id,
-    "leave-threshold",
-    db
-  );
-
-  if (leaveMessageThreshold < 1) {
-    return;
-  }
-
-  let joinDate = member.joinedAt;
-  let now = new Date();
-  let joinTime = (now.getTime() - joinDate.getTime()) / 1000;
-  if (joinTime < leaveMessageThreshold * 60) {
-    member.guild.systemChannel.send({
-      content: `${member.user.username} has already left us. :disappointed:`,
-    });
-  }
 });
 
 bot.on("messageDelete", function (message) {

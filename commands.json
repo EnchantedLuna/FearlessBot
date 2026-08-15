@@ -1117,10 +1117,6 @@
             {
               "name": "Active Role Threshold in Minutes",
               "value": "active-threshold"
-            },
-            {
-              "name": "Leave Message Threshold in Minutes (0 to disable)",
-              "value": "leave-threshold"
             }
           ]
         },
