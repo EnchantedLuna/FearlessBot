@@ -1,4 +1,4 @@
-const { escapeText } = require("../../util");
+const { escapeText, isMod } = require("../../util");
 
 async function getBans(db, guild) {
   const [rows] = await db.promise().query(
@@ -50,6 +50,10 @@ function getType(action, roleid, guild) {
 }
 
 exports.interaction = async function (interaction, bot, db) {
+  if (!isMod(interaction.member, interaction.guild)) {
+    interaction.reply({ content: ":x: You do not have permission to use this command.", ephemeral: true });
+    return;
+  }
   const response = await getBans(db, interaction.guild);
   interaction.reply({
     embeds: [{ title: "Upcoming Expirations", description: response }],
