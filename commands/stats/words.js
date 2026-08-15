@@ -22,7 +22,7 @@ async function getWords(db, guildId, memberId) {
     rows[0].messages +
     " messages, an average of " +
     average +
-    " words per message.\nPlease note: This feature is deprecated and will be removed soon."
+    " words per message.\nPlease note: This feature is deprecated and the bot is no longer counting words since August 14, 2026."
   );
 }
 
