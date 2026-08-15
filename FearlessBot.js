@@ -38,7 +38,7 @@ const db = mysql.createConnection({
   timezone: "Z",
 });
 
-bot.on("ready", () => {
+bot.on("clientReady", () => {
   const time = new Date().toLocaleString();
   console.log("FearlessBot (Taylor's Version) is ready - Started " + time);
   setInterval(function () {
