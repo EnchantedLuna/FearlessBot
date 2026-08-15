@@ -913,7 +913,7 @@
   "answer": {
     "action": "question/answer",
     "permissions": "all",
-    "type": "both",
+    "type": "slash",
     "interaction": true,
     "interactionCreate": {
       "name": "answer",

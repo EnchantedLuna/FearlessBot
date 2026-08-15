@@ -129,32 +129,6 @@ bot.on("messageCreate", async (message) => {
   }
 });
 
-function handleDirectMessage(message) {
-  let command = message.content.split(" ");
-  let params = command.slice(1, command.length).join(" ");
-
-  const commandName = command[0]
-    .toLowerCase()
-    .slice(directMessagePrefix.length);
-  if (commandName in commands) {
-    if (
-      commands[commandName].type === "server" ||
-      commands[commandName].type === "slash"
-    ) {
-      return;
-    }
-    if (
-      !util.hasPermission(message.author, commands[commandName].permissions)
-    ) {
-      return message.channel.send({
-        content: ":no_entry: You do not have permission to run this command.",
-      });
-    }
-    let action = require("./commands/" + commands[commandName].action);
-    action.run(message, params, bot, db, commands[commandName].extra);
-  }
-}
-
 bot.on("guildMemberAdd", (member) => {
   validateMutes(member, bot, db);
 });
