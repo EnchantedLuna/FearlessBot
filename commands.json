@@ -326,6 +326,9 @@
       },
       "create-modal": {
         "action": "saves/save-modal"
+      },
+      "metadata": {
+        "action": "saves/getmeta-new"
       }
     },
     "interactionCreate": {
@@ -335,6 +338,19 @@
         {
           "name": "delete",
           "description": "Delete a saved item",
+          "type": 1,
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to delete",
+              "type": 3,
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "metadata",
+          "description": "Show metadata for an item",
           "type": 1,
           "options": [
             {
@@ -408,6 +424,9 @@
       },
       "review": {
         "action": "saves/get"
+      },
+      "meta": {
+        "action": "saves/getmeta-new"
       }
     },
     "interactionCreate": {
@@ -449,6 +468,19 @@
         {
           "name": "review",
           "description": "Show a saved item (including unapproved)",
+          "type": 1,
+          "options": [
+            {
+              "name": "keyword",
+              "description": "The keyword of the saved item to get",
+              "type": 3,
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "meta",
+          "description": "Shows metadata for a saved item (including unapproved)",
           "type": 1,
           "options": [
             {
