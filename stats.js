@@ -22,25 +22,17 @@ exports.updateChannelStats = function (message, db) {
 };
 
 exports.updateUserStats = async function (message, db) {
-  let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
-  const countStats = await channelCountsInStatistics(
-    message.channel.guild.id,
-    message.channel.id,
-    db
-  );
   if (countStats) {
     db.query(
-      "INSERT INTO members (server, id, username, discriminator, lastseen, words, messages) VALUES (?,?,?,?,UNIX_TIMESTAMP(),?,1)" +
-        "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), words=words+?, messages=messages+1, active=1",
+      "INSERT INTO members (server, id, username, discriminator, lastseen, messages) VALUES (?,?,?,?,UNIX_TIMESTAMP(),1)" +
+        "ON DUPLICATE KEY UPDATE username=?, discriminator=?, lastseen=UNIX_TIMESTAMP(), messages=messages+1, active=1",
       [
         message.channel.guild.id,
         message.author.id,
         message.author.username,
         message.author.discriminator,
-        words,
         message.author.username,
         message.author.discriminator,
-        words,
       ]
     );
   } else {
@@ -60,21 +52,8 @@ exports.updateUserStats = async function (message, db) {
 };
 
 exports.handleMessageDelete = function (message, db) {
-  if (
-    !message.channel.type === ChannelType.GuildText ||
-    (message.author.id === config.botAdminUserId &&
-      message.content.startsWith("!fsay"))
-  ) {
+  if (!message.channel.type === ChannelType.GuildText) {
     return;
-  }
-
-  let words = message.content.replace(/\s\s+|\r?\n|\r/g, " ").split(" ").length;
-
-  if (channelCountsInStatistics(message.channel.guild.id, message.channel.id)) {
-    db.query(
-      "UPDATE members SET words=words-?, messages=messages-1 WHERE id=? AND server=?",
-      [words, message.author.id, message.channel.guild.id]
-    );
   }
 
   db.query(
