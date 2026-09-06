@@ -20,7 +20,7 @@ const bot = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildModeration,
-    GatewayIntentBits.GuildEmojisAndStickers,
+    GatewayIntentBits.GuildExpressions,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessageReactions,
@@ -54,7 +54,7 @@ bot.on("messageCreate", async (message) => {
   const prefix = await util.getGuildConfig(
     message.channel.guild.id,
     "prefix",
-    db
+    db,
   );
 
   stats.updateUserStats(message, db);
@@ -70,13 +70,13 @@ bot.on("messageCreate", async (message) => {
         message.reply(config.juliaMessage);
       } else {
         message.reply(
-          'Did you read the part in that message that says "Do not ping reply to this message" in all caps? Now go stand in the corner and think about what you did.'
+          'Did you read the part in that message that says "Do not ping reply to this message" in all caps? Now go stand in the corner and think about what you did.',
         );
         try {
           const timeoutInterval = 4380 * 1000; // 1 hour 13 minutes
           message.member.timeout(
             timeoutInterval,
-            "Ping replying to the first message"
+            "Ping replying to the first message",
           );
         } catch (e) {
           console.log("Failed to punish for pinging first message");
@@ -117,7 +117,7 @@ bot.on("messageCreate", async (message) => {
         message.channel.guild.id,
         message.channel.id,
         db,
-        commandName
+        commandName,
       )
     ) {
       return message.channel.send({
