@@ -12,7 +12,6 @@ const util = require("./util");
 const stats = require("./stats");
 const { runScheduledActions, validateMutes } = require("./runScheduledActions");
 const { checkActiveRole } = require("./activeRole");
-const directMessagePrefix = "!";
 
 const bot = new Client({
   allowedMentions: { parse: ["users", "roles"], repliedUser: true },
