@@ -20,6 +20,17 @@ exports.interaction = function (interaction, bot, db) {
     });
     return;
   }
+  if (member.user.bot) {
+    interaction.reply({
+      embeds: [
+        {
+          description:
+            ":warning: Sadly, I cannot ban another fellow robot. :robot:",
+        },
+      ],
+    });
+    return;
+  }
   member.ban({ reason: reason ?? "" });
   interaction.reply({
     embeds: [
