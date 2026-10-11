@@ -17,10 +17,8 @@ const bot = new Client({
   allowedMentions: { parse: ["users", "roles"], repliedUser: true },
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildModeration,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
   ],
   partials: [Partials.Channel],
@@ -81,60 +79,6 @@ bot.on("messageCreate", async (message) => {
       }
     }
   }
-
-  if (
-    message.content.indexOf(prefix) !== 0 ||
-    message.author.bot ||
-    !message.channel
-      .permissionsFor(message.guild.members.me)
-      .has(PermissionsBitField.Flags.SendMessages)
-  ) {
-    return;
-  }
-  const command = message.content.split(" ");
-  const args = command.slice(1, command.length).join(" ");
-  const commandName = command[0].toLowerCase().slice(prefix.length);
-
-  if (commandName in commands) {
-    if (
-      commands[commandName].type === "dm" ||
-      commands[commandName].type === "slash"
-    ) {
-      return;
-    }
-    if (
-      !util.hasPermission(message.member, commands[commandName].permissions)
-    ) {
-      return message.channel.send({
-        content: ":no_entry: You do not have permission to run this command.",
-      });
-    }
-    if (
-      await util.isCommandBlocked(
-        message.channel.guild.id,
-        message.channel.id,
-        db,
-        commandName,
-      )
-    ) {
-      return message.channel.send({
-        content: ":no_entry: This command is blocked in this channel.",
-      });
-    }
-    let action = require("./commands/" + commands[commandName].action);
-    action.run(message, args, bot, db, commands[commandName].extra);
-  }
-});
-
-bot.on("guildMemberAdd", (member) => {
-  validateMutes(member, bot, db);
-});
-
-bot.on("guildMemberRemove", async (member) => {
-  db.query("UPDATE members SET active=0 WHERE server = ? AND id = ?", [
-    member.guild.id,
-    member.id,
-  ]);
 });
 
 bot.on("messageDelete", function (message) {
